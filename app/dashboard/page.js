@@ -6,20 +6,39 @@ import Link from "next/link";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const getUser = async () => {
+    const getData = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         router.push("/login");
-      } else {
-        setUser(session.user);
+        return;
       }
+
+      setUser(session.user);
+
+      // Get profile
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+      setProfile(profileData);
+
+      // Get agents
+      const { data: agentsData } = await supabase
+        .from("agents")
+        .select("*")
+        .eq("user_id", session.user.id);
+      setAgents(agentsData || []);
+
       setLoading(false);
     };
-    getUser();
+    getData();
   }, [router]);
 
   const handleLogout = async () => {
@@ -38,39 +57,11 @@ export default function Dashboard() {
     );
   }
 
-  const agents = [
-    {
-      icon: "💬",
-      title: "Chat Agent",
-      status: "active",
-      conversations: 0,
-      color: "violet",
-      slug: "chat-agent"
-    },
-    {
-      icon: "📱",
-      title: "WhatsApp Agent",
-      status: "active",
-      conversations: 0,
-      color: "green",
-      slug: "whatsapp-agent"
-    },
-    {
-      icon: "📞",
-      title: "Voice Agent",
-      status: "coming",
-      conversations: 0,
-      color: "blue",
-      slug: "voice-agent"
-    },
-    {
-      icon: "📧",
-      title: "Email Agent",
-      status: "coming",
-      conversations: 0,
-      color: "orange",
-      slug: "email-agent"
-    },
+  const allAgents = [
+    { icon: "💬", title: "Chat Agent", type: "chat-agent", status: "live" },
+    { icon: "📱", title: "WhatsApp Agent", type: "whatsapp-agent", status: "live" },
+    { icon: "📞", title: "Voice Agent", type: "voice-agent", status: "coming" },
+    { icon: "📧", title: "Email Agent", type: "email-agent", status: "coming" },
   ];
 
   return (
@@ -87,7 +78,7 @@ export default function Dashboard() {
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-gray-400 text-sm hidden md:block">
-              {user?.email}
+              {profile?.full_name || user?.email}
             </span>
             <button
               onClick={handleLogout}
@@ -104,119 +95,64 @@ export default function Dashboard() {
         {/* Welcome */}
         <div className="mb-10">
           <h1 className="text-3xl font-bold mb-2">
-            Welcome back! 👋
+            Welcome, {profile?.full_name || "there"}! 👋
           </h1>
           <p className="text-gray-400">
-            Manage your AI agents and monitor their performance.
+            Manage your AI agents from your dashboard.
           </p>
         </div>
 
-        {/* Stats Bar */}
+        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { icon: "🤖", label: "Active Agents", value: "2" },
-            { icon: "💬", label: "Total Conversations", value: "0" },
-            { icon: "⚡", label: "Avg Response Time", value: "<2s" },
-            { icon: "📈", label: "Satisfaction Rate", value: "100%" },
+            { icon: "🤖", label: "Active Agents", value: agents.length || "0" },
+            { icon: "💬", label: "Conversations", value: "0" },
+            { icon: "⚡", label: "Response Time", value: "<2s" },
+            { icon: "📦", label: "Current Plan", value: profile?.plan || "Free" },
           ].map((stat, i) => (
-            <div
-              key={i}
-              className="bg-white/5 border border-white/10 rounded-2xl p-5"
-            >
+            <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className="text-2xl mb-2">{stat.icon}</div>
-              <div className="text-2xl font-bold text-violet-400">
-                {stat.value}
-              </div>
+              <div className="text-2xl font-bold text-violet-400">{stat.value}</div>
               <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
             </div>
           ))}
         </div>
 
-        {/* My Agents */}
+        {/* Agents */}
         <div className="mb-10">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">My Agents</h2>
-            <Link
-              href="/#agents"
-              className="text-sm text-violet-400 hover:text-violet-300 transition"
-            >
-              Add New Agent +
+            <h2 className="text-2xl font-bold">All Agents</h2>
+            <Link href="/#agents" className="text-sm text-violet-400 hover:text-violet-300">
+              Explore Agents +
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {agents.map((agent, i) => (
-              <div
-                key={i}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-violet-500/50 transition"
-              >
+            {allAgents.map((agent, i) => (
+              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-violet-500/50 transition">
                 <div className="flex justify-between items-start mb-4">
                   <span className="text-3xl">{agent.icon}</span>
-                  {agent.status === "active" ? (
+                  {agent.status === "live" ? (
                     <span className="flex items-center gap-1 text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-1 rounded-full">
                       <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                      Active
+                      Live
                     </span>
                   ) : (
                     <span className="text-xs bg-white/10 text-gray-400 border border-white/20 px-2 py-1 rounded-full">
-                      Coming Soon
+                      Soon
                     </span>
                   )}
                 </div>
-                <h3 className="font-bold mb-1">{agent.title}</h3>
-                <p className="text-gray-500 text-sm mb-4">
-                  {agent.conversations} conversations
-                </p>
-                {agent.status === "active" && (
+                <h3 className="font-bold mb-3">{agent.title}</h3>
+                {agent.status === "live" ? (
                   <Link
-                    href={`/agents/${agent.slug}`}
+                    href={`/agents/${agent.type}`}
                     className="text-xs text-violet-400 hover:text-violet-300 transition"
                   >
-                    View Agent →
+                    Open Agent →
                   </Link>
+                ) : (
+                  <span className="text-xs text-gray-600">Coming Soon</span>
                 )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mb-10">
-          <h2 className="text-2xl font-bold mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              {
-                icon: "📝",
-                title: "Edit Knowledge Base",
-                desc: "Update your business information",
-                action: "Edit"
-              },
-              {
-                icon: "📊",
-                title: "View Analytics",
-                desc: "See conversation statistics",
-                action: "View"
-              },
-              {
-                icon: "⚙️",
-                title: "Account Settings",
-                desc: "Manage your account details",
-                action: "Settings"
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 flex justify-between items-center hover:border-violet-500/50 transition cursor-pointer"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="text-3xl">{item.icon}</span>
-                  <div>
-                    <h3 className="font-bold text-sm">{item.title}</h3>
-                    <p className="text-gray-500 text-xs">{item.desc}</p>
-                  </div>
-                </div>
-                <span className="text-xs text-violet-400 border border-violet-500/30 px-3 py-1 rounded-full">
-                  {item.action}
-                </span>
               </div>
             ))}
           </div>
@@ -224,12 +160,8 @@ export default function Dashboard() {
 
         {/* Upgrade Banner */}
         <div className="bg-gradient-to-r from-violet-600/20 to-purple-600/20 border border-violet-500/30 rounded-2xl p-8 text-center">
-          <h3 className="text-2xl font-bold mb-2">
-            Upgrade to Pro 🚀
-          </h3>
-          <p className="text-gray-400 mb-6">
-            Get 3 agents, advanced analytics and priority support
-          </p>
+          <h3 className="text-2xl font-bold mb-2">Upgrade to Pro 🚀</h3>
+          <p className="text-gray-400 mb-6">Get unlimited agents and advanced analytics</p>
           <Link
             href="/#pricing"
             className="px-8 py-3 bg-violet-600 hover:bg-violet-500 rounded-xl font-semibold transition inline-block"
