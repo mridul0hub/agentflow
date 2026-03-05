@@ -112,8 +112,8 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-white transition">How It Works</a>
           </div>
           <div className="flex gap-3">
-            <Link href="/login" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition">
-              Login
+            <Link href="/dashboard" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition">
+              Dashboard
             </Link>
             <Link href="/signup" className="px-4 py-2 text-sm bg-violet-600 hover:bg-violet-500 rounded-lg transition">
               Get Started Free
