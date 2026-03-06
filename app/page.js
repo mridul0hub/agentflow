@@ -1,4 +1,7 @@
+"use client";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 const agents = [
   {
@@ -94,6 +97,27 @@ const plans = [
 ];
 
 export default function Home() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+    };
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
+
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-white">
 
@@ -111,13 +135,33 @@ export default function Home() {
             <a href="#pricing" className="hover:text-white transition">Pricing</a>
             <a href="#how-it-works" className="hover:text-white transition">How It Works</a>
           </div>
-          <div className="flex gap-3">
-            <Link href="/dashboard" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition">
-              Dashboard
-            </Link>
-            <Link href="/signup" className="px-4 py-2 text-sm bg-violet-600 hover:bg-violet-500 rounded-lg transition">
-              Get Started Free
-            </Link>
+          <div className="flex items-center gap-3">
+            {user ? (
+              <>
+                <Link href="/dashboard" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition">
+                  Dashboard
+                </Link>
+                <img
+                  src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${user.email}&background=7c3aed&color=fff`}
+                  className="w-8 h-8 rounded-full border-2 border-violet-500 cursor-pointer"
+                />
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition">
+                  Login
+                </Link>
+                <Link href="/signup" className="px-4 py-2 text-sm bg-violet-600 hover:bg-violet-500 rounded-lg transition">
+                  Get Started Free
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -140,9 +184,15 @@ export default function Home() {
             phone calls and appointments — 24/7, automatically, for any business.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup" className="px-8 py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-lg font-semibold transition transform hover:scale-105">
-              Start Free Trial 🚀
-            </Link>
+            {user ? (
+              <Link href="/dashboard" className="px-8 py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-lg font-semibold transition transform hover:scale-105">
+                Go to Dashboard 🚀
+              </Link>
+            ) : (
+              <Link href="/signup" className="px-8 py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-lg font-semibold transition transform hover:scale-105">
+                Start Free Trial 🚀
+              </Link>
+            )}
             <button className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-lg transition">
               Watch Demo ▶
             </button>
@@ -174,15 +224,11 @@ export default function Home() {
       <section id="agents" className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              All AI Agents
-            </h2>
+            <h2 className="text-4xl font-bold mb-4">All AI Agents</h2>
             <p className="text-gray-400 text-lg">
               Pick the agent your business needs. Deploy in minutes.
             </p>
           </div>
-
-          {/* Big Agents Box */}
           <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {agents.map((agent, i) => (
@@ -206,9 +252,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold mb-2 group-hover:text-violet-400 transition">
                     {agent.title}
                   </h3>
-                  <p className="text-gray-400 text-sm mb-4">
-                    {agent.description}
-                  </p>
+                  <p className="text-gray-400 text-sm mb-4">{agent.description}</p>
                   {agent.status === "live" ? (
                     <Link
                       href={`/agents/${agent.slug}`}
@@ -217,9 +261,7 @@ export default function Home() {
                       Learn More →
                     </Link>
                   ) : (
-                    <span className="text-sm text-gray-600">
-                      Notify me when ready
-                    </span>
+                    <span className="text-sm text-gray-600">Notify me when ready</span>
                   )}
                 </div>
               ))}
@@ -229,7 +271,7 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-20 px-6 bg-white/2">
+      <section id="how-it-works" className="py-20 px-6 bg-white/[0.02]">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-4">How It Works</h2>
           <p className="text-gray-400 mb-16">Get your AI agent running in 3 simple steps</p>
@@ -272,9 +314,7 @@ export default function Home() {
                   </div>
                 )}
                 <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <div className="text-4xl font-bold text-violet-400 mb-1">
-                  {plan.price}
-                </div>
+                <div className="text-4xl font-bold text-violet-400 mb-1">{plan.price}</div>
                 <div className="text-gray-500 text-sm mb-6">per {plan.period}</div>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, j) => (
@@ -284,15 +324,29 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  className={`w-full py-3 rounded-xl font-semibold transition ${
-                    plan.highlighted
-                      ? "bg-violet-600 hover:bg-violet-500"
-                      : "bg-white/10 hover:bg-white/20"
-                  }`}
-                >
-                  Get Started
-                </button>
+                {user ? (
+                  <Link
+                    href="/dashboard"
+                    className={`w-full py-3 rounded-xl font-semibold transition block text-center ${
+                      plan.highlighted
+                        ? "bg-violet-600 hover:bg-violet-500"
+                        : "bg-white/10 hover:bg-white/20"
+                    }`}
+                  >
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    href="/signup"
+                    className={`w-full py-3 rounded-xl font-semibold transition block text-center ${
+                      plan.highlighted
+                        ? "bg-violet-600 hover:bg-violet-500"
+                        : "bg-white/10 hover:bg-white/20"
+                    }`}
+                  >
+                    Get Started
+                  </Link>
+                )}
               </div>
             ))}
           </div>
