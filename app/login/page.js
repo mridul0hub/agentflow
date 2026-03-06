@@ -26,11 +26,19 @@ export default function LoginPage() {
     setLoading(false);
   };
 
+  const handleGoogleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`
+      }
+    });
+  };
+
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center px-6">
       <div className="w-full max-w-md">
 
-        {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
             <span className="text-3xl">🤖</span>
@@ -41,9 +49,23 @@ export default function LoginPage() {
           <p className="text-gray-400 mt-2">Welcome back!</p>
         </div>
 
-        {/* Form */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
           <h1 className="text-2xl font-bold mb-6">Login</h1>
+
+          {/* Google Login Button */}
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-3 py-3 bg-white text-black rounded-xl font-semibold hover:bg-gray-100 transition mb-6"
+          >
+            <img src="https://www.google.com/favicon.ico" className="w-5 h-5" />
+            Continue with Google
+          </button>
+
+          <div className="flex items-center gap-3 mb-6">
+            <div className="flex-1 h-px bg-white/10"></div>
+            <span className="text-gray-500 text-sm">or</span>
+            <div className="flex-1 h-px bg-white/10"></div>
+          </div>
 
           {error && (
             <div className="bg-red-500/20 border border-red-500/30 text-red-300 px-4 py-3 rounded-xl mb-4 text-sm">
@@ -88,7 +110,6 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-
       </div>
     </main>
   );

@@ -10,7 +10,6 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   const handleSignup = async () => {
@@ -26,34 +25,24 @@ export default function SignupPage() {
     if (error) {
       setError(error.message);
     } else {
-      setSuccess(true);
+      router.push("/dashboard");
     }
     setLoading(false);
   };
 
-  if (success) {
-    return (
-      <main className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
-          <div className="text-6xl mb-4">📧</div>
-          <h1 className="text-3xl font-bold mb-4">Check Your Email!</h1>
-          <p className="text-gray-400 mb-8">
-            We sent a confirmation link to <span className="text-violet-400">{email}</span>.
-            Click it to activate your account.
-          </p>
-          <Link href="/login" className="px-6 py-3 bg-violet-600 rounded-xl hover:bg-violet-500 transition">
-            Go to Login
-          </Link>
-        </div>
-      </main>
-    );
-  }
+  const handleGoogleSignup = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`
+      }
+    });
+  };
 
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center px-6">
       <div className="w-full max-w-md">
 
-        {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
             <span className="text-3xl">🤖</span>
@@ -64,9 +53,23 @@ export default function SignupPage() {
           <p className="text-gray-400 mt-2">Create your account</p>
         </div>
 
-        {/* Form */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
           <h1 className="text-2xl font-bold mb-6">Sign Up</h1>
+
+          {/* Google Signup Button */}
+          <button
+            onClick={handleGoogleSignup}
+            className="w-full flex items-center justify-center gap-3 py-3 bg-white text-black rounded-xl font-semibold hover:bg-gray-100 transition mb-6"
+          >
+            <img src="https://www.google.com/favicon.ico" className="w-5 h-5" />
+            Continue with Google
+          </button>
+
+          <div className="flex items-center gap-3 mb-6">
+            <div className="flex-1 h-px bg-white/10"></div>
+            <span className="text-gray-500 text-sm">or</span>
+            <div className="flex-1 h-px bg-white/10"></div>
+          </div>
 
           {error && (
             <div className="bg-red-500/20 border border-red-500/30 text-red-300 px-4 py-3 rounded-xl mb-4 text-sm">
@@ -121,7 +124,6 @@ export default function SignupPage() {
             </Link>
           </p>
         </div>
-
       </div>
     </main>
   );
