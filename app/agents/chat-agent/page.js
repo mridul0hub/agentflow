@@ -37,7 +37,7 @@ export default function ChatAgentPage() {
     setLoading(true);
 
     try {
-      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8001";
+      const BACKEND_URL = "https://web-production-b673d.up.railway.app";
       const response = await fetch(`${BACKEND_URL}/chat/message`, {
         
         method: "POST",
