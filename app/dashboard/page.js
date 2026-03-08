@@ -60,7 +60,7 @@ export default function Dashboard() {
 
         .db-page {
           min-height: 100vh;
-          background: linear-gradient(160deg, #0d2e08 0%, #1a4a12 30%, #2d6a20 60%, #1a3d10 100%);
+          background: linear-gradient(160deg, #e8f5e1 0%, #c8edb8 30%, #a8d890 60%, #c8edb8 100%);
           position: relative;
           overflow: hidden;
         }
@@ -120,47 +120,34 @@ export default function Dashboard() {
         }
 
         /* Navbar */
-        .db-navbar {
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 14px 32px;
-          background: rgba(10,30,8,0.7);
-          backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-
-        /* Cards */
         .glass-card {
-          background: rgba(255,255,255,0.07);
+          background: rgba(255,255,255,0.6);
           backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.12);
+          border: 1px solid rgba(255,255,255,0.8);
           border-radius: 20px;
           transition: all 0.3s;
         }
         .glass-card:hover {
-          background: rgba(255,255,255,0.1);
-          border-color: rgba(255,255,255,0.18);
+          background: rgba(255,255,255,0.75);
+          border-color: rgba(255,255,255,0.9);
           transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(45,90,39,0.12);
         }
 
         .stat-card {
-          background: rgba(255,255,255,0.07);
+          background: rgba(255,255,255,0.6);
           backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.12);
+          border: 1px solid rgba(255,255,255,0.8);
           border-radius: 18px;
           padding: 24px;
           transition: all 0.3s;
         }
-        .stat-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
+        .stat-card:hover { background: rgba(255,255,255,0.75); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(45,90,39,0.12); }
 
         .agent-card {
-          background: rgba(255,255,255,0.06);
+          background: rgba(255,255,255,0.5);
           backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.1);
+          border: 1px solid rgba(255,255,255,0.7);
           border-radius: 18px;
           padding: 22px;
           display: flex;
@@ -170,31 +157,31 @@ export default function Dashboard() {
           cursor: pointer;
           text-decoration: none;
         }
-        .agent-card:hover { background: rgba(255,255,255,0.1); transform: translateX(4px); border-color: rgba(255,255,255,0.18); }
+        .agent-card:hover { background: rgba(255,255,255,0.7); transform: translateX(4px); }
 
         .action-btn {
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.5);
+          border: 1px solid rgba(255,255,255,0.7);
           border-radius: 14px;
           padding: 16px;
           text-align: center;
           cursor: pointer;
           transition: all 0.3s;
-          color: white;
+          color: #1a2e1a;
           text-decoration: none;
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 8px;
         }
-        .action-btn:hover { background: rgba(255,255,255,0.14); transform: translateY(-3px); }
+        .action-btn:hover { background: rgba(255,255,255,0.75); transform: translateY(-3px); }
 
         .activity-item {
           display: flex;
           align-items: center;
           gap: 12px;
           padding: 12px 0;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          border-bottom: 1px solid rgba(45,90,39,0.1);
         }
         .activity-item:last-child { border-bottom: none; }
 
@@ -241,19 +228,19 @@ export default function Dashboard() {
         <nav className="db-navbar">
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
             <span style={{ fontSize: "22px" }}>🌿</span>
-            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", fontWeight: "700", color: "white" }}>Vasu Agents</span>
+            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", fontWeight: "700", color: "#1a2e1a" }}>Vasu Agents</span>
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>{currentTime}</span>
+            <span style={{ color: "#5a7a5a", fontSize: "13px" }}>{currentTime}</span>
             <div style={{ position: "relative" }}>
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
                 style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "50px", padding: "6px 14px 6px 6px", cursor: "pointer" }}
               >
                 <img src={avatarUrl} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />
-                <span style={{ fontSize: "13px", fontWeight: "500", color: "white" }}>{firstName}</span>
-                <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.5)" }}>▼</span>
+                <span style={{ fontSize: "13px", fontWeight: "500", color: "#1a2e1a" }}>{firstName}</span>
+                <span style={{ fontSize: "10px", color: "#5a7a5a" }}>▼</span>
               </button>
               {showDropdown && (
                 <div style={{ position: "absolute", top: "50px", right: 0, background: "rgba(15,35,12,0.97)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "8px", boxShadow: "0 10px 40px rgba(0,0,0,0.4)", minWidth: "180px", zIndex: 200 }}>
@@ -273,10 +260,10 @@ export default function Dashboard() {
             <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
               <img src={avatarUrl} style={{ width: "56px", height: "56px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.2)" }} />
               <div>
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(22px, 4vw, 32px)", color: "white", margin: 0 }}>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(22px, 4vw, 32px)", color: "#1a2e1a", margin: 0 }}>
                   {getGreeting()}, {firstName}! 🌿
                 </h1>
-                <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "14px", margin: "4px 0 0" }}>
+                <p style={{ color: "#5a7a5a", fontSize: "14px", margin: "4px 0 0" }}>
                   Here's what's happening with your agents today
                 </p>
               </div>
@@ -294,7 +281,7 @@ export default function Dashboard() {
               <div key={stat.label} className="stat-card">
                 <div style={{ fontSize: "28px", marginBottom: "10px" }}>{stat.icon}</div>
                 <div style={{ fontSize: "28px", fontWeight: "700", color: stat.color, fontFamily: "'Playfair Display', serif", marginBottom: "4px" }}>{stat.value}</div>
-                <div style={{ fontSize: "13px", fontWeight: "600", color: "white", marginBottom: "2px" }}>{stat.label}</div>
+                <div style={{ fontSize: "13px", fontWeight: "600", color: "#1a2e1a", marginBottom: "2px" }}>{stat.label}</div>
                 <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)" }}>{stat.sub}</div>
               </div>
             ))}
@@ -305,13 +292,13 @@ export default function Dashboard() {
             {/* My Agents */}
             <div className="fade-3 glass-card" style={{ padding: "24px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "white", margin: 0 }}>My Agents</h2>
-                <span style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)", fontSize: "12px", padding: "4px 10px", borderRadius: "50px" }}>0 active</span>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "#1a2e1a", margin: 0 }}>My Agents</h2>
+                <span style={{ background: "rgba(255,255,255,0.08)", color: "#5a7a5a", fontSize: "12px", padding: "4px 10px", borderRadius: "50px" }}>0 active</span>
               </div>
               <Link href="/agents/whatsapp-agent" className="agent-card" style={{ marginBottom: "10px" }}>
                 <div style={{ width: "44px", height: "44px", background: "rgba(37,211,102,0.15)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", flexShrink: 0 }}>💬</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "14px", fontWeight: "600", color: "white" }}>WhatsApp Agent</div>
+                  <div style={{ fontSize: "14px", fontWeight: "600", color: "#1a2e1a" }}>WhatsApp Agent</div>
                   <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>Auto-reply to customers</div>
                 </div>
                 <span style={{ fontSize: "11px", background: "rgba(255,165,0,0.15)", color: "#ffa500", padding: "3px 10px", borderRadius: "50px", flexShrink: 0 }}>Setup</span>
@@ -323,7 +310,7 @@ export default function Dashboard() {
 
             {/* Recent Activity */}
             <div className="fade-3 glass-card" style={{ padding: "24px" }}>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "white", margin: "0 0 20px" }}>Recent Activity</h2>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "#1a2e1a", margin: "0 0 20px" }}>Recent Activity</h2>
               <div style={{ textAlign: "center", padding: "30px 20px" }}>
                 <div style={{ fontSize: "36px", marginBottom: "12px" }}>🌱</div>
                 <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", lineHeight: "1.6" }}>
@@ -335,7 +322,7 @@ export default function Dashboard() {
 
           {/* Quick Actions */}
           <div className="fade-4 glass-card" style={{ padding: "24px", marginBottom: "28px" }}>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "white", margin: "0 0 20px" }}>Quick Actions</h2>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "#1a2e1a", margin: "0 0 20px" }}>Quick Actions</h2>
             <div className="actions-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px" }}>
               {[
                 { icon: "💬", label: "Setup WhatsApp Agent", href: "/agents/whatsapp-agent" },
@@ -366,17 +353,17 @@ export default function Dashboard() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
                 <span style={{ fontSize: "18px" }}>🌿</span>
-                <span style={{ color: "white", fontWeight: "600", fontSize: "15px" }}>Free Plan</span>
+                <span style={{ color: "#1a2e1a", fontWeight: "600", fontSize: "15px" }}>Free Plan</span>
                 <span style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontSize: "11px", padding: "2px 8px", borderRadius: "50px" }}>Current</span>
               </div>
-              <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", margin: 0 }}>
+              <p style={{ color: "#5a7a5a", fontSize: "13px", margin: 0 }}>
                 Upgrade to unlock unlimited agents, analytics & priority support
               </p>
             </div>
             <button style={{
               padding: "10px 24px", borderRadius: "50px",
               background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
-              border: "none", color: "white",
+              border: "none", color: "#1a2e1a",
               fontSize: "13px", fontWeight: "600",
               cursor: "pointer", whiteSpace: "nowrap",
               fontFamily: "'DM Sans', sans-serif"
