@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
-export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
+export default function AuthModal({ isOpen, onClose = () => {}, defaultTab = "login" }) {
   const [tab, setTab] = useState(defaultTab);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,188 +12,336 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  // keep local tab in sync if parent changes defaultTab
+  useEffect(() => {
+    setTab(defaultTab);
+    setError("");
+  }, [defaultTab]);
+
   if (!isOpen) return null;
 
   const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/dashboard` }
-    });
+    try {
+      setLoading(true);
+      setError("");
+      const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/dashboard` : undefined;
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo }
+      });
+      if (error) setError(error.message);
+      // note: signInWithOAuth usually redirects; we don't push here
+    } catch (err) {
+      setError(err?.message || "An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleLogin = async () => {
-    setLoading(true);
-    setError("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message);
-    } else {
+  const handleLogin = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!email || !password) return setError("Please provide both email and password.");
+
+    try {
+      setLoading(true);
+      setError("");
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      // success
       onClose();
-      router.push("/dashboard");
+      // replace so users can't go back to modal
+      router.replace("/dashboard");
+    } catch (err) {
+      setError(err?.message || "An unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  const handleSignup = async () => {
-    setLoading(true);
-    setError("");
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: name } }
-    });
-    if (error) {
-      setError(error.message);
-    } else {
+  const handleSignup = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!email || !password || !name) return setError("Please provide name, email and password.");
+
+    try {
+      setLoading(true);
+      setError("");
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: name } }
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      // signUp may require email confirmation depending on your Supabase settings
       onClose();
-      router.push("/dashboard");
+      router.replace("/dashboard");
+    } catch (err) {
+      setError(err?.message || "An unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
+  const submit = (e) => (tab === "login" ? handleLogin(e) : handleSignup(e));
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "16px",
+        background: "rgba(26,46,26,0.5)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)"
+      }}
     >
       <div
-        className="w-full max-w-md rounded-3xl p-8 relative"
         style={{
-          background: "rgba(255,255,255,0.92)",
-          border: "1px solid rgba(255,255,255,0.9)",
-          boxShadow: "0 25px 60px rgba(45,90,39,0.2)"
+          width: "100%",
+          maxWidth: "420px",
+          background: "rgba(255,255,255,0.97)",
+          borderRadius: "28px",
+          padding: "36px",
+          boxShadow: "0 32px 80px rgba(45,90,39,0.25), 0 0 0 1px rgba(255,255,255,0.8)",
+          position: "relative",
+          animation: "slideUp 0.3s ease"
         }}
       >
-        {/* Close Button */}
+        <style>{`
+          @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .auth-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1.5px solid #e5e7eb;
+            background: #f8faf8;
+            color: #1a2e1a;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+            font-family: 'DM Sans', sans-serif;
+            box-sizing: border-box;
+          }
+          .auth-input:focus { border-color: #4a7c59; }
+          .auth-input::placeholder { color: #9ca3af; }
+          .google-btn:hover { background: #f9fafb; }
+        `}</style>
+
+        {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+          aria-label="Close authentication dialog"
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "16px",
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            border: "none",
+            background: "#f3f4f6",
+            color: "#6b7280",
+            fontSize: "16px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
         >
           ✕
         </button>
 
         {/* Logo */}
-        <div className="text-center mb-6">
-          <span className="text-3xl">🌿</span>
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <div style={{ fontSize: "32px", marginBottom: "6px" }}>🌿</div>
           <h2
-            className="text-2xl font-bold mt-1"
-            style={{ fontFamily: "'Playfair Display', serif", color: "#1a2e1a" }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "22px",
+              fontWeight: "700",
+              color: "#1a2e1a",
+              margin: 0
+            }}
           >
-            AgentFlow
+            Vasu Agents
           </h2>
+          <p style={{ color: "#6b7280", fontSize: "13px", marginTop: "4px" }}>
+            {tab === "login" ? "Welcome back!" : "Create your account"}
+          </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-gray-100 rounded-2xl p-1 mb-6">
-          <button
-            onClick={() => { setTab("login"); setError(""); }}
-            className="flex-1 py-2 rounded-xl text-sm font-medium transition"
-            style={{
-              background: tab === "login" ? "white" : "transparent",
-              color: tab === "login" ? "#1a2e1a" : "#5a7a5a",
-              boxShadow: tab === "login" ? "0 2px 8px rgba(0,0,0,0.1)" : "none"
-            }}
-          >
-            Login
-          </button>
-          <button
-            onClick={() => { setTab("signup"); setError(""); }}
-            className="flex-1 py-2 rounded-xl text-sm font-medium transition"
-            style={{
-              background: tab === "signup" ? "white" : "transparent",
-              color: tab === "signup" ? "#1a2e1a" : "#5a7a5a",
-              boxShadow: tab === "signup" ? "0 2px 8px rgba(0,0,0,0.1)" : "none"
-            }}
-          >
-            Sign Up
-          </button>
+        <div
+          style={{
+            display: "flex",
+            background: "#f3f4f6",
+            borderRadius: "14px",
+            padding: "4px",
+            marginBottom: "20px"
+          }}
+        >
+          {["login", "signup"].map((t) => (
+            <button
+              key={t}
+              onClick={() => {
+                setTab(t);
+                setError("");
+              }}
+              style={{
+                flex: 1,
+                padding: "9px",
+                borderRadius: "10px",
+                border: "none",
+                fontSize: "13px",
+                fontWeight: "500",
+                cursor: "pointer",
+                transition: "all 0.2s",
+                background: tab === t ? "white" : "transparent",
+                color: tab === t ? "#1a2e1a" : "#6b7280",
+                boxShadow: tab === t ? "0 2px 8px rgba(0,0,0,0.1)" : "none",
+                fontFamily: "'DM Sans', sans-serif"
+              }}
+            >
+              {t === "login" ? "Login" : "Sign Up"}
+            </button>
+          ))}
         </div>
 
         {/* Google Button */}
         <button
           onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 py-3 rounded-2xl font-medium text-sm transition mb-4"
+          disabled={loading}
+          className="google-btn"
           style={{
-            background: "white",
+            width: "100%",
+            padding: "12px",
+            borderRadius: "14px",
             border: "1.5px solid #e5e7eb",
+            background: "white",
             color: "#1a2e1a",
+            fontSize: "14px",
+            fontWeight: "500",
+            cursor: loading ? "not-allowed" : "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+            marginBottom: "16px",
+            fontFamily: "'DM Sans', sans-serif",
+            transition: "all 0.2s",
             boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
           }}
         >
-          <img src="https://www.google.com/favicon.ico" className="w-4 h-4" />
+          <img src="https://www.google.com/favicon.ico" alt="Google" style={{ width: "16px", height: "16px" }} />
           Continue with Google
         </button>
 
         {/* Divider */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="flex-1 h-px bg-gray-200"></div>
-          <span className="text-gray-400 text-xs">or</span>
-          <div className="flex-1 h-px bg-gray-200"></div>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+          <div style={{ flex: 1, height: "1px", background: "#e5e7eb" }} />
+          <span style={{ color: "#9ca3af", fontSize: "12px" }}>or</span>
+          <div style={{ flex: 1, height: "1px", background: "#e5e7eb" }} />
         </div>
 
         {/* Error */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-4 text-sm">
+          <div
+            role="alert"
+            style={{
+              background: "#fef2f2",
+              border: "1px solid #fecaca",
+              color: "#dc2626",
+              padding: "10px 14px",
+              borderRadius: "12px",
+              fontSize: "13px",
+              marginBottom: "14px"
+            }}
+          >
             {error}
           </div>
         )}
 
         {/* Form */}
-        <div className="space-y-3">
+        <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           {tab === "signup" && (
             <input
+              className="auth-input"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Full Name"
-              className="w-full px-4 py-3 rounded-2xl text-sm outline-none transition"
-              style={{
-                background: "#f8faf8",
-                border: "1.5px solid #e5e7eb",
-                color: "#1a2e1a"
-              }}
+              aria-label="Full name"
             />
           )}
+
           <input
+            className="auth-input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email address"
-            className="w-full px-4 py-3 rounded-2xl text-sm outline-none transition"
-            style={{
-              background: "#f8faf8",
-              border: "1.5px solid #e5e7eb",
-              color: "#1a2e1a"
-            }}
+            aria-label="Email address"
           />
+
           <input
+            className="auth-input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            onKeyDown={(e) => e.key === "Enter" && (tab === "login" ? handleLogin() : handleSignup())}
-            className="w-full px-4 py-3 rounded-2xl text-sm outline-none transition"
-            style={{
-              background: "#f8faf8",
-              border: "1.5px solid #e5e7eb",
-              color: "#1a2e1a"
-            }}
+            aria-label="Password"
           />
+
           <button
-            onClick={tab === "login" ? handleLogin : handleSignup}
+            type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-2xl font-semibold text-sm transition"
             style={{
-              background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
+              width: "100%",
+              padding: "13px",
+              borderRadius: "14px",
+              border: "none",
+              background: loading ? "#9ca3af" : "linear-gradient(135deg, #2d5a27, #4a7c59)",
               color: "white",
-              opacity: loading ? 0.7 : 1
+              fontSize: "14px",
+              fontWeight: "600",
+              cursor: loading ? "not-allowed" : "pointer",
+              fontFamily: "'DM Sans', sans-serif",
+              marginTop: "4px",
+              transition: "all 0.2s"
             }}
           >
             {loading ? "Please wait..." : tab === "login" ? "Login" : "Create Account"}
           </button>
-        </div>
+        </form>
 
+        <p style={{ textAlign: "center", fontSize: "12px", color: "#9ca3af", marginTop: "16px" }}>
+          {tab === "login" ? "Don't have an account? " : "Already have an account? "}
+          <button
+            onClick={() => {
+              setTab(tab === "login" ? "signup" : "login");
+              setError("");
+            }}
+            style={{ color: "#4a7c59", background: "none", border: "none", cursor: "pointer", fontWeight: "600", fontSize: "12px" }}
+          >
+            {tab === "login" ? "Sign Up" : "Login"}
+          </button>
+        </p>
       </div>
     </div>
   );
