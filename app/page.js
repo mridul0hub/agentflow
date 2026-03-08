@@ -481,7 +481,7 @@ export default function Home() {
         }}>{agent.icon}</div>
         <h3 style={{
           fontFamily: "'Playfair Display', serif",
-          fontSize: "20px", fontWeight: "700",
+          fontSize: "50px", fontWeight: "700",
           color: "#1a2e1a", marginBottom: "10px"
         }}>{agent.name}</h3>
         <p style={{
