@@ -406,6 +406,99 @@ export default function Home() {
           <h1 className="hero-title">Coming Soon</h1>
           <p className="hero-sub">Something beautiful is growing here.</p>
 
+        {/* Agents Section */}
+<section style={{
+  position: "relative", zIndex: 10,
+  padding: "80px 24px",
+  maxWidth: "1100px",
+  margin: "0 auto"
+}}>
+  <div style={{ textAlign: "center", marginBottom: "50px" }}>
+    <p style={{
+      fontSize: "12px", fontWeight: "600", letterSpacing: "3px",
+      textTransform: "uppercase", color: "#2d6a2d", marginBottom: "12px"
+    }}>🤖 Our AI Agents</p>
+    <h2 style={{
+      fontFamily: "'Playfair Display', serif",
+      fontSize: "clamp(28px, 5vw, 48px)",
+      fontWeight: "700", color: "#1a2e1a"
+    }}>Agents for Every Business</h2>
+  </div>
+
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "24px"
+  }}>
+    {[
+      {
+        icon: "💬",
+        name: "WhatsApp AI Agent",
+        desc: "Auto-reply to customer messages, send offers, handle queries 24/7 on WhatsApp.",
+        tag: "Most Popular",
+        slug: "whatsapp-agent",
+        color: "#25D366"
+      }
+    ].map((agent) => (
+      <div
+        key={agent.slug}
+        onClick={() => user ? window.location.href = `/agents/${agent.slug}` : openAuth("signup")}
+        style={{
+          background: "rgba(255,255,255,0.65)",
+          backdropFilter: "blur(12px)",
+          border: "1.5px solid rgba(255,255,255,0.85)",
+          borderRadius: "24px",
+          padding: "32px",
+          cursor: "pointer",
+          transition: "all 0.3s",
+          position: "relative",
+          boxShadow: "0 4px 20px rgba(45,90,39,0.08)"
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = "translateY(-6px)";
+          e.currentTarget.style.boxShadow = "0 16px 40px rgba(45,90,39,0.18)";
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "0 4px 20px rgba(45,90,39,0.08)";
+        }}
+      >
+        {agent.tag && (
+          <span style={{
+            position: "absolute", top: "16px", right: "16px",
+            background: agent.color, color: "white",
+            fontSize: "11px", fontWeight: "600",
+            padding: "4px 10px", borderRadius: "50px"
+          }}>{agent.tag}</span>
+        )}
+        <div style={{
+          width: "56px", height: "56px",
+          background: "rgba(255,255,255,0.9)",
+          borderRadius: "16px",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: "28px", marginBottom: "16px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+        }}>{agent.icon}</div>
+        <h3 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "20px", fontWeight: "700",
+          color: "#1a2e1a", marginBottom: "10px"
+        }}>{agent.name}</h3>
+        <p style={{
+          color: "#5a7a5a", fontSize: "14px",
+          lineHeight: "1.6", marginBottom: "20px"
+        }}>{agent.desc}</p>
+        <div style={{
+          display: "flex", alignItems: "center",
+          color: "#2d5a27", fontSize: "13px", fontWeight: "600", gap: "6px"
+        }}>
+          {user ? "Try Free →" : "Sign up to try →"}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>    
+
           {!user ? (
             <div className="hero-buttons">
               <button className="btn-hero-primary" onClick={() => openAuth("signup")}>
