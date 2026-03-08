@@ -41,10 +41,10 @@ export default function Dashboard() {
   };
 
   if (loading) return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #1a4a15 0%, #2d6a20 50%, #1a3d10 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #e8f5e1 0%, #c8edb8 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ textAlign: "center" }}>
         <div style={{ fontSize: "48px", marginBottom: "16px", animation: "spin 2s linear infinite" }}>🌿</div>
-        <p style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'DM Sans', sans-serif" }}>Loading your dashboard...</p>
+        <p style={{ color: "#2d5a27", fontFamily: "'DM Sans', sans-serif" }}>Loading your dashboard...</p>
       </div>
       <style>{`@keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }`}</style>
     </div>
@@ -65,7 +65,6 @@ export default function Dashboard() {
           overflow: hidden;
         }
 
-        /* Sunlight rays */
         .ray {
           position: fixed;
           top: -10%;
@@ -87,22 +86,19 @@ export default function Dashboard() {
           50% { opacity: 1; }
         }
 
-        /* Floating leaves */
         .leaf {
           position: fixed;
-          font-size: 16px;
           pointer-events: none;
           animation: leafFall linear infinite;
           opacity: 0;
         }
         @keyframes leafFall {
           0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
-          10% { opacity: 0.7; }
-          90% { opacity: 0.5; }
+          10% { opacity: 0.6; }
+          90% { opacity: 0.4; }
           100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Top sunlight glow */
         .sun-glow {
           position: fixed;
           top: -80px;
@@ -120,34 +116,52 @@ export default function Dashboard() {
         }
 
         /* Navbar */
+        .db-navbar {
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 14px 32px;
+          background: rgba(255,255,255,0.5);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255,255,255,0.7);
+        }
+
         .glass-card {
-          background: rgba(255,255,255,0.6);
+          background: rgba(255,255,255,0.65);
           backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.8);
+          border: 1px solid rgba(255,255,255,0.85);
           border-radius: 20px;
           transition: all 0.3s;
         }
         .glass-card:hover {
-          background: rgba(255,255,255,0.75);
-          border-color: rgba(255,255,255,0.9);
+          background: rgba(255,255,255,0.8);
+          border-color: rgba(255,255,255,0.95);
           transform: translateY(-3px);
           box-shadow: 0 12px 30px rgba(45,90,39,0.12);
         }
 
         .stat-card {
-          background: rgba(255,255,255,0.6);
+          background: rgba(255,255,255,0.65);
           backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.8);
+          border: 1px solid rgba(255,255,255,0.85);
           border-radius: 18px;
           padding: 24px;
           transition: all 0.3s;
         }
-        .stat-card:hover { background: rgba(255,255,255,0.75); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(45,90,39,0.12); }
+        .stat-card:hover {
+          background: rgba(255,255,255,0.8);
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(45,90,39,0.12);
+        }
 
         .agent-card {
-          background: rgba(255,255,255,0.5);
+          background: rgba(255,255,255,0.55);
           backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.7);
+          border: 1px solid rgba(255,255,255,0.75);
           border-radius: 18px;
           padding: 22px;
           display: flex;
@@ -157,13 +171,13 @@ export default function Dashboard() {
           cursor: pointer;
           text-decoration: none;
         }
-        .agent-card:hover { background: rgba(255,255,255,0.7); transform: translateX(4px); }
+        .agent-card:hover { background: rgba(255,255,255,0.75); transform: translateX(4px); }
 
         .action-btn {
-          background: rgba(255,255,255,0.5);
-          border: 1px solid rgba(255,255,255,0.7);
+          background: rgba(255,255,255,0.55);
+          border: 1px solid rgba(255,255,255,0.75);
           border-radius: 14px;
-          padding: 16px;
+          padding: 18px 12px;
           text-align: center;
           cursor: pointer;
           transition: all 0.3s;
@@ -172,16 +186,16 @@ export default function Dashboard() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 8px;
+          gap: 10px;
         }
-        .action-btn:hover { background: rgba(255,255,255,0.75); transform: translateY(-3px); }
+        .action-btn:hover { background: rgba(255,255,255,0.8); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(45,90,39,0.1); }
 
         .activity-item {
           display: flex;
           align-items: center;
           gap: 12px;
           padding: 12px 0;
-          border-bottom: 1px solid rgba(45,90,39,0.1);
+          border-bottom: 1px solid rgba(45,90,39,0.08);
         }
         .activity-item:last-child { border-bottom: none; }
 
@@ -199,13 +213,13 @@ export default function Dashboard() {
           .db-navbar { padding: 12px 16px; }
           .db-content { padding: 20px 16px !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .agents-activity-grid { grid-template-columns: 1fr !important; }
           .actions-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
 
       <div className="db-page">
 
-        {/* Background Effects */}
         <div className="sun-glow" />
         <div className="ray ray-1" />
         <div className="ray ray-2" />
@@ -214,10 +228,9 @@ export default function Dashboard() {
         <div className="ray ray-5" />
         <div className="ray ray-6" />
 
-        {/* Floating Leaves */}
         {["🍃", "🌿", "🍀", "🌱"].map((leaf, i) => (
           <div key={i} className="leaf" style={{
-            left: `${20 + i * 20}%`,
+            left: `${15 + i * 22}%`,
             animationDuration: `${8 + i * 3}s`,
             animationDelay: `${i * 2}s`,
             fontSize: `${14 + i * 2}px`
@@ -226,26 +239,69 @@ export default function Dashboard() {
 
         {/* Navbar */}
         <nav className="db-navbar">
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
-            <span style={{ fontSize: "22px" }}>🌿</span>
-            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", fontWeight: "700", color: "#1a2e1a" }}>Vasu Agents</span>
+          {/* Logo - LEFT */}
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
+            <span style={{ fontSize: "28px" }}>🌿</span>
+            <span style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "28px",
+              fontWeight: "700",
+              color: "#1a2e1a",
+              letterSpacing: "-0.5px"
+            }}>Vasu Agents</span>
           </Link>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <span style={{ color: "#5a7a5a", fontSize: "13px" }}>{currentTime}</span>
+          {/* Time + Avatar - RIGHT */}
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <span style={{
+              color: "#1a2e1a",
+              fontSize: "15px",
+              fontWeight: "800",
+              fontFamily: "'DM Sans', sans-serif",
+              letterSpacing: "0.5px"
+            }}>{currentTime}</span>
+
             <div style={{ position: "relative" }}>
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "50px", padding: "6px 14px 6px 6px", cursor: "pointer" }}
+                style={{
+                  display: "flex", alignItems: "center", gap: "8px",
+                  background: "rgba(255,255,255,0.7)",
+                  border: "1.5px solid rgba(255,255,255,0.9)",
+                  borderRadius: "50px", padding: "6px 14px 6px 6px",
+                  cursor: "pointer", transition: "all 0.2s"
+                }}
               >
-                <img src={avatarUrl} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }} />
-                <span style={{ fontSize: "13px", fontWeight: "500", color: "#1a2e1a" }}>{firstName}</span>
+                <img src={avatarUrl} style={{ width: "34px", height: "34px", borderRadius: "50%", objectFit: "cover" }} />
+                <span style={{ fontSize: "14px", fontWeight: "600", color: "#1a2e1a" }}>{firstName}</span>
                 <span style={{ fontSize: "10px", color: "#5a7a5a" }}>▼</span>
               </button>
+
               {showDropdown && (
-                <div style={{ position: "absolute", top: "50px", right: 0, background: "rgba(15,35,12,0.97)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "8px", boxShadow: "0 10px 40px rgba(0,0,0,0.4)", minWidth: "180px", zIndex: 200 }}>
-                  <div style={{ padding: "8px 14px 10px", fontSize: "11px", color: "rgba(255,255,255,0.4)", borderBottom: "1px solid rgba(255,255,255,0.08)", marginBottom: "4px" }}>{user?.email}</div>
-                  <button onClick={handleLogout} style={{ display: "block", width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: "10px", fontSize: "13px", color: "#ff6b6b", background: "transparent", border: "none", cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}>🚪 Logout</button>
+                <div style={{
+                  position: "absolute", top: "52px", right: 0,
+                  background: "rgba(255,255,255,0.97)",
+                  border: "1px solid rgba(255,255,255,0.9)",
+                  borderRadius: "16px", padding: "8px",
+                  boxShadow: "0 10px 40px rgba(45,90,39,0.2)",
+                  minWidth: "190px", zIndex: 200
+                }}>
+                  <div style={{ padding: "8px 14px 10px", fontSize: "11px", color: "#9ca3af", borderBottom: "1px solid #f0f0f0", marginBottom: "4px" }}>
+                    {user?.email}
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setShowDropdown(false)}
+                    style={{ display: "block", padding: "10px 14px", borderRadius: "10px", fontSize: "13px", color: "#1a2e1a", textDecoration: "none" }}
+                  >
+                    🏠 Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    style={{ display: "block", width: "100%", textAlign: "left", padding: "10px 14px", borderRadius: "10px", fontSize: "13px", color: "#dc2626", background: "transparent", border: "none", cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    🚪 Logout
+                  </button>
                 </div>
               )}
             </div>
@@ -253,17 +309,17 @@ export default function Dashboard() {
         </nav>
 
         {/* Main Content */}
-        <div className="db-content" style={{ padding: "32px 32px", maxWidth: "1200px", margin: "0 auto" }}>
+        <div className="db-content" style={{ padding: "36px 32px", maxWidth: "1200px", margin: "0 auto" }}>
 
           {/* Welcome Header */}
           <div className="fade-1" style={{ marginBottom: "32px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
-              <img src={avatarUrl} style={{ width: "56px", height: "56px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.2)" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: "18px", flexWrap: "wrap" }}>
+              <img src={avatarUrl} style={{ width: "60px", height: "60px", borderRadius: "50%", border: "3px solid rgba(255,255,255,0.8)", boxShadow: "0 4px 12px rgba(45,90,39,0.15)" }} />
               <div>
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(22px, 4vw, 32px)", color: "#1a2e1a", margin: 0 }}>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(26px, 4vw, 38px)", color: "#1a2e1a", margin: 0, fontWeight: "700" }}>
                   {getGreeting()}, {firstName}! 🌿
                 </h1>
-                <p style={{ color: "#5a7a5a", fontSize: "14px", margin: "4px 0 0" }}>
+                <p style={{ color: "#5a7a5a", fontSize: "15px", margin: "5px 0 0", fontWeight: "400" }}>
                   Here's what's happening with your agents today
                 </p>
               </div>
@@ -275,45 +331,46 @@ export default function Dashboard() {
             {[
               { icon: "💬", label: "Messages Handled", value: "0", sub: "This month", color: "#25D366" },
               { icon: "🤖", label: "Active Agents", value: "0", sub: "Running now", color: "#4a9eff" },
-              { icon: "⚡", label: "Avg Response", value: "—", sub: "Response time", color: "#ffd54f" },
+              { icon: "⚡", label: "Avg Response", value: "—", sub: "Response time", color: "#d4a017" },
               { icon: "😊", label: "Happy Customers", value: "0", sub: "Satisfied users", color: "#ff7043" },
             ].map((stat) => (
               <div key={stat.label} className="stat-card">
-                <div style={{ fontSize: "28px", marginBottom: "10px" }}>{stat.icon}</div>
-                <div style={{ fontSize: "28px", fontWeight: "700", color: stat.color, fontFamily: "'Playfair Display', serif", marginBottom: "4px" }}>{stat.value}</div>
-                <div style={{ fontSize: "13px", fontWeight: "600", color: "#1a2e1a", marginBottom: "2px" }}>{stat.label}</div>
-                <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)" }}>{stat.sub}</div>
+                <div style={{ fontSize: "30px", marginBottom: "12px" }}>{stat.icon}</div>
+                <div style={{ fontSize: "34px", fontWeight: "700", color: stat.color, fontFamily: "'Playfair Display', serif", marginBottom: "6px" }}>{stat.value}</div>
+                <div style={{ fontSize: "15px", fontWeight: "700", color: "#1a2e1a", marginBottom: "3px" }}>{stat.label}</div>
+                <div style={{ fontSize: "12px", color: "#5a7a5a", fontWeight: "500" }}>{stat.sub}</div>
               </div>
             ))}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "28px" }}>
+          {/* My Agents + Recent Activity */}
+          <div className="agents-activity-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "28px" }}>
 
             {/* My Agents */}
-            <div className="fade-3 glass-card" style={{ padding: "24px" }}>
+            <div className="fade-3 glass-card" style={{ padding: "26px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "#1a2e1a", margin: 0 }}>My Agents</h2>
-                <span style={{ background: "rgba(255,255,255,0.08)", color: "#5a7a5a", fontSize: "12px", padding: "4px 10px", borderRadius: "50px" }}>0 active</span>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", margin: 0 }}>My Agents</h2>
+                <span style={{ background: "rgba(45,90,39,0.1)", color: "#2d5a27", fontSize: "12px", fontWeight: "600", padding: "4px 12px", borderRadius: "50px" }}>0 active</span>
               </div>
-              <Link href="/agents/whatsapp-agent" className="agent-card" style={{ marginBottom: "10px" }}>
-                <div style={{ width: "44px", height: "44px", background: "rgba(37,211,102,0.15)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", flexShrink: 0 }}>💬</div>
+              <Link href="/agents/whatsapp-agent" className="agent-card" style={{ marginBottom: "12px" }}>
+                <div style={{ width: "46px", height: "46px", background: "rgba(37,211,102,0.12)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", flexShrink: 0 }}>💬</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "14px", fontWeight: "600", color: "#1a2e1a" }}>WhatsApp Agent</div>
-                  <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>Auto-reply to customers</div>
+                  <div style={{ fontSize: "15px", fontWeight: "700", color: "#1a2e1a" }}>WhatsApp Agent</div>
+                  <div style={{ fontSize: "13px", color: "#5a7a5a", marginTop: "3px" }}>Auto-reply to customers</div>
                 </div>
-                <span style={{ fontSize: "11px", background: "rgba(255,165,0,0.15)", color: "#ffa500", padding: "3px 10px", borderRadius: "50px", flexShrink: 0 }}>Setup</span>
+                <span style={{ fontSize: "11px", background: "rgba(255,165,0,0.12)", color: "#e6900a", padding: "4px 12px", borderRadius: "50px", flexShrink: 0, fontWeight: "600" }}>Setup</span>
               </Link>
-              <div style={{ textAlign: "center", padding: "20px", color: "rgba(255,255,255,0.3)", fontSize: "13px" }}>
+              <div style={{ textAlign: "center", padding: "20px", color: "#5a7a5a", fontSize: "14px", fontWeight: "500" }}>
                 More agents coming soon 🌱
               </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="fade-3 glass-card" style={{ padding: "24px" }}>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "#1a2e1a", margin: "0 0 20px" }}>Recent Activity</h2>
+            <div className="fade-3 glass-card" style={{ padding: "26px" }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", margin: "0 0 20px" }}>Recent Activity</h2>
               <div style={{ textAlign: "center", padding: "30px 20px" }}>
-                <div style={{ fontSize: "36px", marginBottom: "12px" }}>🌱</div>
-                <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", lineHeight: "1.6" }}>
+                <div style={{ fontSize: "40px", marginBottom: "14px" }}>🌱</div>
+                <p style={{ color: "#5a7a5a", fontSize: "14px", lineHeight: "1.7", fontWeight: "500", margin: 0 }}>
                   No activity yet.<br />Set up your first agent to get started!
                 </p>
               </div>
@@ -321,9 +378,9 @@ export default function Dashboard() {
           </div>
 
           {/* Quick Actions */}
-          <div className="fade-4 glass-card" style={{ padding: "24px", marginBottom: "28px" }}>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "#1a2e1a", margin: "0 0 20px" }}>Quick Actions</h2>
-            <div className="actions-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px" }}>
+          <div className="fade-4 glass-card" style={{ padding: "26px", marginBottom: "28px" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", margin: "0 0 20px" }}>Quick Actions</h2>
+            <div className="actions-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px" }}>
               {[
                 { icon: "💬", label: "Setup WhatsApp Agent", href: "/agents/whatsapp-agent" },
                 { icon: "📊", label: "View Analytics", href: "#" },
@@ -331,8 +388,8 @@ export default function Dashboard() {
                 { icon: "🆘", label: "Get Support", href: "#" },
               ].map((action) => (
                 <Link key={action.label} href={action.href} className="action-btn">
-                  <span style={{ fontSize: "26px" }}>{action.icon}</span>
-                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", fontWeight: "500", fontFamily: "'DM Sans', sans-serif" }}>{action.label}</span>
+                  <span style={{ fontSize: "30px" }}>{action.icon}</span>
+                  <span style={{ fontSize: "13px", color: "#1a2e1a", fontWeight: "600", fontFamily: "'DM Sans', sans-serif", textAlign: "center", lineHeight: "1.4" }}>{action.label}</span>
                 </Link>
               ))}
             </div>
@@ -340,33 +397,35 @@ export default function Dashboard() {
 
           {/* Plan Banner */}
           <div className="fade-5" style={{
-            background: "linear-gradient(135deg, rgba(45,90,39,0.4), rgba(74,124,89,0.3))",
-            border: "1px solid rgba(74,124,89,0.4)",
+            background: "rgba(255,255,255,0.55)",
+            border: "1.5px solid rgba(255,255,255,0.8)",
             borderRadius: "20px",
             padding: "24px 28px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
-            gap: "16px"
+            gap: "16px",
+            backdropFilter: "blur(12px)"
           }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                <span style={{ fontSize: "18px" }}>🌿</span>
-                <span style={{ color: "#1a2e1a", fontWeight: "600", fontSize: "15px" }}>Free Plan</span>
-                <span style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontSize: "11px", padding: "2px 8px", borderRadius: "50px" }}>Current</span>
+                <span style={{ fontSize: "20px" }}>🌿</span>
+                <span style={{ color: "#1a2e1a", fontWeight: "300", fontSize: "18px", fontFamily: "'Playfair Display', serif" }}>Free Plan</span>
+                <span style={{ background: "rgba(45,90,39,0.1)", color: "#4a7c59", fontSize: "11px", fontWeight: "500", padding: "3px 10px", borderRadius: "50px" }}>Current</span>
               </div>
-              <p style={{ color: "#5a7a5a", fontSize: "13px", margin: 0 }}>
+              <p style={{ color: "#5a7a5a", fontSize: "13px", margin: 0, fontWeight: "300" }}>
                 Upgrade to unlock unlimited agents, analytics & priority support
               </p>
             </div>
             <button style={{
-              padding: "10px 24px", borderRadius: "50px",
+              padding: "12px 28px", borderRadius: "50px",
               background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
-              border: "none", color: "#1a2e1a",
-              fontSize: "13px", fontWeight: "600",
+              border: "none", color: "white",
+              fontSize: "14px", fontWeight: "600",
               cursor: "pointer", whiteSpace: "nowrap",
-              fontFamily: "'DM Sans', sans-serif"
+              fontFamily: "'DM Sans', sans-serif",
+              boxShadow: "0 4px 15px rgba(45,90,39,0.25)"
             }}>
               Upgrade Plan 🚀
             </button>
