@@ -136,7 +136,7 @@ export default function Home() {
             fontFamily: "'Playfair Display', serif",
             fontSize: "20px", fontWeight: "700",
             color: "#1a2e1a"
-          }}>AgentFlow</span>
+          }}>VASU AGENTS</span>
         </div>
 
         {/* Auth Section */}
@@ -247,7 +247,7 @@ export default function Home() {
           fontSize: "13px", fontWeight: "500", letterSpacing: "3px",
           textTransform: "uppercase", color: "#4a7c59", marginBottom: "16px"
         }}>
-          🌱 Welcome to AgentFlow
+          🌱 Welcome to VASU AGENTS
         </p>
         <h1 className="fade-up-2" style={{
           fontFamily: "'Playfair Display', serif",

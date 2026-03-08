@@ -65,7 +65,7 @@ export default function Dashboard() {
           <span style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: "20px", fontWeight: "700", color: "#1a2e1a"
-          }}>AgentFlow</span>
+          }}>VASU AGENTS</span>
         </Link>
 
         {/* User Avatar */}
