@@ -16,11 +16,9 @@ export default function Home() {
       setUser(session?.user || null);
     };
     getUser();
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
     });
-
     return () => subscription.unsubscribe();
   }, []);
 
@@ -36,299 +34,403 @@ export default function Home() {
   };
 
   return (
-    <main style={{ minHeight: "100vh", background: "linear-gradient(180deg, #c9e8f5 0%, #e8f4f0 40%, #d4edda 100%)" }}>
-
-      {/* Nature Background Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        {/* Sun */}
-        <div style={{
-          position: "absolute", top: "60px", right: "15%",
-          width: "120px", height: "120px",
-          background: "radial-gradient(circle, #fff9c4, #ffd54f, rgba(255,213,79,0))",
-          borderRadius: "50%",
-          animation: "pulse 4s ease-in-out infinite"
-        }} />
-        {/* Clouds */}
-        {[
-          { top: "8%", left: "5%", width: "200px", opacity: 0.9, delay: "0s" },
-          { top: "12%", left: "30%", width: "150px", opacity: 0.7, delay: "2s" },
-          { top: "6%", right: "25%", width: "180px", opacity: 0.8, delay: "1s" },
-        ].map((cloud, i) => (
-          <div key={i} style={{
-            position: "absolute",
-            top: cloud.top, left: cloud.left, right: cloud.right,
-            width: cloud.width,
-            height: "60px",
-            background: `rgba(255,255,255,${cloud.opacity})`,
-            borderRadius: "50px",
-            filter: "blur(8px)",
-            animation: `float ${6 + i}s ease-in-out infinite`,
-            animationDelay: cloud.delay
-          }} />
-        ))}
-        {/* Mountains */}
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0,
-          height: "35vh",
-          background: "linear-gradient(180deg, transparent, #2d5a27)",
-          clipPath: "polygon(0% 100%, 0% 60%, 8% 30%, 16% 55%, 24% 20%, 32% 50%, 40% 15%, 48% 45%, 56% 25%, 64% 50%, 72% 20%, 80% 45%, 88% 30%, 96% 55%, 100% 35%, 100% 100%)"
-        }} />
-        {/* Forest layer */}
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0,
-          height: "20vh",
-          background: "linear-gradient(180deg, #3d7a35, #1a4a15)",
-          clipPath: "polygon(0% 100%, 0% 70%, 3% 40%, 6% 65%, 9% 35%, 12% 60%, 15% 30%, 18% 55%, 21% 25%, 24% 50%, 27% 35%, 30% 55%, 33% 20%, 36% 50%, 39% 30%, 42% 55%, 45% 25%, 48% 50%, 51% 35%, 54% 55%, 57% 20%, 60% 50%, 63% 30%, 66% 55%, 69% 25%, 72% 50%, 75% 35%, 78% 55%, 81% 20%, 84% 50%, 87% 30%, 90% 55%, 93% 25%, 96% 50%, 100% 35%, 100% 100%)"
-        }} />
-        {/* Birds */}
-        {[20, 35, 50, 65, 80].map((left, i) => (
-          <div key={i} style={{
-            position: "absolute",
-            top: `${15 + i * 3}%`,
-            left: `${left}%`,
-            fontSize: "16px",
-            animation: `fly ${8 + i * 2}s linear infinite`,
-            animationDelay: `${i * 1.5}s`,
-            opacity: 0.7
-          }}>🐦</div>
-        ))}
-      </div>
-
-      {/* CSS Animations */}
+    <>
       <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          33% { transform: translateY(-15px) translateX(10px); }
-          66% { transform: translateY(-8px) translateX(-5px); }
+        html, body { margin: 0; padding: 0; overflow-x: hidden; }
+
+        .nature-bg {
+          min-height: 100vh;
+          position: relative;
+          overflow: hidden;
+          background: linear-gradient(180deg, #87CEEB 0%, #b8e4f7 25%, #c8ecd8 60%, #a8d5b5 100%);
         }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.1); opacity: 0.9; }
+
+        /* Sun */
+        .sun {
+          position: absolute;
+          top: 60px;
+          right: 12%;
+          width: 100px;
+          height: 100px;
+          background: radial-gradient(circle, #fff9c4 30%, #ffd54f 60%, rgba(255,213,79,0) 100%);
+          border-radius: 50%;
+          animation: sunPulse 4s ease-in-out infinite;
+          box-shadow: 0 0 60px rgba(255,213,79,0.6);
         }
-        @keyframes fly {
-          0% { transform: translateX(-50px); opacity: 0; }
-          10% { opacity: 0.7; }
-          90% { opacity: 0.7; }
-          100% { transform: translateX(200px); opacity: 0; }
+
+        @keyframes sunPulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(255,213,79,0.6); }
+          50% { transform: scale(1.08); box-shadow: 0 0 90px rgba(255,213,79,0.8); }
         }
+
+        /* Clouds */
+        .cloud {
+          position: absolute;
+          background: rgba(255,255,255,0.85);
+          border-radius: 50px;
+          filter: blur(6px);
+        }
+        .cloud-1 { top: 8%; left: 5%; width: 180px; height: 55px; animation: cloudFloat 8s ease-in-out infinite; }
+        .cloud-2 { top: 14%; left: 28%; width: 140px; height: 45px; animation: cloudFloat 11s ease-in-out infinite 2s; }
+        .cloud-3 { top: 6%; right: 20%; width: 200px; height: 60px; animation: cloudFloat 9s ease-in-out infinite 1s; }
+        .cloud-4 { top: 18%; right: 8%; width: 120px; height: 40px; animation: cloudFloat 10s ease-in-out infinite 3s; }
+
+        @keyframes cloudFloat {
+          0%, 100% { transform: translateX(0px); }
+          50% { transform: translateX(20px); }
+        }
+
+        /* Birds */
+        .bird {
+          position: absolute;
+          font-size: 18px;
+          animation: birdFly linear infinite;
+          opacity: 0;
+        }
+        .bird-1 { top: 15%; animation-duration: 12s; animation-delay: 0s; }
+        .bird-2 { top: 20%; animation-duration: 16s; animation-delay: 3s; }
+        .bird-3 { top: 12%; animation-duration: 14s; animation-delay: 6s; }
+        .bird-4 { top: 25%; animation-duration: 18s; animation-delay: 1s; }
+
+        @keyframes birdFly {
+          0% { transform: translateX(-80px); opacity: 0; }
+          5% { opacity: 1; }
+          95% { opacity: 1; }
+          100% { transform: translateX(110vw); opacity: 0; }
+        }
+
+        /* Mountains back */
+        .mountains-back {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 40vh;
+          background: linear-gradient(180deg, #4a8a4a 0%, #2d6a2d 100%);
+          clip-path: polygon(0% 100%, 0% 65%, 5% 40%, 10% 60%, 15% 30%, 20% 55%, 25% 25%, 30% 50%, 35% 20%, 40% 48%, 45% 28%, 50% 52%, 55% 22%, 60% 48%, 65% 25%, 70% 50%, 75% 22%, 80% 48%, 85% 30%, 90% 55%, 95% 35%, 100% 55%, 100% 100%);
+        }
+
+        /* Mountains front */
+        .mountains-front {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 28vh;
+          background: linear-gradient(180deg, #2d5a27 0%, #1a3d1a 100%);
+          clip-path: polygon(0% 100%, 0% 70%, 4% 45%, 8% 65%, 12% 35%, 16% 60%, 20% 30%, 24% 55%, 28% 25%, 32% 52%, 36% 32%, 40% 55%, 44% 20%, 48% 50%, 52% 28%, 56% 52%, 60% 22%, 64% 50%, 68% 30%, 72% 55%, 76% 25%, 80% 52%, 84% 32%, 88% 58%, 92% 35%, 96% 58%, 100% 40%, 100% 100%);
+        }
+
+        /* Trees */
+        .trees {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 15vh;
+          background: linear-gradient(180deg, #1a4a15 0%, #0f2e0f 100%);
+          clip-path: polygon(0% 100%, 0% 75%, 2% 50%, 4% 70%, 6% 40%, 8% 65%, 10% 35%, 12% 60%, 14% 30%, 16% 55%, 18% 40%, 20% 60%, 22% 25%, 24% 55%, 26% 35%, 28% 58%, 30% 28%, 32% 55%, 34% 38%, 36% 60%, 38% 22%, 40% 55%, 42% 32%, 44% 58%, 46% 28%, 48% 52%, 50% 35%, 52% 58%, 54% 25%, 56% 52%, 58% 35%, 60% 58%, 62% 22%, 64% 52%, 66% 35%, 68% 58%, 70% 28%, 72% 52%, 74% 35%, 76% 58%, 78% 25%, 80% 52%, 82% 32%, 84% 58%, 86% 28%, 88% 52%, 90% 38%, 92% 60%, 94% 30%, 96% 55%, 98% 40%, 100% 60%, 100% 100%);
+        }
+
+        /* Grass */
+        .grass {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 6vh;
+          background: linear-gradient(180deg, #2d7a2d, #1a4a1a);
+        }
+
+        /* Navbar */
+        .navbar {
+          position: fixed;
+          top: 0; left: 0; right: 0;
+          z-index: 100;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 32px;
+          background: rgba(255,255,255,0.25);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          text-decoration: none;
+        }
+
+        .logo-text {
+          font-family: 'Playfair Display', serif;
+          font-size: 20px;
+          font-weight: 700;
+          color: #1a2e1a;
+        }
+
+        .btn-login {
+          padding: 8px 22px;
+          border-radius: 50px;
+          background: rgba(255,255,255,0.7);
+          border: 1.5px solid rgba(255,255,255,0.9);
+          color: #1a2e1a;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-family: 'DM Sans', sans-serif;
+        }
+        .btn-login:hover { background: rgba(255,255,255,0.9); }
+
+        .btn-signup {
+          padding: 8px 22px;
+          border-radius: 50px;
+          background: linear-gradient(135deg, #2d5a27, #4a7c59);
+          border: none;
+          color: white;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-family: 'DM Sans', sans-serif;
+          box-shadow: 0 4px 15px rgba(45,90,39,0.3);
+        }
+        .btn-signup:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(45,90,39,0.4); }
+
+        /* Hero */
+        .hero {
+          position: relative;
+          z-index: 10;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 120px 24px 220px;
+        }
+
+        .hero-tag {
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #2d6a2d;
+          margin-bottom: 16px;
+          animation: fadeUp 0.8s ease forwards;
+        }
+
+        .hero-title {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(42px, 9vw, 88px);
+          font-weight: 700;
+          line-height: 1.05;
+          color: #1a2e1a;
+          margin-bottom: 20px;
+          text-shadow: 0 2px 20px rgba(255,255,255,0.5);
+          animation: fadeUp 0.8s ease 0.15s forwards;
+          opacity: 0;
+        }
+
+        .hero-sub {
+          font-size: clamp(15px, 2vw, 19px);
+          color: #3d5a3d;
+          max-width: 480px;
+          line-height: 1.7;
+          margin-bottom: 40px;
+          animation: fadeUp 0.8s ease 0.3s forwards;
+          opacity: 0;
+        }
+
+        .hero-buttons {
+          display: flex;
+          gap: 14px;
+          flex-wrap: wrap;
+          justify-content: center;
+          animation: fadeUp 0.8s ease 0.45s forwards;
+          opacity: 0;
+        }
+
+        .btn-hero-primary {
+          padding: 15px 36px;
+          border-radius: 50px;
+          background: linear-gradient(135deg, #2d5a27, #4a7c59);
+          border: none;
+          color: white;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          box-shadow: 0 8px 30px rgba(45,90,39,0.35);
+          transition: all 0.2s;
+          font-family: 'DM Sans', sans-serif;
+        }
+        .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(45,90,39,0.45); }
+
+        .btn-hero-secondary {
+          padding: 15px 36px;
+          border-radius: 50px;
+          background: rgba(255,255,255,0.75);
+          border: 1.5px solid rgba(255,255,255,0.9);
+          color: #1a2e1a;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          backdrop-filter: blur(10px);
+          transition: all 0.2s;
+          font-family: 'DM Sans', sans-serif;
+        }
+        .btn-hero-secondary:hover { background: rgba(255,255,255,0.9); }
+
+        /* Avatar dropdown */
+        .avatar-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(255,255,255,0.8);
+          border: 1.5px solid rgba(255,255,255,0.9);
+          border-radius: 50px;
+          padding: 6px 14px 6px 6px;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .avatar-btn:hover { background: rgba(255,255,255,0.95); }
+
+        .dropdown {
+          position: absolute;
+          top: 52px;
+          right: 0;
+          background: rgba(255,255,255,0.97);
+          border-radius: 16px;
+          padding: 8px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+          min-width: 170px;
+          z-index: 200;
+        }
+
+        .dropdown-item {
+          display: block;
+          width: 100%;
+          text-align: left;
+          padding: 10px 14px;
+          border-radius: 10px;
+          font-size: 13px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: background 0.2s;
+          font-family: 'DM Sans', sans-serif;
+          text-decoration: none;
+        }
+        .dropdown-item:hover { background: #f0f7f0; }
+        .dropdown-item-red { color: #dc2626; }
+        .dropdown-item-red:hover { background: #fff5f5 !important; }
+
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(30px); }
+          from { opacity: 0; transform: translateY(24px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .fade-up { animation: fadeUp 0.8s ease forwards; }
-        .fade-up-2 { animation: fadeUp 0.8s ease 0.2s forwards; opacity: 0; }
-        .fade-up-3 { animation: fadeUp 0.8s ease 0.4s forwards; opacity: 0; }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+          .navbar { padding: 14px 20px; }
+          .hero { padding: 100px 20px 200px; }
+          .sun { width: 70px; height: 70px; right: 8%; top: 80px; }
+        }
       `}</style>
 
-      {/* Navbar */}
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        background: "rgba(255,255,255,0.3)",
-        backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255,255,255,0.5)",
-        padding: "16px 32px",
-        display: "flex", justifyContent: "space-between", alignItems: "center"
-      }}>
-        {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontSize: "24px" }}>🌿</span>
-          <span style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "20px", fontWeight: "700",
-            color: "#1a2e1a"
-          }}>VASU AGENTS</span>
-        </div>
+      <div className="nature-bg">
+        {/* Nature Elements */}
+        <div className="sun" />
+        <div className="cloud cloud-1" />
+        <div className="cloud cloud-2" />
+        <div className="cloud cloud-3" />
+        <div className="cloud cloud-4" />
+        <div className="bird bird-1">🐦</div>
+        <div className="bird bird-2">🐦</div>
+        <div className="bird bird-3">🐦</div>
+        <div className="bird bird-4">🐦</div>
+        <div className="mountains-back" />
+        <div className="mountains-front" />
+        <div className="trees" />
+        <div className="grass" />
 
-        {/* Auth Section */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {user ? (
-            <div style={{ position: "relative" }}>
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                style={{
-                  display: "flex", alignItems: "center", gap: "8px",
-                  background: "rgba(255,255,255,0.8)",
-                  border: "1.5px solid rgba(255,255,255,0.9)",
-                  borderRadius: "50px", padding: "6px 14px 6px 6px",
-                  cursor: "pointer", transition: "all 0.2s"
-                }}
-              >
-                <img
-                  src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.user_metadata?.full_name || user.email)}&background=2d5a27&color=fff&size=32`}
-                  style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }}
-                />
-                <span style={{ fontSize: "13px", fontWeight: "500", color: "#1a2e1a" }}>
-                  {user.user_metadata?.full_name?.split(" ")[0] || user.email?.split("@")[0]}
-                </span>
-                <span style={{ fontSize: "10px", color: "#5a7a5a" }}>▼</span>
+        {/* Navbar */}
+        <nav className="navbar">
+          <div className="logo">
+            <span style={{ fontSize: "24px" }}>🌿</span>
+            <span className="logo-text">Vasu Agents</span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {user ? (
+              <div style={{ position: "relative" }}>
+                <button className="avatar-btn" onClick={() => setShowDropdown(!showDropdown)}>
+                  <img
+                    src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.user_metadata?.full_name || user.email)}&background=2d5a27&color=fff&size=32`}
+                    style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }}
+                  />
+                  <span style={{ fontSize: "13px", fontWeight: "500", color: "#1a2e1a" }}>
+                    {user.user_metadata?.full_name?.split(" ")[0] || user.email?.split("@")[0]}
+                  </span>
+                  <span style={{ fontSize: "10px", color: "#5a7a5a" }}>▼</span>
+                </button>
+                {showDropdown && (
+                  <div className="dropdown">
+                    <div style={{ padding: "8px 14px 10px", fontSize: "11px", color: "#9ca3af", borderBottom: "1px solid #f0f0f0", marginBottom: "4px" }}>
+                      {user.email}
+                    </div>
+                    <Link href="/dashboard" className="dropdown-item" style={{ color: "#1a2e1a" }} onClick={() => setShowDropdown(false)}>
+                      🏠 Dashboard
+                    </Link>
+                    <button className="dropdown-item dropdown-item-red" onClick={handleLogout}>
+                      🚪 Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <button className="btn-login" onClick={() => openAuth("login")}>Login</button>
+                <button className="btn-signup" onClick={() => openAuth("signup")}>Get Started</button>
+              </>
+            )}
+          </div>
+        </nav>
+
+        {/* Hero */}
+        <section className="hero">
+          <p className="hero-tag">🌱 Welcome to Vasu Agents</p>
+          <h1 className="hero-title">Coming Soon</h1>
+          <p className="hero-sub">Something beautiful is growing here.</p>
+
+          {!user ? (
+            <div className="hero-buttons">
+              <button className="btn-hero-primary" onClick={() => openAuth("signup")}>
+                Get Started Free 🌿
               </button>
-
-              {/* Dropdown */}
-              {showDropdown && (
-                <div style={{
-                  position: "absolute", top: "50px", right: 0,
-                  background: "rgba(255,255,255,0.95)",
-                  borderRadius: "16px", padding: "8px",
-                  boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
-                  border: "1px solid rgba(255,255,255,0.9)",
-                  minWidth: "160px", zIndex: 200
-                }}>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setShowDropdown(false)}
-                    style={{
-                      display: "block", padding: "10px 14px",
-                      borderRadius: "10px", fontSize: "13px",
-                      color: "#1a2e1a", textDecoration: "none",
-                      transition: "background 0.2s"
-                    }}
-                    onMouseEnter={e => e.target.style.background = "#f0f7f0"}
-                    onMouseLeave={e => e.target.style.background = "transparent"}
-                  >
-                    🏠 Dashboard
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    style={{
-                      display: "block", width: "100%", textAlign: "left",
-                      padding: "10px 14px", borderRadius: "10px",
-                      fontSize: "13px", color: "#c0392b",
-                      background: "transparent", border: "none",
-                      cursor: "pointer", transition: "background 0.2s"
-                    }}
-                    onMouseEnter={e => e.target.style.background = "#fff5f5"}
-                    onMouseLeave={e => e.target.style.background = "transparent"}
-                  >
-                    🚪 Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <>
-              <button
-                onClick={() => openAuth("login")}
-                style={{
-                  padding: "8px 20px", borderRadius: "50px",
-                  background: "rgba(255,255,255,0.6)",
-                  border: "1.5px solid rgba(255,255,255,0.8)",
-                  color: "#1a2e1a", fontSize: "13px", fontWeight: "500",
-                  cursor: "pointer", transition: "all 0.2s"
-                }}
-              >
+              <button className="btn-hero-secondary" onClick={() => openAuth("login")}>
                 Login
               </button>
-              <button
-                onClick={() => openAuth("signup")}
-                style={{
-                  padding: "8px 20px", borderRadius: "50px",
-                  background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
-                  border: "none", color: "white",
-                  fontSize: "13px", fontWeight: "500",
-                  cursor: "pointer", transition: "all 0.2s"
-                }}
-              >
-                Get Started
-              </button>
-            </>
+            </div>
+          ) : (
+            <div className="hero-buttons" style={{ opacity: 1, animation: "none" }}>
+              <Link href="/dashboard" className="btn-hero-primary" style={{ textDecoration: "none", display: "inline-block" }}>
+                Go to Dashboard 🌿
+              </Link>
+            </div>
           )}
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section style={{
-        position: "relative", zIndex: 1,
-        minHeight: "100vh",
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center",
-        textAlign: "center", padding: "120px 24px 200px"
-      }}>
-        <p className="fade-up" style={{
-          fontSize: "13px", fontWeight: "500", letterSpacing: "3px",
-          textTransform: "uppercase", color: "#4a7c59", marginBottom: "16px"
-        }}>
-          🌱 Welcome to VASU AGENTS
-        </p>
-        <h1 className="fade-up-2" style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: "clamp(40px, 8vw, 80px)",
-          fontWeight: "700", lineHeight: "1.1",
-          color: "#1a2e1a", marginBottom: "24px"
-        }}>
-          Coming Soon
-        </h1>
-        <p className="fade-up-3" style={{
-          fontSize: "clamp(16px, 2vw, 20px)",
-          color: "#5a7a5a", maxWidth: "500px",
-          lineHeight: "1.6", marginBottom: "40px"
-        }}>
-          Something beautiful is growing here.
-        </p>
-
-        {!user && (
-          <div className="fade-up-3" style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
-            <button
-              onClick={() => openAuth("signup")}
-              style={{
-                padding: "14px 32px", borderRadius: "50px",
-                background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
-                border: "none", color: "white",
-                fontSize: "15px", fontWeight: "600",
-                cursor: "pointer",
-                boxShadow: "0 8px 24px rgba(45,90,39,0.3)"
-              }}
-            >
-              Get Started Free 🌿
-            </button>
-            <button
-              onClick={() => openAuth("login")}
-              style={{
-                padding: "14px 32px", borderRadius: "50px",
-                background: "rgba(255,255,255,0.7)",
-                border: "1.5px solid rgba(255,255,255,0.9)",
-                color: "#1a2e1a", fontSize: "15px", fontWeight: "600",
-                cursor: "pointer"
-              }}
-            >
-              Login
-            </button>
-          </div>
-        )}
-
-        {user && (
-          <div className="fade-up-3">
-            <Link
-              href="/dashboard"
-              style={{
-                padding: "14px 32px", borderRadius: "50px",
-                background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
-                color: "white", fontSize: "15px", fontWeight: "600",
-                textDecoration: "none",
-                boxShadow: "0 8px 24px rgba(45,90,39,0.3)",
-                display: "inline-block"
-              }}
-            >
-              Go to Dashboard 🌿
-            </Link>
-          </div>
-        )}
-      </section>
+        </section>
+      </div>
 
       {/* Auth Modal */}
-      <AuthModal
-        isOpen={showAuth}
-        onClose={() => setShowAuth(false)}
-        defaultTab={authTab}
-      />
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} defaultTab={authTab} />
 
-      {/* Click outside dropdown */}
       {showDropdown && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setShowDropdown(false)}
-        />
+        <div style={{ position: "fixed", inset: 0, zIndex: 40 }} onClick={() => setShowDropdown(false)} />
       )}
-
-    </main>
+    </>
   );
 }
