@@ -1,103 +1,14 @@
 "use client";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-
-const agents = [
-  {
-    icon: "💬",
-    title: "Chat Agent",
-    description: "24/7 AI customer support for your website. Answers customer queries instantly.",
-    status: "live",
-    slug: "chat-agent",
-    color: "from-violet-600 to-purple-600",
-  },
-  {
-    icon: "📱",
-    title: "WhatsApp Agent",
-    description: "Auto-reply to WhatsApp messages. Every Indian business needs this.",
-    status: "live",
-    slug: "whatsapp-agent",
-    color: "from-green-600 to-emerald-600",
-  },
-  {
-    icon: "📞",
-    title: "Voice Call Agent",
-    description: "AI picks up calls, answers queries, transfers important calls to owner.",
-    status: "coming",
-    slug: "voice-agent",
-    color: "from-blue-600 to-cyan-600",
-  },
-  {
-    icon: "📧",
-    title: "Email Agent",
-    description: "Reads and replies to emails automatically 24/7.",
-    status: "coming",
-    slug: "email-agent",
-    color: "from-orange-600 to-amber-600",
-  },
-  {
-    icon: "📅",
-    title: "Appointment Agent",
-    description: "Customers book appointments automatically without calling.",
-    status: "coming",
-    slug: "appointment-agent",
-    color: "from-pink-600 to-rose-600",
-  },
-  {
-    icon: "🛒",
-    title: "Order Taking Agent",
-    description: "Takes orders from customers automatically through chat.",
-    status: "coming",
-    slug: "order-agent",
-    color: "from-red-600 to-orange-600",
-  },
-];
-
-const plans = [
-  {
-    name: "Starter",
-    price: "₹1,999",
-    period: "month",
-    features: [
-      "1 AI Agent",
-      "500 conversations/month",
-      "Basic analytics",
-      "Email support",
-    ],
-    highlighted: false,
-  },
-  {
-    name: "Pro",
-    price: "₹3,999",
-    period: "month",
-    features: [
-      "3 AI Agents",
-      "2000 conversations/month",
-      "Advanced analytics",
-      "Priority support",
-      "Custom branding",
-    ],
-    highlighted: true,
-  },
-  {
-    name: "Business",
-    price: "₹7,999",
-    period: "month",
-    features: [
-      "Unlimited Agents",
-      "Unlimited conversations",
-      "Full analytics",
-      "24/7 support",
-      "Custom branding",
-      "API access",
-    ],
-    highlighted: false,
-  },
-];
+import AuthModal from "./components/AuthModal";
+import Link from "next/link";
 
 export default function Home() {
   const [user, setUser] = useState(null);
+  const [showAuth, setShowAuth] = useState(false);
+  const [authTab, setAuthTab] = useState("login");
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -116,262 +27,307 @@ export default function Home() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setShowDropdown(false);
+  };
+
+  const openAuth = (tab) => {
+    setAuthTab(tab);
+    setShowAuth(true);
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0f] text-white">
+    <main style={{ minHeight: "100vh", background: "linear-gradient(180deg, #c9e8f5 0%, #e8f4f0 40%, #d4edda 100%)" }}>
+
+      {/* Nature Background Elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        {/* Sun */}
+        <div style={{
+          position: "absolute", top: "60px", right: "15%",
+          width: "120px", height: "120px",
+          background: "radial-gradient(circle, #fff9c4, #ffd54f, rgba(255,213,79,0))",
+          borderRadius: "50%",
+          animation: "pulse 4s ease-in-out infinite"
+        }} />
+        {/* Clouds */}
+        {[
+          { top: "8%", left: "5%", width: "200px", opacity: 0.9, delay: "0s" },
+          { top: "12%", left: "30%", width: "150px", opacity: 0.7, delay: "2s" },
+          { top: "6%", right: "25%", width: "180px", opacity: 0.8, delay: "1s" },
+        ].map((cloud, i) => (
+          <div key={i} style={{
+            position: "absolute",
+            top: cloud.top, left: cloud.left, right: cloud.right,
+            width: cloud.width,
+            height: "60px",
+            background: `rgba(255,255,255,${cloud.opacity})`,
+            borderRadius: "50px",
+            filter: "blur(8px)",
+            animation: `float ${6 + i}s ease-in-out infinite`,
+            animationDelay: cloud.delay
+          }} />
+        ))}
+        {/* Mountains */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0,
+          height: "35vh",
+          background: "linear-gradient(180deg, transparent, #2d5a27)",
+          clipPath: "polygon(0% 100%, 0% 60%, 8% 30%, 16% 55%, 24% 20%, 32% 50%, 40% 15%, 48% 45%, 56% 25%, 64% 50%, 72% 20%, 80% 45%, 88% 30%, 96% 55%, 100% 35%, 100% 100%)"
+        }} />
+        {/* Forest layer */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0,
+          height: "20vh",
+          background: "linear-gradient(180deg, #3d7a35, #1a4a15)",
+          clipPath: "polygon(0% 100%, 0% 70%, 3% 40%, 6% 65%, 9% 35%, 12% 60%, 15% 30%, 18% 55%, 21% 25%, 24% 50%, 27% 35%, 30% 55%, 33% 20%, 36% 50%, 39% 30%, 42% 55%, 45% 25%, 48% 50%, 51% 35%, 54% 55%, 57% 20%, 60% 50%, 63% 30%, 66% 55%, 69% 25%, 72% 50%, 75% 35%, 78% 55%, 81% 20%, 84% 50%, 87% 30%, 90% 55%, 93% 25%, 96% 50%, 100% 35%, 100% 100%)"
+        }} />
+        {/* Birds */}
+        {[20, 35, 50, 65, 80].map((left, i) => (
+          <div key={i} style={{
+            position: "absolute",
+            top: `${15 + i * 3}%`,
+            left: `${left}%`,
+            fontSize: "16px",
+            animation: `fly ${8 + i * 2}s linear infinite`,
+            animationDelay: `${i * 1.5}s`,
+            opacity: 0.7
+          }}>🐦</div>
+        ))}
+      </div>
+
+      {/* CSS Animations */}
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          33% { transform: translateY(-15px) translateX(10px); }
+          66% { transform: translateY(-8px) translateX(-5px); }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.1); opacity: 0.9; }
+        }
+        @keyframes fly {
+          0% { transform: translateX(-50px); opacity: 0; }
+          10% { opacity: 0.7; }
+          90% { opacity: 0.7; }
+          100% { transform: translateX(200px); opacity: 0; }
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.8s ease forwards; }
+        .fade-up-2 { animation: fadeUp 0.8s ease 0.2s forwards; opacity: 0; }
+        .fade-up-3 { animation: fadeUp 0.8s ease 0.4s forwards; opacity: 0; }
+      `}</style>
 
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">🤖</span>
-            <span className="text-xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-              AgentFlow
-            </span>
-          </div>
-          <div className="hidden md:flex gap-8 text-sm text-gray-400">
-            <a href="#agents" className="hover:text-white transition">Agents</a>
-            <a href="#pricing" className="hover:text-white transition">Pricing</a>
-            <a href="#how-it-works" className="hover:text-white transition">How It Works</a>
-          </div>
-          <div className="flex items-center gap-3">
-            {user ? (
-              <>
-                <Link href="/dashboard" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition">
-                  Dashboard
-                </Link>
+      <nav style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        background: "rgba(255,255,255,0.3)",
+        backdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(255,255,255,0.5)",
+        padding: "16px 32px",
+        display: "flex", justifyContent: "space-between", alignItems: "center"
+      }}>
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "24px" }}>🌿</span>
+          <span style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "20px", fontWeight: "700",
+            color: "#1a2e1a"
+          }}>AgentFlow</span>
+        </div>
+
+        {/* Auth Section */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {user ? (
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                style={{
+                  display: "flex", alignItems: "center", gap: "8px",
+                  background: "rgba(255,255,255,0.8)",
+                  border: "1.5px solid rgba(255,255,255,0.9)",
+                  borderRadius: "50px", padding: "6px 14px 6px 6px",
+                  cursor: "pointer", transition: "all 0.2s"
+                }}
+              >
                 <img
-                  src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${user.email}&background=7c3aed&color=fff`}
-                  className="w-8 h-8 rounded-full border-2 border-violet-500 cursor-pointer"
+                  src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.user_metadata?.full_name || user.email)}&background=2d5a27&color=fff&size=32`}
+                  style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover" }}
                 />
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link href="/login" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition">
-                  Login
-                </Link>
-                <Link href="/signup" className="px-4 py-2 text-sm bg-violet-600 hover:bg-violet-500 rounded-lg transition">
-                  Get Started Free
-                </Link>
-              </>
-            )}
-          </div>
+                <span style={{ fontSize: "13px", fontWeight: "500", color: "#1a2e1a" }}>
+                  {user.user_metadata?.full_name?.split(" ")[0] || user.email?.split("@")[0]}
+                </span>
+                <span style={{ fontSize: "10px", color: "#5a7a5a" }}>▼</span>
+              </button>
+
+              {/* Dropdown */}
+              {showDropdown && (
+                <div style={{
+                  position: "absolute", top: "50px", right: 0,
+                  background: "rgba(255,255,255,0.95)",
+                  borderRadius: "16px", padding: "8px",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
+                  border: "1px solid rgba(255,255,255,0.9)",
+                  minWidth: "160px", zIndex: 200
+                }}>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setShowDropdown(false)}
+                    style={{
+                      display: "block", padding: "10px 14px",
+                      borderRadius: "10px", fontSize: "13px",
+                      color: "#1a2e1a", textDecoration: "none",
+                      transition: "background 0.2s"
+                    }}
+                    onMouseEnter={e => e.target.style.background = "#f0f7f0"}
+                    onMouseLeave={e => e.target.style.background = "transparent"}
+                  >
+                    🏠 Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      display: "block", width: "100%", textAlign: "left",
+                      padding: "10px 14px", borderRadius: "10px",
+                      fontSize: "13px", color: "#c0392b",
+                      background: "transparent", border: "none",
+                      cursor: "pointer", transition: "background 0.2s"
+                    }}
+                    onMouseEnter={e => e.target.style.background = "#fff5f5"}
+                    onMouseLeave={e => e.target.style.background = "transparent"}
+                  >
+                    🚪 Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={() => openAuth("login")}
+                style={{
+                  padding: "8px 20px", borderRadius: "50px",
+                  background: "rgba(255,255,255,0.6)",
+                  border: "1.5px solid rgba(255,255,255,0.8)",
+                  color: "#1a2e1a", fontSize: "13px", fontWeight: "500",
+                  cursor: "pointer", transition: "all 0.2s"
+                }}
+              >
+                Login
+              </button>
+              <button
+                onClick={() => openAuth("signup")}
+                style={{
+                  padding: "8px 20px", borderRadius: "50px",
+                  background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
+                  border: "none", color: "white",
+                  fontSize: "13px", fontWeight: "500",
+                  cursor: "pointer", transition: "all 0.2s"
+                }}
+              >
+                Get Started
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 text-center">
-        <div className="max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-violet-600/20 border border-violet-500/30 rounded-full px-4 py-2 text-sm text-violet-300 mb-8">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            AI Agents Live and Working Right Now
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Automate Your Business
-            <span className="block bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              With AI Agents
-            </span>
-          </h1>
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            Deploy AI agents that handle customer support, WhatsApp messages,
-            phone calls and appointments — 24/7, automatically, for any business.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {user ? (
-              <Link href="/dashboard" className="px-8 py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-lg font-semibold transition transform hover:scale-105">
-                Go to Dashboard 🚀
-              </Link>
-            ) : (
-              <Link href="/signup" className="px-8 py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-lg font-semibold transition transform hover:scale-105">
-                Start Free Trial 🚀
-              </Link>
-            )}
-            <button className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-lg transition">
-              Watch Demo ▶
+      <section style={{
+        position: "relative", zIndex: 1,
+        minHeight: "100vh",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        textAlign: "center", padding: "120px 24px 200px"
+      }}>
+        <p className="fade-up" style={{
+          fontSize: "13px", fontWeight: "500", letterSpacing: "3px",
+          textTransform: "uppercase", color: "#4a7c59", marginBottom: "16px"
+        }}>
+          🌱 Welcome to AgentFlow
+        </p>
+        <h1 className="fade-up-2" style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "clamp(40px, 8vw, 80px)",
+          fontWeight: "700", lineHeight: "1.1",
+          color: "#1a2e1a", marginBottom: "24px"
+        }}>
+          Coming Soon
+        </h1>
+        <p className="fade-up-3" style={{
+          fontSize: "clamp(16px, 2vw, 20px)",
+          color: "#5a7a5a", maxWidth: "500px",
+          lineHeight: "1.6", marginBottom: "40px"
+        }}>
+          Something beautiful is growing here.
+        </p>
+
+        {!user && (
+          <div className="fade-up-3" style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
+            <button
+              onClick={() => openAuth("signup")}
+              style={{
+                padding: "14px 32px", borderRadius: "50px",
+                background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
+                border: "none", color: "white",
+                fontSize: "15px", fontWeight: "600",
+                cursor: "pointer",
+                boxShadow: "0 8px 24px rgba(45,90,39,0.3)"
+              }}
+            >
+              Get Started Free 🌿
+            </button>
+            <button
+              onClick={() => openAuth("login")}
+              style={{
+                padding: "14px 32px", borderRadius: "50px",
+                background: "rgba(255,255,255,0.7)",
+                border: "1.5px solid rgba(255,255,255,0.9)",
+                color: "#1a2e1a", fontSize: "15px", fontWeight: "600",
+                cursor: "pointer"
+              }}
+            >
+              Login
             </button>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
-            No credit card required • Setup in 10 minutes • Cancel anytime
-          </p>
-        </div>
+        )}
+
+        {user && (
+          <div className="fade-up-3">
+            <Link
+              href="/dashboard"
+              style={{
+                padding: "14px 32px", borderRadius: "50px",
+                background: "linear-gradient(135deg, #2d5a27, #4a7c59)",
+                color: "white", fontSize: "15px", fontWeight: "600",
+                textDecoration: "none",
+                boxShadow: "0 8px 24px rgba(45,90,39,0.3)",
+                display: "inline-block"
+              }}
+            >
+              Go to Dashboard 🌿
+            </Link>
+          </div>
+        )}
       </section>
 
-      {/* Stats */}
-      <section className="py-12 px-6 border-y border-white/10">
-        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { number: "24/7", label: "Always Online" },
-            { number: "<2s", label: "Response Time" },
-            { number: "10min", label: "Setup Time" },
-            { number: "₹0", label: "To Get Started" },
-          ].map((stat, i) => (
-            <div key={i}>
-              <div className="text-3xl font-bold text-violet-400">{stat.number}</div>
-              <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuth}
+        onClose={() => setShowAuth(false)}
+        defaultTab={authTab}
+      />
 
-      {/* Agents Section */}
-      <section id="agents" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">All AI Agents</h2>
-            <p className="text-gray-400 text-lg">
-              Pick the agent your business needs. Deploy in minutes.
-            </p>
-          </div>
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {agents.map((agent, i) => (
-                <div
-                  key={i}
-                  className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-violet-500/50 transition group cursor-pointer"
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-4xl">{agent.icon}</span>
-                    {agent.status === "live" ? (
-                      <span className="flex items-center gap-1 text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-1 rounded-full">
-                        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                        Live
-                      </span>
-                    ) : (
-                      <span className="text-xs bg-white/10 text-gray-400 border border-white/20 px-2 py-1 rounded-full">
-                        Coming Soon
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-violet-400 transition">
-                    {agent.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4">{agent.description}</p>
-                  {agent.status === "live" ? (
-                    <Link
-                      href={`/agents/${agent.slug}`}
-                      className="inline-flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition"
-                    >
-                      Learn More →
-                    </Link>
-                  ) : (
-                    <span className="text-sm text-gray-600">Notify me when ready</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-20 px-6 bg-white/[0.02]">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">How It Works</h2>
-          <p className="text-gray-400 mb-16">Get your AI agent running in 3 simple steps</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { step: "01", title: "Choose Your Agent", desc: "Pick the AI agent that fits your business needs from our collection." },
-              { step: "02", title: "Add Your Info", desc: "Tell us about your business — timings, services, FAQs. Takes 5 minutes." },
-              { step: "03", title: "Go Live!", desc: "Your AI agent is deployed and starts handling customers automatically." },
-            ].map((item, i) => (
-              <div key={i} className="relative">
-                <div className="text-6xl font-bold text-white/5 mb-4">{item.step}</div>
-                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-gray-400 text-sm">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Simple Pricing</h2>
-            <p className="text-gray-400">Start free. Pay only when you are ready.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {plans.map((plan, i) => (
-              <div
-                key={i}
-                className={`rounded-2xl p-8 border ${
-                  plan.highlighted
-                    ? "bg-violet-600/20 border-violet-500 scale-105"
-                    : "bg-white/5 border-white/10"
-                }`}
-              >
-                {plan.highlighted && (
-                  <div className="text-xs text-violet-300 bg-violet-600/30 rounded-full px-3 py-1 inline-block mb-4">
-                    Most Popular
-                  </div>
-                )}
-                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <div className="text-4xl font-bold text-violet-400 mb-1">{plan.price}</div>
-                <div className="text-gray-500 text-sm mb-6">per {plan.period}</div>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm text-gray-300">
-                      <span className="text-green-400">✓</span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                {user ? (
-                  <Link
-                    href="/dashboard"
-                    className={`w-full py-3 rounded-xl font-semibold transition block text-center ${
-                      plan.highlighted
-                        ? "bg-violet-600 hover:bg-violet-500"
-                        : "bg-white/10 hover:bg-white/20"
-                    }`}
-                  >
-                    Go to Dashboard
-                  </Link>
-                ) : (
-                  <Link
-                    href="/signup"
-                    className={`w-full py-3 rounded-xl font-semibold transition block text-center ${
-                      plan.highlighted
-                        ? "bg-violet-600 hover:bg-violet-500"
-                        : "bg-white/10 hover:bg-white/20"
-                    }`}
-                  >
-                    Get Started
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">🤖</span>
-            <span className="text-xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-              AgentFlow
-            </span>
-          </div>
-          <p className="text-gray-500 text-sm">
-            © 2026 AgentFlow. Built with ❤️ for Indian businesses.
-          </p>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <a href="#" className="hover:text-white transition">Privacy</a>
-            <a href="#" className="hover:text-white transition">Terms</a>
-            <a href="#" className="hover:text-white transition">Contact</a>
-          </div>
-        </div>
-      </footer>
+      {/* Click outside dropdown */}
+      {showDropdown && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setShowDropdown(false)}
+        />
+      )}
 
     </main>
   );

@@ -6,39 +6,21 @@ import Link from "next/link";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const getData = async () => {
+    const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        router.push("/login");
-        return;
+        router.push("/");
+      } else {
+        setUser(session.user);
       }
-
-      setUser(session.user);
-
-      // Get profile
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", session.user.id)
-        .single();
-      setProfile(profileData);
-
-      // Get agents
-      const { data: agentsData } = await supabase
-        .from("agents")
-        .select("*")
-        .eq("user_id", session.user.id);
-      setAgents(agentsData || []);
-
       setLoading(false);
     };
-    getData();
+    getUser();
   }, [router]);
 
   const handleLogout = async () => {
@@ -48,129 +30,131 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-4xl mb-4 animate-spin">⚙️</div>
-          <p className="text-gray-400">Loading your dashboard...</p>
+      <main style={{
+        minHeight: "100vh",
+        background: "linear-gradient(180deg, #c9e8f5 0%, #e8f4f0 100%)",
+        display: "flex", alignItems: "center", justifyContent: "center"
+      }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: "40px", marginBottom: "16px" }}>🌿</div>
+          <p style={{ color: "#4a7c59", fontFamily: "'DM Sans', sans-serif" }}>Loading...</p>
         </div>
       </main>
     );
   }
 
-  const allAgents = [
-    { icon: "💬", title: "Chat Agent", type: "chat-agent", status: "live" },
-    { icon: "📱", title: "WhatsApp Agent", type: "whatsapp-agent", status: "live" },
-    { icon: "📞", title: "Voice Agent", type: "voice-agent", status: "coming" },
-    { icon: "📧", title: "Email Agent", type: "email-agent", status: "coming" },
-  ];
-
   return (
-    <main className="min-h-screen bg-[#0a0a0f] text-white">
+    <main style={{
+      minHeight: "100vh",
+      background: "linear-gradient(180deg, #c9e8f5 0%, #e8f4f0 40%, #d4edda 100%)"
+    }}>
 
       {/* Navbar */}
-      <nav className="bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/10 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🤖</span>
-            <span className="text-xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
-              AgentFlow
+      <nav style={{
+        background: "rgba(255,255,255,0.4)",
+        backdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(255,255,255,0.5)",
+        padding: "16px 32px",
+        display: "flex", justifyContent: "space-between", alignItems: "center"
+      }}>
+        <Link href="/" style={{
+          display: "flex", alignItems: "center", gap: "8px",
+          textDecoration: "none"
+        }}>
+          <span style={{ fontSize: "24px" }}>🌿</span>
+          <span style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "20px", fontWeight: "700", color: "#1a2e1a"
+          }}>AgentFlow</span>
+        </Link>
+
+        {/* User Avatar */}
+        <div style={{ position: "relative" }}>
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            style={{
+              display: "flex", alignItems: "center", gap: "8px",
+              background: "rgba(255,255,255,0.8)",
+              border: "1.5px solid rgba(255,255,255,0.9)",
+              borderRadius: "50px", padding: "6px 14px 6px 6px",
+              cursor: "pointer"
+            }}
+          >
+            <img
+              src={user?.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.user_metadata?.full_name || user?.email)}&background=2d5a27&color=fff&size=32`}
+              style={{ width: "32px", height: "32px", borderRadius: "50%" }}
+            />
+            <span style={{ fontSize: "13px", fontWeight: "500", color: "#1a2e1a" }}>
+              {user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0]}
             </span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-gray-400 text-sm hidden md:block">
-              {profile?.full_name || user?.email}
-            </span>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition"
-            >
-              Logout
-            </button>
-          </div>
+            <span style={{ fontSize: "10px", color: "#5a7a5a" }}>▼</span>
+          </button>
+
+          {showDropdown && (
+            <div style={{
+              position: "absolute", top: "50px", right: 0,
+              background: "rgba(255,255,255,0.95)",
+              borderRadius: "16px", padding: "8px",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
+              minWidth: "160px", zIndex: 200
+            }}>
+              <div style={{ padding: "10px 14px", fontSize: "12px", color: "#5a7a5a", borderBottom: "1px solid #f0f0f0", marginBottom: "4px" }}>
+                {user?.email}
+              </div>
+              <button
+                onClick={handleLogout}
+                style={{
+                  display: "block", width: "100%", textAlign: "left",
+                  padding: "10px 14px", borderRadius: "10px",
+                  fontSize: "13px", color: "#c0392b",
+                  background: "transparent", border: "none",
+                  cursor: "pointer"
+                }}
+              >
+                🚪 Logout
+              </button>
+            </div>
+          )}
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      {/* Dashboard Content */}
+      <div style={{ padding: "40px 32px", maxWidth: "1200px", margin: "0 auto" }}>
+        <h1 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "32px", color: "#1a2e1a", marginBottom: "8px"
+        }}>
+          Welcome, {user?.user_metadata?.full_name?.split(" ")[0] || "there"}! 👋
+        </h1>
+        <p style={{ color: "#5a7a5a", marginBottom: "40px" }}>
+          Your dashboard is ready.
+        </p>
 
-        {/* Welcome */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold mb-2">
-            Welcome, {profile?.full_name || "there"}! 👋
-          </h1>
-          <p className="text-gray-400">
-            Manage your AI agents from your dashboard.
+        {/* Empty Dashboard — content added later */}
+        <div style={{
+          background: "rgba(255,255,255,0.6)",
+          backdropFilter: "blur(10px)",
+          border: "1.5px solid rgba(255,255,255,0.8)",
+          borderRadius: "24px",
+          padding: "60px",
+          textAlign: "center"
+        }}>
+          <div style={{ fontSize: "48px", marginBottom: "16px" }}>🌱</div>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "24px", color: "#1a2e1a", marginBottom: "8px"
+          }}>
+            Something is growing here
+          </h2>
+          <p style={{ color: "#5a7a5a" }}>
+            Your content will appear here soon.
           </p>
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {[
-            { icon: "🤖", label: "Active Agents", value: agents.length || "0" },
-            { icon: "💬", label: "Conversations", value: "0" },
-            { icon: "⚡", label: "Response Time", value: "<2s" },
-            { icon: "📦", label: "Current Plan", value: profile?.plan || "Free" },
-          ].map((stat, i) => (
-            <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-5">
-              <div className="text-2xl mb-2">{stat.icon}</div>
-              <div className="text-2xl font-bold text-violet-400">{stat.value}</div>
-              <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Agents */}
-        <div className="mb-10">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">All Agents</h2>
-            <Link href="/#agents" className="text-sm text-violet-400 hover:text-violet-300">
-              Explore Agents +
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {allAgents.map((agent, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-violet-500/50 transition">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-3xl">{agent.icon}</span>
-                  {agent.status === "live" ? (
-                    <span className="flex items-center gap-1 text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-1 rounded-full">
-                      <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                      Live
-                    </span>
-                  ) : (
-                    <span className="text-xs bg-white/10 text-gray-400 border border-white/20 px-2 py-1 rounded-full">
-                      Soon
-                    </span>
-                  )}
-                </div>
-                <h3 className="font-bold mb-3">{agent.title}</h3>
-                {agent.status === "live" ? (
-                  <Link
-                    href={`/agents/${agent.type}`}
-                    className="text-xs text-violet-400 hover:text-violet-300 transition"
-                  >
-                    Open Agent →
-                  </Link>
-                ) : (
-                  <span className="text-xs text-gray-600">Coming Soon</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Upgrade Banner */}
-        <div className="bg-gradient-to-r from-violet-600/20 to-purple-600/20 border border-violet-500/30 rounded-2xl p-8 text-center">
-          <h3 className="text-2xl font-bold mb-2">Upgrade to Pro 🚀</h3>
-          <p className="text-gray-400 mb-6">Get unlimited agents and advanced analytics</p>
-          <Link
-            href="/#pricing"
-            className="px-8 py-3 bg-violet-600 hover:bg-violet-500 rounded-xl font-semibold transition inline-block"
-          >
-            View Plans
-          </Link>
-        </div>
-
       </div>
+
+      {showDropdown && (
+        <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
+      )}
     </main>
   );
 }

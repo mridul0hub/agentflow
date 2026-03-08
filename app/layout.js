@@ -1,28 +1,21 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
-import CookieConsent from "./components/CookieConsent";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
 });
 
 export const metadata = {
   title: "AgentFlow — AI Agents for Every Business",
-  description: "Deploy AI agents that handle customer support, WhatsApp messages and appointments 24/7",
+  description: "Deploy AI agents that handle customer support 24/7",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={geist.variable}>
         {children}
-        <CookieConsent />
       </body>
     </html>
   );
