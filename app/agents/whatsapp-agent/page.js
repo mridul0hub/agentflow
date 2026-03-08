@@ -145,9 +145,15 @@ export default function WhatsAppAgentPage() {
             <p style={{ fontSize: "clamp(15px, 2vw, 18px)", color: "#3d5a3d", maxWidth: "560px", margin: "0 auto 36px", lineHeight: "1.7" }}>
               AI automatically replies to every customer message, sends offers, recovers lost sales, and handles queries — without you lifting a finger.
             </p>
-            <button className="try-btn" onClick={() => !user && setShowAuth(true)}>
-              {user ? "🚀 Start Free Trial" : "💬 Try WhatsApp Agent Free"}
-            </button>
+            <button className="try-btn" onClick={() => {
+  if (user) {
+    window.location.href = "/dashboard/whatsapp-setup";
+  } else {
+    setShowAuth(true);
+  }
+}}>
+  {user ? "🚀 Get Started Now" : "💬 Try WhatsApp Agent Free"}
+</button>
           </div>
 
           {/* How it works */}
@@ -200,15 +206,21 @@ export default function WhatsAppAgentPage() {
             <p style={{ color: "#5a7a5a", marginBottom: "28px", fontSize: "15px" }}>
               Join businesses already saving hours every day with Vasu Agents
             </p>
-            <button className="try-btn" onClick={() => !user && setShowAuth(true)}>
-              {user ? "🚀 Get Started Now" : "💬 Start Free Trial"}
-            </button>
+            <button className="try-btn" onClick={() => {
+  if (user) {
+    window.location.href = "/dashboard/whatsapp-setup";
+  } else {
+    setShowAuth(true);
+  }
+}}>
+  {user ? "🚀 Get Started Now" : "💬 Try WhatsApp Agent Free"}
+</button>
           </div>
 
         </div>
       </div>
 
-      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} defaultTab="signup" />
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} defaultTab="signup" redirectTo="/dashboard/whatsapp-setup" />
       {showDropdown && <div style={{ position: "fixed", inset: 0, zIndex: 40 }} onClick={() => setShowDropdown(false)} />}
     </>
   );
