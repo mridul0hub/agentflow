@@ -382,7 +382,7 @@ export default function Dashboard() {
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", margin: "0 0 20px" }}>Quick Actions</h2>
             <div className="actions-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px" }}>
               {[
-                { icon: "💬", label: "Setup WhatsApp Agent", href: "/agents/whatsapp-agent" },
+                { icon: "💬", label: "Setup WhatsApp Agent", href: "/dashboard/whatsapp-setup" },
                 { icon: "📊", label: "View Analytics", href: "#" },
                 { icon: "⚙️", label: "Settings", href: "#" },
                 { icon: "🆘", label: "Get Support", href: "#" },
