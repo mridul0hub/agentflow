@@ -327,7 +327,7 @@ export default function Dashboard() {
           </div>
 
           {/* Stats */}
-          <div className="fade-2 stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "28px" }}>
+          <div className="fade-2 stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "16px", marginBottom: "28px" }}>
             {[
               { icon: "💬", label: "Messages Handled", value: "0", sub: "This month", color: "#25D366" },
               { icon: "🤖", label: "Active Agents", value: "0", sub: "Running now", color: "#4a9eff" },
@@ -380,12 +380,12 @@ export default function Dashboard() {
           {/* Quick Actions */}
           <div className="fade-4 glass-card" style={{ padding: "26px", marginBottom: "28px" }}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", margin: "0 0 20px" }}>Quick Actions</h2>
-            <div className="actions-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px" }}>
+            <div className="actions-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "14px" }}>
               {[
                 { icon: "💬", label: "Setup WhatsApp Agent", href: "/dashboard/whatsapp-setup" },
+                { icon: "📧", label: "Setup Email Agent", href: "/dashboard/email-setup" },
                 { icon: "📊", label: "View Analytics", href: "#" },
                 { icon: "⚙️", label: "Settings", href: "#" },
-                { icon: "🆘", label: "Get Support", href: "#" },
               ].map((action) => (
                 <Link key={action.label} href={action.href} className="action-btn">
                   <span style={{ fontSize: "30px" }}>{action.icon}</span>
