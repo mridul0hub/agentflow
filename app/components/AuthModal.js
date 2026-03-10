@@ -26,7 +26,12 @@ export default function AuthModal({ isOpen, onClose = () => {}, defaultTab = "lo
       const redirect = typeof window !== "undefined" ? `${window.location.origin}${redirectTo}` : undefined;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: redirect }
+        options: { 
+    redirectTo: redirect,
+    queryParams: {
+      prompt: "select_account"
+    }
+  }
       });
       if (error) setError(error.message);
     } catch (err) {
