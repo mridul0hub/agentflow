@@ -327,7 +327,7 @@ export default function Dashboard() {
           </div>
 
           {/* Stats */}
-          <div className="fade-2 stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "16px", marginBottom: "28px" }}>
+          <div className="fade-2 stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "28px" }}>
             {[
               { icon: "💬", label: "Messages Handled", value: "0", sub: "This month", color: "#25D366" },
               { icon: "🤖", label: "Active Agents", value: "0", sub: "Running now", color: "#4a9eff" },
