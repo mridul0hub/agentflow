@@ -314,7 +314,7 @@ export default function PricingPage() {
       {/* NAVBAR */}
       <nav className={`nb ${scrolled ? "s" : ""}`}>
         <Link href="/" className="nb-logo">
-          <div className="nb-logo-icon">✦</div>
+          <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px" }} />
           <span className="nb-logo-text">Soni AI Agents</span>
         </Link>
         <div className="nb-links">
