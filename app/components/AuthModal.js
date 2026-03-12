@@ -236,7 +236,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
             <button className="am-close" onClick={onClose}>✕</button>
 
             <div className="am-brand">
-              <div className="am-brand-icon">✦</div>
+              <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px" }} />
               <span className="am-brand-name">Soni AI Agents</span>
             </div>
 
