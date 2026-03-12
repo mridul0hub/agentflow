@@ -7,8 +7,11 @@ const geist = Geist({
 });
 
 export const metadata = {
-  title: "AgentFlow — AI Agents for Every Business",
-  description: "Deploy AI agents that handle customer support 24/7",
+  title: "Soni AI Agents",
+  description: "AI agents for Indian businesses",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {

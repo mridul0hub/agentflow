@@ -2,10 +2,15 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import AuthModal from "../components/AuthModal";
 
 export default function AboutPage() {
   const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
+  const [authTab, setAuthTab] = useState("login");
 
   useEffect(() => {
     const getUser = async () => {
@@ -13,6 +18,12 @@ export default function AboutPage() {
       setUser(session?.user || null);
     };
     getUser();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => { subscription.unsubscribe(); window.removeEventListener("scroll", handleScroll); };
   }, []);
 
   const handleLogout = async () => {
@@ -21,296 +32,365 @@ export default function AboutPage() {
     setShowDropdown(false);
   };
 
+  const openAuth = (tab) => { setAuthTab(tab); setShowAuth(true); };
+
   const firstName = user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "";
-  const avatarUrl = user?.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.user_metadata?.full_name || user?.email || "U")}&background=2d5a27&color=fff&size=32`;
+  const avatarUrl = user?.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.user_metadata?.full_name || user?.email || "U")}&background=7c3aed&color=fff&size=32`;
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-        html, body { margin: 0; padding: 0; overflow-x: hidden; }
-        * { box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap');
 
-        .about-page {
-          min-height: 100vh;
-          background: linear-gradient(180deg, #87CEEB 0%, #b8e4f7 20%, #c8ecd8 55%, #a8d5b5 100%);
-          position: relative;
-          overflow: hidden;
-          font-family: 'DM Sans', sans-serif;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: #fafafa; color: #0a0a0a; font-family: 'Geist', sans-serif; overflow-x: hidden; }
 
-        .sun {
-          position: absolute; top: 50px; right: 10%;
-          width: 90px; height: 90px;
-          background: radial-gradient(circle, #fff9c4 30%, #ffd54f 60%, rgba(255,213,79,0) 100%);
-          border-radius: 50%;
-          animation: sunPulse 4s ease-in-out infinite;
-          box-shadow: 0 0 60px rgba(255,213,79,0.6);
-          pointer-events: none;
-        }
-        @keyframes sunPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.08); }
+        :root {
+          --purple: #7c3aed; --purple-light: #8b5cf6;
+          --purple-soft: #f5f3ff; --purple-dim: #ede9fe;
+          --black: #0a0a0a; --grey-1: #18181b; --grey-2: #3f3f46;
+          --grey-3: #71717a; --grey-4: #a1a1aa; --grey-5: #d4d4d8;
+          --grey-6: #e4e4e7; --grey-7: #f4f4f5; --white: #ffffff;
         }
 
-        .cloud {
-          position: absolute; background: rgba(255,255,255,0.8);
-          border-radius: 50px; filter: blur(5px); pointer-events: none;
-        }
-        .c1 { top: 7%; left: 4%; width: 160px; height: 50px; animation: cf 8s ease-in-out infinite; }
-        .c2 { top: 12%; left: 30%; width: 120px; height: 40px; animation: cf 11s ease-in-out infinite 2s; }
-        .c3 { top: 5%; right: 22%; width: 180px; height: 55px; animation: cf 9s ease-in-out infinite 1s; }
-        @keyframes cf { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(18px); } }
+        /* NAVBAR */
+        .nb { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; transition: all 0.3s; }
+        .nb.s { background: rgba(250,250,250,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--grey-6); }
+        .nb-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+        .nb-logo-icon { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--purple), #a855f7); display: flex; align-items: center; justify-content: center; font-size: 16px; color: white; flex-shrink: 0; }
+        .nb-logo-text { font-size: 15px; font-weight: 600; color: var(--black); letter-spacing: -0.3px; white-space: nowrap; }
+        .nb-links { display: flex; align-items: center; gap: 4px; }
+        .nb-link { padding: 6px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--grey-2); text-decoration: none; transition: all 0.15s; }
+        .nb-link:hover { background: var(--grey-7); color: var(--black); }
+        .nb-link.active { color: var(--black); background: var(--grey-7); }
+        .nb-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .btn-ghost { padding: 7px 16px; border-radius: 8px; border: none; background: transparent; font-size: 14px; font-weight: 500; color: var(--grey-2); cursor: pointer; font-family: 'Geist', sans-serif; white-space: nowrap; }
+        .btn-ghost:hover { background: var(--grey-7); }
+        .btn-dark { padding: 7px 16px; border-radius: 8px; border: none; background: var(--black); font-size: 14px; font-weight: 500; color: white; cursor: pointer; font-family: 'Geist', sans-serif; white-space: nowrap; transition: all 0.2s; }
+        .btn-dark:hover { background: var(--grey-1); }
 
-        .mountains-back {
-          position: absolute; bottom: 0; left: 0; right: 0; height: 35vh;
-          background: linear-gradient(180deg, #4a8a4a 0%, #2d6a2d 100%);
-          clip-path: polygon(0% 100%, 0% 65%, 5% 40%, 10% 60%, 15% 30%, 20% 55%, 25% 25%, 30% 50%, 35% 20%, 40% 48%, 45% 28%, 50% 52%, 55% 22%, 60% 48%, 65% 25%, 70% 50%, 75% 22%, 80% 48%, 85% 30%, 90% 55%, 95% 35%, 100% 55%, 100% 100%);
-          pointer-events: none;
+        /* hamburger */
+        .hb { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+        .hb span { display: block; width: 22px; height: 2px; background: var(--black); border-radius: 2px; transition: all 0.25s; }
+        .hb.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hb.open span:nth-child(2) { opacity: 0; }
+        .hb.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* mobile drawer */
+        .mob-menu { display: none; position: fixed; top: 60px; left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--grey-6); padding: 12px 16px 20px; z-index: 199; flex-direction: column; gap: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+        .mob-menu.open { display: flex; }
+        .mob-link { padding: 12px 16px; border-radius: 10px; font-size: 15px; font-weight: 500; color: var(--black); text-decoration: none; display: block; background: none; border: none; cursor: pointer; font-family: 'Geist', sans-serif; text-align: left; width: 100%; transition: background 0.15s; }
+        .mob-link:hover { background: var(--grey-7); }
+        .mob-divider { height: 1px; background: var(--grey-6); margin: 6px 0; }
+        .mob-btn { width: 100%; padding: 13px; border-radius: 10px; background: var(--black); color: white; border: none; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Geist', sans-serif; margin-top: 4px; }
+
+        /* avatar */
+        .av-btn { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--grey-6); border-radius: 8px; padding: 5px 12px 5px 6px; cursor: pointer; }
+        .av-img { width: 28px; height: 28px; border-radius: 6px; object-fit: cover; }
+        .av-name { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; }
+        .dropdown { position: absolute; top: 44px; right: 0; background: var(--white); border-radius: 14px; padding: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); min-width: 180px; z-index: 300; border: 1px solid var(--grey-6); }
+        .dd-email { padding: 8px 12px 10px; font-size: 11px; color: var(--grey-4); border-bottom: 1px solid var(--grey-6); margin-bottom: 4px; }
+        .dd-item { display: block; width: 100%; text-align: left; padding: 9px 12px; border-radius: 8px; font-size: 13px; background: transparent; border: none; cursor: pointer; font-family: 'Geist', sans-serif; color: var(--black); text-decoration: none; transition: background 0.15s; }
+        .dd-item:hover { background: var(--grey-7); }
+
+        /* PAGE */
+        .page { padding-top: 60px; min-height: 100vh; background: #fafafa; }
+
+        /* ABOUT HERO */
+        .about-hero {
+          background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
+          padding: 80px 24px 80px;
+          text-align: center;
+          position: relative; overflow: hidden;
         }
-        .mountains-front {
-          position: absolute; bottom: 0; left: 0; right: 0; height: 22vh;
-          background: linear-gradient(180deg, #2d5a27 0%, #1a3d1a 100%);
-          clip-path: polygon(0% 100%, 0% 70%, 4% 45%, 8% 65%, 12% 35%, 16% 60%, 20% 30%, 24% 55%, 28% 25%, 32% 52%, 36% 32%, 40% 55%, 44% 20%, 48% 50%, 52% 28%, 56% 52%, 60% 22%, 64% 50%, 68% 30%, 72% 55%, 76% 25%, 80% 52%, 84% 32%, 88% 58%, 92% 35%, 96% 58%, 100% 40%, 100% 100%);
-          pointer-events: none;
+        .about-hero-grid {
+          position: absolute; inset: 0;
+          background-image: linear-gradient(rgba(124,58,237,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.06) 1px, transparent 1px);
+          background-size: 40px 40px;
         }
-        .trees {
-          position: absolute; bottom: 0; left: 0; right: 0; height: 12vh;
-          background: linear-gradient(180deg, #1a4a15 0%, #0f2e0f 100%);
-          clip-path: polygon(0% 100%, 0% 75%, 2% 50%, 4% 70%, 6% 40%, 8% 65%, 10% 35%, 12% 60%, 14% 30%, 16% 55%, 18% 40%, 20% 60%, 22% 25%, 24% 55%, 26% 35%, 28% 58%, 30% 28%, 32% 55%, 34% 38%, 36% 60%, 38% 22%, 40% 55%, 42% 32%, 44% 58%, 46% 28%, 48% 52%, 50% 35%, 52% 58%, 54% 25%, 56% 52%, 58% 35%, 60% 58%, 62% 22%, 64% 52%, 66% 35%, 68% 58%, 70% 28%, 72% 52%, 74% 35%, 76% 58%, 78% 25%, 80% 52%, 82% 32%, 84% 58%, 86% 28%, 88% 52%, 90% 38%, 92% 60%, 94% 30%, 96% 55%, 98% 40%, 100% 60%, 100% 100%);
-          pointer-events: none;
+        .about-hero-glow {
+          position: absolute; inset: 0;
+          background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124,58,237,0.35) 0%, transparent 70%);
+        }
+        .about-hero-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+        .about-tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #a78bfa; margin-bottom: 18px; }
+        .about-title { font-family: 'Instrument Serif', serif; font-size: clamp(36px, 6vw, 62px); font-weight: 400; color: white; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 18px; }
+        .about-title em { font-style: italic; color: #a78bfa; }
+        .about-sub { font-size: clamp(15px, 2vw, 17px); color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 500px; margin: 0 auto; }
+
+        /* SECTIONS */
+        .sec { padding: 80px 24px; }
+        .sec-alt { padding: 80px 24px; background: var(--grey-7); }
+        .con { max-width: 1000px; margin: 0 auto; }
+        .sec-tag { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; display: block; }
+        .sec-title { font-family: 'Instrument Serif', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; line-height: 1.1; letter-spacing: -0.8px; color: var(--black); margin-bottom: 14px; }
+        .sec-title em { font-style: italic; color: var(--purple); }
+        .sec-sub { font-size: 16px; color: var(--grey-3); line-height: 1.7; max-width: 520px; }
+
+        /* MISSION VISION */
+        .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 44px; }
+        .mv-card { background: var(--white); border: 1px solid var(--grey-6); border-radius: 20px; padding: 32px; transition: all 0.25s; }
+        .mv-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+        .mv-icon { font-size: 32px; margin-bottom: 16px; }
+        .mv-title { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--black); margin-bottom: 12px; }
+        .mv-text { font-size: 15px; color: var(--grey-3); line-height: 1.75; }
+
+        /* WHY GRID */
+        .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
+        .why-card { background: var(--white); border: 1px solid var(--grey-6); border-radius: 16px; padding: 24px; transition: all 0.2s; }
+        .why-card:hover { border-color: var(--purple-dim); background: var(--purple-soft); transform: translateY(-2px); }
+        .why-icon { font-size: 26px; margin-bottom: 12px; }
+        .why-title { font-size: 14px; font-weight: 600; color: var(--black); margin-bottom: 7px; }
+        .why-text { font-size: 13px; color: var(--grey-3); line-height: 1.65; }
+
+        /* FOUNDER */
+        .founder-card { background: var(--white); border: 1px solid var(--grey-6); border-radius: 20px; padding: 36px; margin-top: 44px; display: flex; align-items: flex-start; gap: 24px; }
+        .founder-av { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), #a855f7); display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', serif; font-size: 28px; color: white; flex-shrink: 0; box-shadow: 0 4px 16px rgba(124,58,237,0.3); }
+        .founder-name { font-family: 'Instrument Serif', serif; font-size: 26px; color: var(--black); margin-bottom: 4px; }
+        .founder-role { font-size: 13px; color: var(--purple); font-weight: 600; margin-bottom: 16px; letter-spacing: 0.3px; }
+        .founder-text { font-size: 15px; color: var(--grey-3); line-height: 1.75; }
+
+        /* CONTACT */
+        .contact-grid { display: flex; flex-direction: column; gap: 12px; max-width: 460px; margin-top: 32px; }
+        .contact-item { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--white); border: 1px solid var(--grey-6); border-radius: 14px; text-decoration: none; color: var(--black); transition: all 0.2s; }
+        .contact-item:hover { border-color: var(--purple-dim); background: var(--purple-soft); transform: translateX(4px); }
+        .contact-icon { width: 42px; height: 42px; border-radius: 11px; background: var(--purple-soft); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .contact-label { font-size: 11px; color: var(--grey-4); margin-bottom: 2px; }
+        .contact-value { font-size: 14px; font-weight: 600; color: var(--black); }
+
+        /* FOOTER */
+        .ft { background: var(--grey-7); border-top: 1px solid var(--grey-6); padding: 48px 24px 24px; }
+        .ft-bot { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .ft-copy { font-size: 13px; color: var(--grey-4); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .f1 { animation: fadeUp 0.6s ease both; }
+        .f2 { animation: fadeUp 0.6s ease 0.1s both; }
+        .f3 { animation: fadeUp 0.6s ease 0.2s both; }
+        .f4 { animation: fadeUp 0.6s ease 0.3s both; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+          .nb { padding: 0 20px; }
+          .nb-links { display: none; }
+          .btn-ghost { display: none; }
+          .hb { display: flex; }
+          .why-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        .navbar {
-          position: sticky; top: 0; z-index: 100;
-          display: flex; justify-content: space-between; align-items: center;
-          padding: 15px 32px;
-          background: rgba(255,255,255,0.3);
-          backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(255,255,255,0.5);
+        @media (max-width: 600px) {
+          .nb { padding: 0 14px; height: 54px; }
+          .nb-logo-text { font-size: 14px; }
+          .btn-dark { padding: 6px 12px; font-size: 13px; }
+          .mob-menu { top: 54px; }
+
+          .about-hero { padding: 60px 16px; }
+
+          .sec { padding: 56px 16px; }
+          .sec-alt { padding: 56px 16px; }
+
+          .mv-grid { grid-template-columns: 1fr; }
+          .mv-card { padding: 24px 20px; }
+
+          .why-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+          .why-card { padding: 18px 14px; }
+
+          .founder-card { flex-direction: column; padding: 24px 20px; gap: 16px; }
+          .founder-av { width: 60px; height: 60px; font-size: 24px; }
+
+          .contact-item { padding: 14px 16px; }
+
+          .ft { padding: 32px 16px 20px; }
+          .ft-bot { flex-direction: column; text-align: center; }
         }
 
-        .glass {
-          background: rgba(255,255,255,0.65);
-          backdrop-filter: blur(16px);
-          border: 1px solid rgba(255,255,255,0.85);
-          border-radius: 20px;
-        }
-
-        .card-hover {
-          transition: all 0.3s;
-        }
-        .card-hover:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 16px 40px rgba(45,90,39,0.14);
-          background: rgba(255,255,255,0.82) !important;
-        }
-
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .f1 { animation: fadeUp 0.6s ease forwards; }
-        .f2 { animation: fadeUp 0.6s ease 0.1s forwards; opacity: 0; }
-        .f3 { animation: fadeUp 0.6s ease 0.2s forwards; opacity: 0; }
-        .f4 { animation: fadeUp 0.6s ease 0.3s forwards; opacity: 0; }
-        .f5 { animation: fadeUp 0.6s ease 0.4s forwards; opacity: 0; }
-
-        .contact-link {
-          display: flex; align-items: center; gap: 12px;
-          padding: 16px 20px;
-          background: rgba(255,255,255,0.55);
-          border: 1px solid rgba(255,255,255,0.8);
-          border-radius: 14px;
-          text-decoration: none;
-          color: #1a2e1a;
-          transition: all 0.3s;
-        }
-        .contact-link:hover {
-          background: rgba(255,255,255,0.85);
-          transform: translateX(5px);
-        }
-
-        @media(max-width: 768px) {
-          .navbar { padding: 12px 16px; }
-          .page-content { padding: 28px 16px 280px !important; }
-          .two-col { grid-template-columns: 1fr !important; }
-          .three-col { grid-template-columns: 1fr !important; }
-          .hero-title { font-size: 34px !important; }
+        @media (max-width: 380px) {
+          .why-grid { grid-template-columns: 1fr; }
+          .nb-logo-text { font-size: 13px; }
         }
       `}</style>
 
-      <div className="about-page">
-        <div className="sun" />
-        <div className="cloud c1" /><div className="cloud c2" /><div className="cloud c3" />
-        <div className="mountains-back" />
-        <div className="mountains-front" />
-        <div className="trees" />
+      {/* NAVBAR */}
+      <nav className={`nb ${scrolled ? "s" : ""}`}>
+        <Link href="/" className="nb-logo">
+          <div className="nb-logo-icon">✦</div>
+          <span className="nb-logo-text">Soni AI Agents</span>
+        </Link>
 
-        {/* Navbar */}
-        <nav className="navbar">
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
-            <span style={{ fontSize: "24px" }}>🌿</span>
-            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "20px", fontWeight: "700", color: "#1a2e1a" }}>Vasu Agents</span>
-          </Link>
+        <div className="nb-links">
+          <Link href="/" className="nb-link">Home</Link>
+          <Link href="/about" className="nb-link active">About</Link>
+          <Link href="/pricing" className="nb-link">Pricing</Link>
+        </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Link href="/" style={{ padding: "8px 18px", borderRadius: "50px", background: "rgba(255,255,255,0.65)", border: "1.5px solid rgba(255,255,255,0.9)", color: "#1a2e1a", fontSize: "13px", fontWeight: "500", textDecoration: "none" }}>
-              Home
-            </Link>
-            {user ? (
-              <div style={{ position: "relative" }}>
-                <button onClick={() => setShowDropdown(!showDropdown)} style={{
-                  display: "flex", alignItems: "center", gap: "8px",
-                  background: "rgba(255,255,255,0.7)", border: "1.5px solid rgba(255,255,255,0.9)",
-                  borderRadius: "50px", padding: "6px 12px 6px 6px", cursor: "pointer"
-                }}>
-                  <img src={avatarUrl} style={{ width: "28px", height: "28px", borderRadius: "50%", objectFit: "cover" }} />
-                  <span style={{ fontSize: "13px", fontWeight: "600", color: "#1a2e1a" }}>{firstName}</span>
-                  <span style={{ fontSize: "10px", color: "#5a7a5a" }}>▼</span>
-                </button>
-                {showDropdown && (
-                  <div style={{
-                    position: "absolute", top: "46px", right: 0,
-                    background: "rgba(255,255,255,0.98)", borderRadius: "16px", padding: "8px",
-                    boxShadow: "0 10px 40px rgba(45,90,39,0.2)", minWidth: "170px", zIndex: 200,
-                    border: "1px solid rgba(255,255,255,0.9)"
-                  }}>
-                    <Link href="/dashboard" onClick={() => setShowDropdown(false)}
-                      style={{ display: "block", padding: "10px 14px", borderRadius: "10px", fontSize: "13px", color: "#1a2e1a", textDecoration: "none" }}>
-                      Dashboard
-                    </Link>
-                    <button onClick={handleLogout} style={{
-                      display: "block", width: "100%", textAlign: "left", padding: "10px 14px",
-                      borderRadius: "10px", fontSize: "13px", color: "#dc2626",
-                      background: "transparent", border: "none", cursor: "pointer", fontFamily: "'DM Sans', sans-serif"
-                    }}>Logout</button>
-                  </div>
-                )}
+        <div className="nb-actions">
+          {user ? (
+            <div style={{ position: "relative" }}>
+              <button className="av-btn" onClick={() => setShowDropdown(!showDropdown)}>
+                <img className="av-img" src={avatarUrl} alt="avatar" />
+                <span className="av-name">{firstName}</span>
+                <span style={{ fontSize: "10px", color: "var(--grey-4)" }}>▼</span>
+              </button>
+              {showDropdown && (
+                <div className="dropdown">
+                  <div className="dd-email">{user.email}</div>
+                  <Link href="/dashboard" className="dd-item" onClick={() => setShowDropdown(false)}>Dashboard</Link>
+                  <button className="dd-item" style={{ color: "#dc2626" }} onClick={handleLogout}>Logout</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <button className="btn-ghost" onClick={() => openAuth("login")}>Login</button>
+              <button className="btn-dark" onClick={() => openAuth("signup")}>Get Started</button>
+            </>
+          )}
+          <button className={`hb ${mobileMenu ? "open" : ""}`} onClick={() => setMobileMenu(!mobileMenu)} aria-label="Menu">
+            <span /><span /><span />
+          </button>
+        </div>
+      </nav>
+
+      {/* MOBILE MENU */}
+      <div className={`mob-menu ${mobileMenu ? "open" : ""}`}>
+        <Link href="/" className="mob-link" onClick={() => setMobileMenu(false)}>Home</Link>
+        <Link href="/about" className="mob-link" onClick={() => setMobileMenu(false)}>About</Link>
+        <Link href="/pricing" className="mob-link" onClick={() => setMobileMenu(false)}>Pricing</Link>
+        <div className="mob-divider" />
+        {user ? (
+          <>
+            <Link href="/dashboard" className="mob-link" onClick={() => setMobileMenu(false)}>Dashboard</Link>
+            <button className="mob-link" style={{ color: "#dc2626" }} onClick={() => { handleLogout(); setMobileMenu(false); }}>Logout</button>
+          </>
+        ) : (
+          <>
+            <button className="mob-link" onClick={() => { openAuth("login"); setMobileMenu(false); }}>Login</button>
+            <button className="mob-btn" onClick={() => { openAuth("signup"); setMobileMenu(false); }}>Get Started Free</button>
+          </>
+        )}
+      </div>
+
+      <div className="page">
+
+        {/* HERO */}
+        <div className="about-hero">
+          <div className="about-hero-grid" />
+          <div className="about-hero-glow" />
+          <div className="about-hero-inner f1">
+            <span className="about-tag">✦ About Us</span>
+            <h1 className="about-title">We make AI work<br /><em>for real businesses</em></h1>
+            <p className="about-sub">Soni AI Agents was built with one goal — help Indian businesses stop missing customers and start growing, without any technical hassle.</p>
+          </div>
+        </div>
+
+        {/* MISSION + VISION */}
+        <section className="sec">
+          <div className="con">
+            <div className="f2">
+              <span className="sec-tag">✦ What Drives Us</span>
+              <h2 className="sec-title">Our mission &<br /><em>vision</em></h2>
+            </div>
+            <div className="mv-grid f2">
+              <div className="mv-card">
+                <div className="mv-icon">🎯</div>
+                <div className="mv-title">Our Mission</div>
+                <p className="mv-text">To make AI accessible for every small and medium business in India — not just big corporations with big budgets. Every shop, clinic, and coaching center deserves a smart assistant that works 24/7.</p>
               </div>
-            ) : (
-              <Link href="/" style={{ padding: "8px 18px", borderRadius: "50px", background: "linear-gradient(135deg, #2d5a27, #4a7c59)", color: "white", fontSize: "13px", fontWeight: "600", textDecoration: "none" }}>
-                Get Started
-              </Link>
-            )}
-          </div>
-        </nav>
-
-        {/* Page Content */}
-        <div className="page-content" style={{ padding: "50px 24px 300px", maxWidth: "1000px", margin: "0 auto", position: "relative", zIndex: 10 }}>
-
-          {/* Hero */}
-          <div className="f1" style={{ textAlign: "center", marginBottom: "60px" }}>
-            <p style={{ fontSize: "12px", fontWeight: "600", letterSpacing: "3px", textTransform: "uppercase", color: "#2d6a2d", marginBottom: "14px" }}>
-              About Us
-            </p>
-            <h1 className="hero-title" style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 6vw, 54px)", fontWeight: "700", color: "#1a2e1a", marginBottom: "18px", lineHeight: 1.1 }}>
-              We make AI work<br />for real businesses
-            </h1>
-            <p style={{ color: "#3d5a3d", fontSize: "17px", maxWidth: "520px", margin: "0 auto", lineHeight: 1.75 }}>
-              Vasu Agents was built with one goal — help Indian businesses stop missing customers and start growing, without any technical hassle.
-            </p>
-          </div>
-
-          {/* Mission + Vision */}
-          <div className="f2 two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px", marginBottom: "24px" }}>
-            <div className="glass card-hover" style={{ padding: "30px" }}>
-              <div style={{ fontSize: "32px", marginBottom: "14px" }}>🎯</div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", marginBottom: "12px" }}>Our Mission</h2>
-              <p style={{ color: "#5a7a5a", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>
-                To make AI accessible for every small and medium business in India — not just big corporations with big budgets. Every shop, clinic, and coaching center deserves a smart assistant that works 24/7.
-              </p>
-            </div>
-            <div className="glass card-hover" style={{ padding: "30px" }}>
-              <div style={{ fontSize: "32px", marginBottom: "14px" }}>🔭</div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", marginBottom: "12px" }}>Our Vision</h2>
-              <p style={{ color: "#5a7a5a", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>
-                A future where no customer inquiry goes unanswered, no lead is lost because the owner was busy, and every Indian business — big or small — has an AI teammate they can count on.
-              </p>
+              <div className="mv-card">
+                <div className="mv-icon">🔭</div>
+                <div className="mv-title">Our Vision</div>
+                <p className="mv-text">A future where no customer inquiry goes unanswered, no lead is lost because the owner was busy, and every Indian business — big or small — has an AI teammate they can count on.</p>
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Why Vasu Agents */}
-          <div className="f3 glass" style={{ padding: "30px", marginBottom: "24px" }}>
-            <p style={{ fontSize: "12px", fontWeight: "600", letterSpacing: "3px", textTransform: "uppercase", color: "#2d6a2d", marginBottom: "10px" }}>Why Us</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "24px", color: "#1a2e1a", marginBottom: "24px" }}>Why Vasu Agents?</h2>
-            <div className="three-col" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
+        {/* WHY US */}
+        <section className="sec-alt">
+          <div className="con f3">
+            <span className="sec-tag">✦ Why Us</span>
+            <h2 className="sec-title">Why Soni<br /><em>AI Agents?</em></h2>
+            <p className="sec-sub">We built this for India — not a copy-paste of some foreign product.</p>
+            <div className="why-grid">
               {[
-                { icon: "🇮🇳", title: "Built for India", desc: "We understand Indian businesses — Hindi support, local pricing, and agents that actually fit how things work here." },
-                { icon: "⚡", title: "Set up in minutes", desc: "No developer needed. Just fill a form, tell us about your business, and your AI agent is live within 24 hours." },
-                { icon: "🔒", title: "You stay in control", desc: "All your data stays secure. You can update your agent anytime, and we activate nothing without your approval." },
-                { icon: "🌙", title: "Works while you sleep", desc: "Your agent replies to customers at 2am, on Sundays, and on holidays — exactly when you can't." },
-                { icon: "💰", title: "Affordable pricing", desc: "We priced Vasu Agents so that even a small clinic or tutor in Tier-2 cities can afford it without thinking twice." },
-                { icon: "🤝", title: "Real support", desc: "We are a small, focused team. When you reach out, you talk to a real person — not a bot." },
-              ].map((item) => (
-                <div key={item.title} style={{ background: "rgba(255,255,255,0.5)", borderRadius: "14px", padding: "20px", border: "1px solid rgba(255,255,255,0.7)" }}>
-                  <div style={{ fontSize: "26px", marginBottom: "10px" }}>{item.icon}</div>
-                  <div style={{ fontSize: "14px", fontWeight: "700", color: "#1a2e1a", marginBottom: "6px" }}>{item.title}</div>
-                  <div style={{ fontSize: "13px", color: "#5a7a5a", lineHeight: 1.65 }}>{item.desc}</div>
+                { icon: "🇮🇳", title: "Built for India", text: "Hindi support, local pricing, and agents that fit how Indian businesses actually work." },
+                { icon: "⚡", title: "Set up in minutes", text: "No developer needed. Fill a form, and your AI agent is live within 24 hours." },
+                { icon: "🔒", title: "You stay in control", text: "Your data stays secure. We activate nothing without your approval." },
+                { icon: "🌙", title: "Works while you sleep", text: "Replies at 2am, on Sundays, on holidays — exactly when you can't." },
+                { icon: "💰", title: "Affordable pricing", text: "Priced so even a small clinic or tutor in Tier-2 cities can afford it." },
+                { icon: "🤝", title: "Real support", text: "When you reach out, you talk to a real person — not a bot." },
+              ].map((w) => (
+                <div key={w.title} className="why-card">
+                  <div className="why-icon">{w.icon}</div>
+                  <div className="why-title">{w.title}</div>
+                  <div className="why-text">{w.text}</div>
                 </div>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* Founder */}
-          <div className="f4 glass" style={{ padding: "30px", marginBottom: "24px" }}>
-            <p style={{ fontSize: "12px", fontWeight: "600", letterSpacing: "3px", textTransform: "uppercase", color: "#2d6a2d", marginBottom: "10px" }}>Founder</p>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: "20px", flexWrap: "wrap" }}>
-              <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "linear-gradient(135deg, #2d5a27, #4a7c59)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "30px", flexShrink: 0, border: "3px solid rgba(255,255,255,0.8)" }}>
-                M
-              </div>
-              <div style={{ flex: 1, minWidth: "200px" }}>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "22px", color: "#1a2e1a", margin: "0 0 4px" }}>Mridul Soni</h3>
-                <p style={{ color: "#4a7c59", fontSize: "13px", fontWeight: "600", margin: "0 0 14px", letterSpacing: "0.5px" }}>Founder, Vasu Agents — Kota, Rajasthan</p>
-                <p style={{ color: "#5a7a5a", fontSize: "15px", lineHeight: 1.75, margin: 0 }}>
-                  Vasu Agents started from a simple observation — most small businesses in India miss dozens of customer messages every day just because no one is available to reply. Mridul built Vasu Agents to fix that, combining AI with a deep understanding of how Indian businesses actually operate.
-                </p>
+        {/* FOUNDER */}
+        <section className="sec">
+          <div className="con f4">
+            <span className="sec-tag">✦ The Founder</span>
+            <h2 className="sec-title">The person<br /><em>behind it</em></h2>
+            <div className="founder-card">
+              <div className="founder-av">M</div>
+              <div>
+                <div className="founder-name">Mridul Soni</div>
+                <div className="founder-role">Founder, Soni AI Agents — Kota, Rajasthan</div>
+                <p className="founder-text">Soni AI Agents started from a simple observation — most small businesses in India miss dozens of customer messages every day just because no one is available to reply. Mridul built this to fix that, combining AI with a deep understanding of how Indian businesses actually operate. His goal: ₹1,50,000/month revenue by age 20, by genuinely helping people.</p>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Contact */}
-          <div className="f5 glass" style={{ padding: "30px" }}>
-            <p style={{ fontSize: "12px", fontWeight: "600", letterSpacing: "3px", textTransform: "uppercase", color: "#2d6a2d", marginBottom: "10px" }}>Get In Touch</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "24px", color: "#1a2e1a", marginBottom: "8px" }}>Contact Us</h2>
-            <p style={{ color: "#5a7a5a", fontSize: "15px", marginBottom: "22px", lineHeight: 1.7 }}>
-              Have a question or want to know if Vasu Agents is right for your business? Just reach out — we reply fast.
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "420px" }}>
-              <a href="mailto:vasusoni1068@gmail.com" className="contact-link">
-                <div style={{ width: "40px", height: "40px", background: "rgba(74,158,255,0.1)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", flexShrink: 0 }}>
-                  📧
-                </div>
+        {/* CONTACT */}
+        <section className="sec-alt">
+          <div className="con f4">
+            <span className="sec-tag">✦ Get In Touch</span>
+            <h2 className="sec-title">Let's<br /><em>talk</em></h2>
+            <p className="sec-sub">Have a question or want to know if Soni AI Agents is right for your business? Just reach out — we reply fast.</p>
+            <div className="contact-grid">
+              <a href="mailto:vasusoni1068@gmail.com" className="contact-item">
+                <div className="contact-icon">📧</div>
                 <div>
-                  <div style={{ fontSize: "12px", color: "#5a7a5a", marginBottom: "2px" }}>Email us at</div>
-                  <div style={{ fontSize: "14px", fontWeight: "600", color: "#1a2e1a" }}>vasusoni1068@gmail.com</div>
+                  <div className="contact-label">Email us at</div>
+                  <div className="contact-value">vasusoni1068@gmail.com</div>
                 </div>
               </a>
-              <a href="https://linkedin.com" target="_blank" className="contact-link">
-                <div style={{ width: "40px", height: "40px", background: "rgba(10,102,194,0.1)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", flexShrink: 0 }}>
-                  💼
-                </div>
+              <a href="https://linkedin.com" target="_blank" className="contact-item">
+                <div className="contact-icon">💼</div>
                 <div>
-                  <div style={{ fontSize: "12px", color: "#5a7a5a", marginBottom: "2px" }}>Connect on</div>
-                  <div style={{ fontSize: "14px", fontWeight: "600", color: "#1a2e1a" }}>LinkedIn — Coming soon</div>
+                  <div className="contact-label">Connect on</div>
+                  <div className="contact-value">LinkedIn — Coming soon</div>
                 </div>
               </a>
-              <div className="contact-link" style={{ cursor: "default" }}>
-                <div style={{ width: "40px", height: "40px", background: "rgba(45,90,39,0.1)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", flexShrink: 0 }}>
-                  📍
-                </div>
+              <div className="contact-item" style={{ cursor: "default" }}>
+                <div className="contact-icon">📍</div>
                 <div>
-                  <div style={{ fontSize: "12px", color: "#5a7a5a", marginBottom: "2px" }}>Based in</div>
-                  <div style={{ fontSize: "14px", fontWeight: "600", color: "#1a2e1a" }}>Kota, Rajasthan, India</div>
+                  <div className="contact-label">Based in</div>
+                  <div className="contact-value">Kota, Rajasthan, India</div>
                 </div>
               </div>
             </div>
           </div>
+        </section>
 
-        </div>
+        {/* FOOTER */}
+        <footer className="ft">
+          <div className="ft-bot">
+            <span className="ft-copy">© 2025 Soni AI Agents. All rights reserved.</span>
+            <span className="ft-copy">Made with ✦ in Kota, India</span>
+          </div>
+        </footer>
+
       </div>
 
-      {showDropdown && <div style={{ position: "fixed", inset: 0, zIndex: 40 }} onClick={() => setShowDropdown(false)} />}
+      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} defaultTab={authTab} />
+      {(showDropdown || mobileMenu) && <div style={{ position: "fixed", inset: 0, zIndex: 198 }} onClick={() => { setShowDropdown(false); setMobileMenu(false); }} />}
     </>
   );
 }
