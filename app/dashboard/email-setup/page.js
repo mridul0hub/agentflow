@@ -271,7 +271,7 @@ export default function EmailSetup() {
             {/* INFO CARDS */}
             <div className="info-grid f3">
               {[
-                { icon: <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />, title: "Gemini AI Powered", text: "Replies professionally to every customer email" },
+                { icon: <img src="/ailogo.jpg" style={{ height: "20px", width: "20px"}} />, title: "Gemini AI Powered", text: "Replies professionally to every customer email" },
                 { icon: "📧", title: "Any Email", text: "Works with Gmail, Outlook, or custom domain" },
                 { icon: "🌙", title: "Works 24/7", text: "Replies at 2am, on Sundays, on holidays" },
                 { icon: "🔒", title: "Secure", text: "All data encrypted and stored securely" },

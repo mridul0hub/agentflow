@@ -336,7 +336,7 @@ export default function Dashboard() {
               {[
                 { icon: <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />, bg: "rgba(37,211,102,0.1)", val: stats.whatsappMessages, label: "WhatsApp Replies", sub: "AI replies sent" },
                 { icon: "📧", bg: "rgba(74,158,255,0.1)", val: stats.emailMessages, label: "Email Replies", sub: "AI replies sent" },
-                { icon: <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />, bg: "rgba(124,58,237,0.1)", val: stats.activeAgents, label: "Active Agents", sub: "Running now" },
+                { icon: <img src="/ailogo.jpg" style={{ height: "20px", width: "20px"}} />, bg: "rgba(124,58,237,0.1)", val: stats.activeAgents, label: "Active Agents", sub: "Running now" },
                 { icon: "👥", bg: "rgba(245,158,11,0.1)", val: stats.totalCustomers, label: "Customers Served", sub: "Unique on WhatsApp" },
               ].map((s) => (
                 <div key={s.label} className="sc">
@@ -410,7 +410,7 @@ export default function Dashboard() {
                   recentActivity.map((item, i) => (
                     <div key={i} className="act-row">
                       <div className="act-icon" style={{ background: item.role === "user" ? "rgba(74,158,255,0.1)" : "rgba(124,58,237,0.1)" }}>
-                        {item.role === "user" ? "👤" : <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />}
+                        {item.role === "user" ? "👤" : <img src="/ailogo.jpg" style={{ height: "20px", width: "20px"}} />}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="act-msg">{item.role === "user" ? "Customer message" : "AI replied"}</div>
