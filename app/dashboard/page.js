@@ -387,6 +387,17 @@ export default function Dashboard() {
                   </span>
                 </Link>
 
+                <Link href="/dashboard/voice-setup" className="ag-row">
+                  <div className="ag-icon" style={{ background: "rgba(124,58,237,0.1)" }}>📞</div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="ag-name">Voice Agent</div>
+                    <div className="ag-sub">AI call answering</div>
+                  </div>
+                  <span className="ag-status" style={{ background: "var(--grey-7)", color: "var(--grey-3)" }}>
+                    Setup →
+                  </span>
+                </Link>
+
                 <div style={{ textAlign: "center", padding: "14px 0 0", fontSize: "12px", color: "var(--grey-4)" }}>
                   More agents coming soon ✦
                 </div>
