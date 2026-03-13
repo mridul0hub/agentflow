@@ -267,7 +267,7 @@ export default function Dashboard() {
         {/* SIDEBAR */}
         <aside className="sidebar">
           <Link href="/" className="sb-logo">
-            <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px", background: "transparent", mixBlendMode: "multiply" }} />
+            <img src="/logo.png" style={{ height: "30px", width: "30px"}} />
             <span className="sb-logo-text">Soni AI Agents</span>
           </Link>
 
