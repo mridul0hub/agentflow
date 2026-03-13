@@ -214,7 +214,7 @@ export default function AboutPage() {
       {/* NAVBAR */}
       <nav className={`nb ${scrolled ? "s" : ""}`}>
         <Link href="/" className="nb-logo">
-          <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px" }} />
+          <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px", background: "transparent", mixBlendMode: "multiply" }} />
           <span className="nb-logo-text">Soni AI Agents</span>
         </Link>
 
@@ -278,7 +278,7 @@ export default function AboutPage() {
           <div className="about-hero-grid" />
           <div className="about-hero-glow" />
           <div className="about-hero-inner f1">
-            <span className="about-tag">✦ About Us</span>
+            <span className="about-tag">About Us</span>
             <h1 className="about-title">We make AI work<br /><em>for real businesses</em></h1>
             <p className="about-sub">Soni AI Agents was built with one goal — help Indian businesses stop missing customers and start growing, without any technical hassle.</p>
           </div>
@@ -288,7 +288,7 @@ export default function AboutPage() {
         <section className="sec">
           <div className="con">
             <div className="f2">
-              <span className="sec-tag">✦ What Drives Us</span>
+              <span className="sec-tag">What Drives Us</span>
               <h2 className="sec-title">Our mission &<br /><em>vision</em></h2>
             </div>
             <div className="mv-grid f2">
@@ -309,7 +309,7 @@ export default function AboutPage() {
         {/* WHY US */}
         <section className="sec-alt">
           <div className="con f3">
-            <span className="sec-tag">✦ Why Us</span>
+            <span className="sec-tag">Why Us</span>
             <h2 className="sec-title">Why Soni<br /><em>AI Agents?</em></h2>
             <p className="sec-sub">We built this for India — not a copy-paste of some foreign product.</p>
             <div className="why-grid">
@@ -334,7 +334,7 @@ export default function AboutPage() {
         {/* FOUNDER */}
         <section className="sec">
           <div className="con f4">
-            <span className="sec-tag">✦ The Founder</span>
+            <span className="sec-tag">The Founder</span>
             <h2 className="sec-title">The person<br /><em>behind it</em></h2>
             <div className="founder-card">
               <div className="founder-av">M</div>
@@ -350,7 +350,7 @@ export default function AboutPage() {
         {/* CONTACT */}
         <section className="sec-alt">
           <div className="con f4">
-            <span className="sec-tag">✦ Get In Touch</span>
+            <span className="sec-tag">Get In Touch</span>
             <h2 className="sec-title">Let's<br /><em>talk</em></h2>
             <p className="sec-sub">Have a question or want to know if Soni AI Agents is right for your business? Just reach out — we reply fast.</p>
             <div className="contact-grid">
@@ -383,7 +383,7 @@ export default function AboutPage() {
         <footer className="ft">
           <div className="ft-bot">
             <span className="ft-copy">© 2025 Soni AI Agents. All rights reserved.</span>
-            <span className="ft-copy">Made with ✦ in Kota, India</span>
+            <span className="ft-copy">Made with in Kota, India</span>
           </div>
         </footer>
 

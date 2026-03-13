@@ -191,7 +191,7 @@ export default function WhatsAppSetup() {
       {/* MOBILE TOPBAR */}
       <div className="mob-topbar">
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
-          <div style={{ width: "28px", height: "28px", borderRadius: "7px", background: "linear-gradient(135deg, #7c3aed, #a855f7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", color: "white" }}>✦</div>
+          <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px", background: "transparent", mixBlendMode: "multiply" }} />
           <span style={{ fontSize: "14px", fontWeight: "600", color: "var(--black)" }}>Soni AI Agents</span>
         </Link>
         <Link href="/dashboard" className="back-btn">← Dashboard</Link>
@@ -201,7 +201,7 @@ export default function WhatsAppSetup() {
         {/* SIDEBAR */}
         <aside className="sidebar">
           <Link href="/" className="sb-logo">
-            <div className="sb-logo-icon">✦</div>
+            <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px", background: "transparent", mixBlendMode: "multiply" }} />
             <span className="sb-logo-text">Soni AI Agents</span>
           </Link>
           <div className="sb-divider" />

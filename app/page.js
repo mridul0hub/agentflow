@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import AuthModal from "./components/AuthModal";
+import CookieConsent from "./components/CookieConsent";
 import Link from "next/link";
 
 export default function Home() {
@@ -37,6 +38,7 @@ export default function Home() {
 
   const waPrice = billing === "monthly" ? "₹1,999" : "₹17,990";
   const emPrice = billing === "monthly" ? "₹999" : "₹8,990";
+  const voPrice = billing === "monthly" ? "₹2,499" : "₹21,990";
   const period = billing === "monthly" ? "/mo" : "/yr";
 
   const testimonials = [
@@ -77,14 +79,12 @@ export default function Home() {
         .btn-dark { padding: 7px 16px; border-radius: 8px; border: none; background: var(--black); font-size: 14px; font-weight: 500; color: white; cursor: pointer; font-family: 'Geist', sans-serif; white-space: nowrap; transition: all 0.2s; }
         .btn-dark:hover { background: var(--grey-1); }
 
-        /* hamburger */
         .hb { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
         .hb span { display: block; width: 22px; height: 2px; background: var(--black); border-radius: 2px; transition: all 0.25s; }
         .hb.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
         .hb.open span:nth-child(2) { opacity: 0; }
         .hb.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-        /* mobile drawer */
         .mob-menu { display: none; position: fixed; top: 60px; left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--grey-6); padding: 12px 16px 20px; z-index: 199; flex-direction: column; gap: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
         .mob-menu.open { display: flex; }
         .mob-link { padding: 12px 16px; border-radius: 10px; font-size: 15px; font-weight: 500; color: var(--black); text-decoration: none; display: block; transition: background 0.15s; background: none; border: none; cursor: pointer; font-family: 'Geist', sans-serif; text-align: left; width: 100%; }
@@ -92,7 +92,6 @@ export default function Home() {
         .mob-divider { height: 1px; background: var(--grey-6); margin: 6px 0; }
         .mob-btn { width: 100%; padding: 13px; border-radius: 10px; background: var(--black); color: white; border: none; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Geist', sans-serif; margin-top: 4px; }
 
-        /* avatar */
         .av-btn { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--grey-6); border-radius: 8px; padding: 5px 12px 5px 6px; cursor: pointer; }
         .av-img { width: 28px; height: 28px; border-radius: 6px; object-fit: cover; }
         .av-name { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; }
@@ -118,7 +117,6 @@ export default function Home() {
         .btn-hs { padding: 12px 28px; border-radius: 10px; background: var(--white); color: var(--black); font-size: 15px; font-weight: 500; border: 1px solid var(--grey-6); cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.2s; white-space: nowrap; }
         .btn-hs:hover { background: var(--grey-7); }
 
-        /* stats row */
         .stats { display: flex; border: 1px solid var(--grey-6); border-radius: 16px; background: var(--white); overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.06); animation: fadeUp 0.6s ease 0.4s both; width: 100%; max-width: 600px; }
         .stat { flex: 1; padding: 20px 16px; text-align: center; border-right: 1px solid var(--grey-6); }
         .stat:last-child { border-right: none; }
@@ -134,30 +132,30 @@ export default function Home() {
         .sec-title em { font-style: italic; color: var(--purple); }
         .sec-sub { font-size: 16px; color: var(--grey-3); max-width: 480px; line-height: 1.7; }
 
-        /* billing toggle */
-        .billing { display: inline-flex; background: var(--grey-7); border: 1px solid var(--grey-6); border-radius: 10px; padding: 4px; margin-top: 24px; margin-bottom: 0; }
+        .billing { display: inline-flex; background: var(--grey-7); border: 1px solid var(--grey-6); border-radius: 10px; padding: 4px; margin-top: 24px; }
         .b-btn { padding: 8px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Geist', sans-serif; background: transparent; color: var(--grey-3); transition: all 0.2s; white-space: nowrap; }
         .b-btn.on { background: var(--white); color: var(--black); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
         .yr-badge { font-size: 10px; background: #dcfce7; color: #16a34a; padding: 2px 7px; border-radius: 50px; margin-left: 6px; font-weight: 700; }
 
-        /* agent cards */
-        .agents { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px; }
+        /* agent cards — 3 columns now */
+        .agents { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
         .ac { background: var(--white); border: 1px solid var(--grey-6); border-radius: 24px; padding: 32px; cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden; }
         .ac::before { content:''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--purple), #a855f7); opacity: 0; transition: opacity 0.25s; }
         .ac:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.1); border-color: var(--grey-5); }
         .ac:hover::before { opacity: 1; }
         .ac-tag { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 11px; font-weight: 600; color: white; margin-bottom: 18px; }
         .ac-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--purple-soft); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 18px; }
-        .ac-name { font-size: 21px; font-weight: 600; color: var(--black); margin-bottom: 10px; letter-spacing: -0.3px; }
-        .ac-desc { font-size: 14px; color: var(--grey-3); line-height: 1.7; margin-bottom: 20px; }
+        .ac-name { font-size: 19px; font-weight: 600; color: var(--black); margin-bottom: 10px; letter-spacing: -0.3px; }
+        .ac-desc { font-size: 13px; color: var(--grey-3); line-height: 1.7; margin-bottom: 20px; }
         .ac-feats { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
         .ac-feat { padding: 4px 11px; border-radius: 50px; background: var(--purple-soft); font-size: 12px; font-weight: 500; color: var(--purple); }
         .ac-price { display: flex; align-items: baseline; gap: 3px; margin-bottom: 14px; }
-        .ac-pv { font-family: 'Instrument Serif', serif; font-size: 34px; color: var(--black); }
+        .ac-pv { font-family: 'Instrument Serif', serif; font-size: 32px; color: var(--black); }
         .ac-pp { font-size: 14px; color: var(--grey-4); }
         .ac-cta { font-size: 14px; font-weight: 500; color: var(--purple); }
+        /* NEW badge on voice card */
+        .ac-new { position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, var(--purple), #a855f7); color: white; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 50px; letter-spacing: 0.5px; }
 
-        /* steps */
         .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 52px; background: var(--grey-6); border-radius: 20px; overflow: hidden; border: 1px solid var(--grey-6); }
         .sc { background: var(--white); padding: 32px 24px; }
         .sc-n { font-family: 'Instrument Serif', serif; font-size: 44px; color: var(--grey-6); line-height: 1; margin-bottom: 18px; }
@@ -165,14 +163,12 @@ export default function Home() {
         .sc-t { font-size: 15px; font-weight: 600; color: var(--black); margin-bottom: 8px; }
         .sc-d { font-size: 13px; color: var(--grey-3); line-height: 1.65; }
 
-        /* biz grid */
         .biz { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 44px; }
         .bc { background: var(--white); border: 1px solid var(--grey-6); border-radius: 14px; padding: 22px 12px; text-align: center; transition: all 0.2s; }
         .bc:hover { border-color: var(--purple-dim); background: var(--purple-soft); transform: translateY(-2px); }
         .bc-i { font-size: 26px; margin-bottom: 8px; }
         .bc-n { font-size: 12px; font-weight: 500; color: var(--grey-2); }
 
-        /* testimonials */
         .testi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 52px; }
         .tc { background: var(--white); border: 1px solid var(--grey-6); border-radius: 20px; padding: 26px; transition: all 0.25s; }
         .tc:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
@@ -183,7 +179,6 @@ export default function Home() {
         .tc-name { font-size: 13px; font-weight: 600; color: var(--black); }
         .tc-role { font-size: 11px; color: var(--grey-4); }
 
-        /* CTA */
         .cta { background: var(--black); padding: 100px 24px; text-align: center; }
         .cta-t { font-family: 'Instrument Serif', serif; font-size: clamp(32px, 6vw, 60px); color: white; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 18px; }
         .cta-t em { font-style: italic; color: #a78bfa; }
@@ -191,7 +186,6 @@ export default function Home() {
         .btn-cta { padding: 14px 36px; border-radius: 10px; background: white; color: var(--black); font-size: 15px; font-weight: 600; border: none; cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.2s; text-decoration: none; display: inline-block; }
         .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.2); }
 
-        /* FOOTER */
         .ft { background: var(--grey-7); border-top: 1px solid var(--grey-6); padding: 60px 24px 28px; }
         .ft-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 44px; }
         .ft-desc { font-size: 14px; color: var(--grey-3); line-height: 1.7; margin-top: 12px; max-width: 250px; }
@@ -204,80 +198,53 @@ export default function Home() {
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ══════════════════════════════
-           RESPONSIVE
-        ══════════════════════════════ */
-
-        /* Tablet ≤ 900px */
         @media (max-width: 900px) {
           .nb { padding: 0 20px; }
           .nb-links { display: none; }
           .btn-ghost { display: none; }
           .hb { display: flex; }
-
           .hero { padding: 80px 20px 60px; min-height: auto; padding-top: 100px; }
-          .hero-title { letter-spacing: -1px; }
-
           .agents { grid-template-columns: 1fr; }
           .steps { grid-template-columns: repeat(2, 1fr); }
           .biz { grid-template-columns: repeat(4, 1fr); }
           .testi { grid-template-columns: 1fr; }
-
           .ft-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-          .ft-desc { max-width: 100%; }
         }
 
-        /* Mobile ≤ 600px */
         @media (max-width: 600px) {
           .nb { padding: 0 14px; height: 54px; }
           .nb-logo-text { font-size: 14px; }
           .btn-dark { padding: 6px 12px; font-size: 13px; }
-
           .mob-menu { top: 54px; }
-
           .hero { padding: 88px 16px 48px; }
           .hero-badge { font-size: 11px; }
-          .hero-title { letter-spacing: -0.5px; }
-          .hero-sub { font-size: 15px; }
           .hero-btns { flex-direction: column; width: 100%; max-width: 320px; }
           .btn-hp, .btn-hs { text-align: center; width: 100%; }
-
           .stats { flex-wrap: wrap; max-width: 100%; }
           .stat { flex: 1 1 50%; min-width: 0; }
           .stat:nth-child(1) { border-bottom: 1px solid var(--grey-6); }
           .stat:nth-child(2) { border-bottom: 1px solid var(--grey-6); border-right: none; }
           .stat:nth-child(3) { border-right: 1px solid var(--grey-6); }
           .stat:nth-child(4) { border-right: none; }
-
           .sec { padding: 60px 16px; }
           .sec-alt { padding: 60px 16px; }
-
           .billing { width: 100%; justify-content: center; }
-
           .ac { padding: 24px 18px; }
           .steps { grid-template-columns: 1fr; }
           .sc { padding: 24px 18px; }
-
           .biz { grid-template-columns: repeat(2, 1fr); gap: 10px; }
           .bc { padding: 18px 10px; }
-
           .tc { padding: 20px 16px; }
-
           .cta { padding: 72px 16px; }
-          .cta-t { letter-spacing: -0.5px; }
-
           .ft { padding: 48px 16px 24px; }
           .ft-grid { grid-template-columns: 1fr; gap: 28px; }
           .ft-bot { flex-direction: column; text-align: center; }
-
           .dropdown { right: -10px; }
         }
 
-        /* Small mobile ≤ 380px */
         @media (max-width: 380px) {
           .nb-logo-text { font-size: 13px; }
           .nb-logo-icon { width: 28px; height: 28px; font-size: 14px; }
-          .hero-title { font-size: 36px; }
           .biz { grid-template-columns: repeat(2, 1fr); }
         }
       `}</style>
@@ -285,15 +252,13 @@ export default function Home() {
       {/* ── NAVBAR ── */}
       <nav className={`nb ${scrolled ? "s" : ""}`}>
         <Link href="/" className="nb-logo">
-          <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px" }} />
+          <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px", background: "transparent", mixBlendMode: "multiply" }} />
           <span className="nb-logo-text">Soni AI Agents</span>
         </Link>
-
         <div className="nb-links">
           <Link href="/about" className="nb-link">About</Link>
           <Link href="/pricing" className="nb-link">Pricing</Link>
         </div>
-
         <div className="nb-actions">
           {user ? (
             <div style={{ position: "relative" }}>
@@ -350,7 +315,7 @@ export default function Home() {
             <span>AI Agents for Indian Businesses</span>
           </div>
           <h1 className="hero-title">Your business,<br /><em>always awake</em></h1>
-          <p className="hero-sub">While you sleep, your AI agent replies to customers, answers questions, and books appointments — automatically. No missed leads, ever.</p>
+          <p className="hero-sub">While you sleep, your AI agent replies to customers, answers calls, and books appointments — automatically. No missed leads, ever.</p>
           <div className="hero-btns">
             {!user ? (
               <>
@@ -375,23 +340,23 @@ export default function Home() {
       {/* ── AGENTS ── */}
       <section className="sec">
         <div className="con">
-          <span className="sec-tag">✦ Our Agents</span>
+          <span className="sec-tag">Our Agents</span>
           <h2 className="sec-title">Pick your agent,<br /><em>we do the rest</em></h2>
           <p className="sec-sub">Set up once, run forever. Your customers get instant replies day and night.</p>
-
           <div className="billing">
             <button className={`b-btn ${billing === "monthly" ? "on" : ""}`} onClick={() => setBilling("monthly")}>Monthly</button>
             <button className={`b-btn ${billing === "yearly" ? "on" : ""}`} onClick={() => setBilling("yearly")}>
               Yearly <span className="yr-badge">3 months free</span>
             </button>
           </div>
-
           <div className="agents">
             {[
-              { icon:"💬", name:"WhatsApp Agent", tag:"Most Popular", tagColor:"#25D366", desc:"Customers message your WhatsApp — AI replies instantly. Handles FAQs, bookings, timings, and more. Works 24/7 so you never miss a lead.", feats:["Auto-replies 24/7","Answers any FAQ","Books appointments","Hindi & English"], price: waPrice, slug:"whatsapp-setup" },
-              { icon:"📧", name:"Email Agent", tag:"New", tagColor:"#7c3aed", desc:"Every customer email gets a smart, professional reply in seconds. No backlogs, no missed inquiries — AI handles it all.", feats:["Instant replies","Professional tone","Works with Gmail","Full history"], price: emPrice, slug:"email-setup" },
+              { icon:"💬", name:"WhatsApp Agent", tag:"Most Popular", tagColor:"#25D366", desc:"Customers message your WhatsApp — AI replies instantly. Handles FAQs, bookings, timings, and more. Works 24/7 so you never miss a lead.", feats:["Auto-replies 24/7","Answers any FAQ","Books appointments","Hindi & English"], price: waPrice, slug:"whatsapp-setup", isNew: false },
+              { icon:"📧", name:"Email Agent", tag:"Smart", tagColor:"#7c3aed", desc:"Every customer email gets a smart, professional reply in seconds. No backlogs, no missed inquiries — AI handles it all.", feats:["Instant replies","Professional tone","Works with Gmail","Full history"], price: emPrice, slug:"email-setup", isNew: false },
+              { icon:"📞", name:"Voice Agent", tag:"Coming Soon", tagColor:"#f59e0b", desc:"Customers call your Indian number — AI answers, speaks in Hinglish, gives info and books appointments. Scam calls auto-detected.", feats:["Indian phone number","Hinglish voice","Books appointments","Scam detection"], price: voPrice, slug:"voice-setup", isNew: true },
             ].map((a) => (
               <div key={a.slug} className="ac" onClick={() => user ? window.location.href=`/dashboard/${a.slug}` : openAuth("signup")}>
+                {a.isNew && <div className="ac-new">NEW ✦</div>}
                 <span className="ac-tag" style={{ background: a.tagColor }}>{a.tag}</span>
                 <div className="ac-icon">{a.icon}</div>
                 <div className="ac-name">{a.name}</div>
@@ -487,7 +452,7 @@ export default function Home() {
           <div className="ft-grid">
             <div>
               <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-                <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px" }} />
+                <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px", background: "transparent", mixBlendMode: "multiply" }} />
                 <span style={{ fontSize:"15px", fontWeight:"600", color:"var(--black)" }}>Soni AI Agents</span>
               </div>
               <p className="ft-desc">AI agents for Indian businesses. Set up once, run forever. Your customers get instant replies — even at 2am.</p>
@@ -497,6 +462,7 @@ export default function Home() {
               <div className="ft-h">Product</div>
               <Link href="/agents/whatsapp-agent" className="ft-link">WhatsApp Agent</Link>
               <Link href="/agents/email-agent" className="ft-link">Email Agent</Link>
+              <Link href="/agents/voice-agent" className="ft-link">Voice Agent</Link>
               <Link href="/pricing" className="ft-link">Pricing</Link>
             </div>
             <div>
@@ -518,12 +484,13 @@ export default function Home() {
           </div>
           <div className="ft-bot">
             <span className="ft-copy">© 2025 Soni AI Agents. All rights reserved.</span>
-            <span className="ft-copy">Made with ✦ in Kota, India</span>
+            <span className="ft-copy">Made with ❤️ in Kota, India</span>
           </div>
         </div>
       </footer>
 
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} defaultTab={authTab} />
+      <CookieConsent />
       {(showDropdown || mobileMenu) && <div style={{ position:"fixed", inset:0, zIndex:198 }} onClick={() => { setShowDropdown(false); setMobileMenu(false); }} />}
     </>
   );
