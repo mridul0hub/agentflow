@@ -281,7 +281,7 @@ export default function Dashboard() {
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Agents</div>
           <Link href="/dashboard/whatsapp-setup" className="sb-link">
-            <span className="sb-link-icon">💬</span> WhatsApp Agent
+            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} /></span> WhatsApp Agent
           </Link>
           <Link href="/dashboard/email-setup" className="sb-link">
             <span className="sb-link-icon">📧</span> Email Agent
