@@ -257,7 +257,7 @@ export default function WhatsAppSetup() {
 
             {/* PAGE HEADER */}
             <div className="page-header f1">
-              <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />
+              <img src="/whatsappsvg.png" style={{ height: "40px", width: "40px"}} />
               <h1 className="page-title">WhatsApp Agent Setup</h1>
               <p className="page-sub">Fill in your business details — your AI agent will use this to reply to customers 24/7 on WhatsApp.</p>
               {existingAgent && (
@@ -348,8 +348,8 @@ export default function WhatsAppSetup() {
             {/* INFO CARDS */}
             <div className="info-grid f3">
               {[
-                { icon: <img src="/ailogo.jpg" style={{ height: "20px", width: "20px"}} />, title: "Gemini AI Powered", text: "Replies intelligently using your business context" },
-                { icon: <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />, title: "WhatsApp Native", text: "Customers chat on regular WhatsApp — no extra app" },
+                { icon: <img src="/ailogo.jpg" style={{ height: "50px", width: "50px"}} />, title: "Gemini AI Powered", text: "Replies intelligently using your business context" },
+                { icon: <img src="/whatsappsvg.png" style={{ height: "40px", width: "40px"}} />, title: "WhatsApp Native", text: "Customers chat on regular WhatsApp — no extra app" },
                 { icon: "🌙", title: "Works 24/7", text: "Replies at 2am, on Sundays, on holidays" },
                 { icon: "🔒", title: "Secure", text: "All data encrypted and stored securely" },
               ].map((item) => (

@@ -410,7 +410,7 @@ export default function Dashboard() {
                   recentActivity.map((item, i) => (
                     <div key={i} className="act-row">
                       <div className="act-icon" style={{ background: item.role === "user" ? "rgba(74,158,255,0.1)" : "rgba(124,58,237,0.1)" }}>
-                        {item.role === "user" ? "👤" : <img src="/ailogo.jpg" style={{ height: "20px", width: "20px"}} />}
+                        {item.role === "user" ? "👤" : <img src="/ailogo.jpg" style={{ height: "50px", width: "50px"}} />}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="act-msg">{item.role === "user" ? "Customer message" : "AI replied"}</div>

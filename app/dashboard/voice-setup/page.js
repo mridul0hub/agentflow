@@ -332,7 +332,7 @@ export default function VoiceSetup() {
             <div className="info-grid f4">
               {[
                 { icon: "📞", title: "Indian Phone Number", text: "Dedicated number assigned — customers pay normal call rates" },
-                { icon: <img src="/ailogo.jpg" style={{ height: "20px", width: "20px"}} />, title: "Gemini AI Powered", text: "Natural Hinglish conversation — sounds human" },
+                { icon: <img src="/ailogo.jpg" style={{ height: "50px", width: "50px"}} />, title: "Gemini AI Powered", text: "Natural Hinglish conversation — sounds human" },
                 { icon: "📅", title: "Auto Appointments", text: "Books appointments directly — saves to your dashboard" },
                 { icon: "⚠️", title: "Scam Detection", text: "Suspicious calls flagged — instant WhatsApp alert to you" },
               ].map((item) => (

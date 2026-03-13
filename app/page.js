@@ -380,7 +380,7 @@ export default function Home() {
             {[
               {n:"01",i:"📝",t:"Fill the form",d:"Tell us about your business — timings, services, pricing, location. Takes 3 minutes."},
               {n:"02",i:"⚙️",t:"We activate",d:"Our team sets up your AI agent within 24 hours. Zero technical work from your end."},
-              {n:"03",i:<img src="/ailogo.jpg" style={{ height: "20px", width: "20px"}} />,t:"AI goes live",d:"Your agent starts replying to customers automatically — any time, any day."},
+              {n:"03",i:<img src="/ailogo.jpg" style={{ height: "50px", width: "50px"}} />,t:"AI goes live",d:"Your agent starts replying to customers automatically — any time, any day."},
               {n:"04",i:"📈",t:"You grow",d:"Focus on your actual work. Every customer query is handled, every lead is captured."},
             ].map(s => (
               <div key={s.n} className="sc">
