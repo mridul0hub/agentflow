@@ -162,7 +162,7 @@ export default function EmailSetup() {
           <Link href="/dashboard" className="sb-link"><span className="sb-link-icon">⊞</span> Dashboard</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Agents</div>
-          <Link href="/dashboard/whatsapp-setup" className="sb-link"><span className="sb-link-icon">💬</span> WhatsApp Agent</Link>
+          <Link href="/dashboard/whatsapp-setup" className="sb-link"><img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} /> WhatsApp Agent</Link>
           <Link href="/dashboard/email-setup" className="sb-link active"><span className="sb-link-icon">📧</span> Email Agent</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Account</div>
@@ -271,7 +271,7 @@ export default function EmailSetup() {
             {/* INFO CARDS */}
             <div className="info-grid f3">
               {[
-                { icon: "🤖", title: "Gemini AI Powered", text: "Replies professionally to every customer email" },
+                { icon: <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />, title: "Gemini AI Powered", text: "Replies professionally to every customer email" },
                 { icon: "📧", title: "Any Email", text: "Works with Gmail, Outlook, or custom domain" },
                 { icon: "🌙", title: "Works 24/7", text: "Replies at 2am, on Sundays, on holidays" },
                 { icon: "🔒", title: "Secure", text: "All data encrypted and stored securely" },

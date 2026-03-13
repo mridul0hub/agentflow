@@ -212,7 +212,7 @@ export default function WhatsAppSetup() {
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Agents</div>
           <Link href="/dashboard/whatsapp-setup" className="sb-link active">
-            <span className="sb-link-icon">💬</span> WhatsApp Agent
+            <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} /> WhatsApp Agent
           </Link>
           <Link href="/dashboard/email-setup" className="sb-link">
             <span className="sb-link-icon">📧</span> Email Agent
@@ -257,7 +257,7 @@ export default function WhatsAppSetup() {
 
             {/* PAGE HEADER */}
             <div className="page-header f1">
-              <div className="page-icon">💬</div>
+              <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />
               <h1 className="page-title">WhatsApp Agent Setup</h1>
               <p className="page-sub">Fill in your business details — your AI agent will use this to reply to customers 24/7 on WhatsApp.</p>
               {existingAgent && (
@@ -348,8 +348,8 @@ export default function WhatsAppSetup() {
             {/* INFO CARDS */}
             <div className="info-grid f3">
               {[
-                { icon: "🤖", title: "Gemini AI Powered", text: "Replies intelligently using your business context" },
-                { icon: "💬", title: "WhatsApp Native", text: "Customers chat on regular WhatsApp — no extra app" },
+                { icon: <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />, title: "Gemini AI Powered", text: "Replies intelligently using your business context" },
+                { icon: <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />, title: "WhatsApp Native", text: "Customers chat on regular WhatsApp — no extra app" },
                 { icon: "🌙", title: "Works 24/7", text: "Replies at 2am, on Sundays, on holidays" },
                 { icon: "🔒", title: "Secure", text: "All data encrypted and stored securely" },
               ].map((item) => (

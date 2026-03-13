@@ -203,7 +203,7 @@ export default function VoiceSetup() {
           <Link href="/dashboard" className="sb-link"><span className="sb-link-icon">⊞</span> Dashboard</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Agents</div>
-          <Link href="/dashboard/whatsapp-setup" className="sb-link"><span className="sb-link-icon">💬</span> WhatsApp Agent</Link>
+          <Link href="/dashboard/whatsapp-setup" className="sb-link"><img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} /> WhatsApp Agent</Link>
           <Link href="/dashboard/email-setup" className="sb-link"><span className="sb-link-icon">📧</span> Email Agent</Link>
           <Link href="/dashboard/voice-setup" className="sb-link active"><span className="sb-link-icon">📞</span> Voice Agent</Link>
           <div style={{ marginTop: "12px" }} />
@@ -332,7 +332,7 @@ export default function VoiceSetup() {
             <div className="info-grid f4">
               {[
                 { icon: "📞", title: "Indian Phone Number", text: "Dedicated number assigned — customers pay normal call rates" },
-                { icon: "🤖", title: "Gemini AI Powered", text: "Natural Hinglish conversation — sounds human" },
+                { icon: <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />, title: "Gemini AI Powered", text: "Natural Hinglish conversation — sounds human" },
                 { icon: "📅", title: "Auto Appointments", text: "Books appointments directly — saves to your dashboard" },
                 { icon: "⚠️", title: "Scam Detection", text: "Suspicious calls flagged — instant WhatsApp alert to you" },
               ].map((item) => (

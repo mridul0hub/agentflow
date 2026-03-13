@@ -136,7 +136,7 @@ export default function WhatsAppAgentPage() {
           {/* Hero */}
           <div style={{ textAlign: "center", marginBottom: "70px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: "rgba(37,211,102,0.12)", border: "1px solid rgba(37,211,102,0.25)", borderRadius: "50px", padding: "8px 20px", marginBottom: "20px" }}>
-              <span style={{ fontSize: "20px" }}>💬</span>
+              <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />
               <span style={{ fontSize: "13px", fontWeight: "600", color: "#128C7E" }}>WhatsApp AI Agent</span>
             </div>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 6vw, 60px)", fontWeight: "700", color: "#1a2e1a", marginBottom: "16px", lineHeight: "1.1" }}>
@@ -152,7 +152,7 @@ export default function WhatsAppAgentPage() {
     setShowAuth(true);
   }
 }}>
-  {user ? "🚀 Get Started Now" : "💬 Try WhatsApp Agent Free"}
+  {user ? "🚀 Get Started Now" : "Try WhatsApp Agent Free"}
 </button>
           </div>
 
@@ -213,7 +213,7 @@ export default function WhatsAppAgentPage() {
     setShowAuth(true);
   }
 }}>
-  {user ? "🚀 Get Started Now" : "💬 Try WhatsApp Agent Free"}
+  {user ? "🚀 Get Started Now" : "Try WhatsApp Agent Free"}
 </button>
           </div>
 

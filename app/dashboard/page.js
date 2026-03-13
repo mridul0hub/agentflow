@@ -334,9 +334,9 @@ export default function Dashboard() {
             {/* STATS */}
             <div className="stats-grid f1">
               {[
-                { icon: "💬", bg: "rgba(37,211,102,0.1)", val: stats.whatsappMessages, label: "WhatsApp Replies", sub: "AI replies sent" },
+                { icon: <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />, bg: "rgba(37,211,102,0.1)", val: stats.whatsappMessages, label: "WhatsApp Replies", sub: "AI replies sent" },
                 { icon: "📧", bg: "rgba(74,158,255,0.1)", val: stats.emailMessages, label: "Email Replies", sub: "AI replies sent" },
-                { icon: "🤖", bg: "rgba(124,58,237,0.1)", val: stats.activeAgents, label: "Active Agents", sub: "Running now" },
+                { icon: <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />, bg: "rgba(124,58,237,0.1)", val: stats.activeAgents, label: "Active Agents", sub: "Running now" },
                 { icon: "👥", bg: "rgba(245,158,11,0.1)", val: stats.totalCustomers, label: "Customers Served", sub: "Unique on WhatsApp" },
               ].map((s) => (
                 <div key={s.label} className="sc">
@@ -360,7 +360,7 @@ export default function Dashboard() {
                 </div>
 
                 <Link href="/dashboard/whatsapp-setup" className="ag-row">
-                  <div className="ag-icon" style={{ background: "rgba(37,211,102,0.1)" }}>💬</div>
+                  <div className="ag-icon" style={{ background: "rgba(37,211,102,0.1)" }}><img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} /></div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="ag-name">WhatsApp Agent</div>
                     <div className="ag-sub">{whatsappAgent?.business_name || "Not set up yet"}</div>
@@ -410,7 +410,7 @@ export default function Dashboard() {
                   recentActivity.map((item, i) => (
                     <div key={i} className="act-row">
                       <div className="act-icon" style={{ background: item.role === "user" ? "rgba(74,158,255,0.1)" : "rgba(124,58,237,0.1)" }}>
-                        {item.role === "user" ? "👤" : "🤖"}
+                        {item.role === "user" ? "👤" : <img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="act-msg">{item.role === "user" ? "Customer message" : "AI replied"}</div>
@@ -433,7 +433,7 @@ export default function Dashboard() {
               <div className="card-title">Quick Actions</div>
               <div className="qa-grid">
                 {[
-                  { icon: "💬", label: "WhatsApp Setup", href: "/dashboard/whatsapp-setup", bg: "rgba(37,211,102,0.1)" },
+                  { icon: <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />, label: "WhatsApp Setup", href: "/dashboard/whatsapp-setup", bg: "rgba(37,211,102,0.1)" },
                   { icon: "📧", label: "Email Setup", href: "/dashboard/email-setup", bg: "rgba(74,158,255,0.1)" },
                   { icon: "💰", label: "Upgrade Plan", href: "/pricing", bg: "rgba(124,58,237,0.1)" },
                   { icon: "🏠", label: "Back to Home", href: "/", bg: "rgba(245,158,11,0.1)" },

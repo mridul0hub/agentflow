@@ -351,7 +351,7 @@ export default function Home() {
           </div>
           <div className="agents">
             {[
-              { icon:"💬", name:"WhatsApp Agent", tag:"Most Popular", tagColor:"#25D366", desc:"Customers message your WhatsApp — AI replies instantly. Handles FAQs, bookings, timings, and more. Works 24/7 so you never miss a lead.", feats:["Auto-replies 24/7","Answers any FAQ","Books appointments","Hindi & English"], price: waPrice, slug:"whatsapp-setup", isNew: false },
+              { icon:<img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />, name:"WhatsApp Agent", tag:"Most Popular", tagColor:"#25D366", desc:"Customers message your WhatsApp — AI replies instantly. Handles FAQs, bookings, timings, and more. Works 24/7 so you never miss a lead.", feats:["Auto-replies 24/7","Answers any FAQ","Books appointments","Hindi & English"], price: waPrice, slug:"whatsapp-setup", isNew: false },
               { icon:"📧", name:"Email Agent", tag:"Smart", tagColor:"#7c3aed", desc:"Every customer email gets a smart, professional reply in seconds. No backlogs, no missed inquiries — AI handles it all.", feats:["Instant replies","Professional tone","Works with Gmail","Full history"], price: emPrice, slug:"email-setup", isNew: false },
               { icon:"📞", name:"Voice Agent", tag:"Coming Soon", tagColor:"#f59e0b", desc:"Customers call your Indian number — AI answers, speaks in Hinglish, gives info and books appointments. Scam calls auto-detected.", feats:["Indian phone number","Hinglish voice","Books appointments","Scam detection"], price: voPrice, slug:"voice-setup", isNew: true },
             ].map((a) => (
@@ -380,7 +380,7 @@ export default function Home() {
             {[
               {n:"01",i:"📝",t:"Fill the form",d:"Tell us about your business — timings, services, pricing, location. Takes 3 minutes."},
               {n:"02",i:"⚙️",t:"We activate",d:"Our team sets up your AI agent within 24 hours. Zero technical work from your end."},
-              {n:"03",i:"🤖",t:"AI goes live",d:"Your agent starts replying to customers automatically — any time, any day."},
+              {n:"03",i:<img src="/ailogo.png" style={{ height: "20px", width: "20px"}} />,t:"AI goes live",d:"Your agent starts replying to customers automatically — any time, any day."},
               {n:"04",i:"📈",t:"You grow",d:"Focus on your actual work. Every customer query is handled, every lead is captured."},
             ].map(s => (
               <div key={s.n} className="sc">

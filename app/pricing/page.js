@@ -41,7 +41,7 @@ export default function PricingPage() {
   const plans = [
     {
       name: "WhatsApp Agent",
-      icon: "💬",
+      icon: <img src="/whatsappsvg.png" style={{ height: "20px", width: "20px"}} />,
       desc: "AI agent that replies to your customers on WhatsApp — 24/7, instantly.",
       monthlyPrice: 1999,
       yearlyPrice: 17990,
