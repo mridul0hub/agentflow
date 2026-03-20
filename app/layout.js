@@ -8,7 +8,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "AEZIO AI Agents",
+  title: "AEZIO AI AGENTS",
   description: "AI agents for businesses worldwide. Set up once, run forever.",
   icons: {
     icon: "/favicon.ico",

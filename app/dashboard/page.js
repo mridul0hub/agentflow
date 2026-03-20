@@ -249,7 +249,7 @@ export default function Dashboard() {
         <aside className={`sidebar ${mobOpen ? "mob-open" : ""}`}>
           <Link href="/" className="sb-logo">
             <img src="/logo.png" style={{ height: "40px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
-            <span className="sb-logo-text">AEZIO AI</span>
+            <span className="sb-logo-text">AEZIO AI AGENT</span>
           </Link>
 
           <div className="sb-divider" />
@@ -261,7 +261,7 @@ export default function Dashboard() {
           <div style={{ marginTop: "14px" }} />
           <div className="sb-label">Agents</div>
           <Link href="/dashboard/whatsapp-setup" className="sb-link" onClick={() => setMobOpen(false)}>
-            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "30px"}} /></span> WhatsApp Agent
+            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "20px"}} /></span> WhatsApp Agent
           </Link>
           <Link href="/dashboard/email-setup" className="sb-link" onClick={() => setMobOpen(false)}>
             <span className="sb-link-icon">📧</span> Email Agent
