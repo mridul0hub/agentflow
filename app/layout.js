@@ -1,14 +1,15 @@
-import { Geist } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata = {
-  title: "Soni AI Agents",
-  description: "AI agents for Indian businesses",
+  title: "AEZIO AI Agents",
+  description: "AI agents for businesses worldwide. Set up once, run forever.",
   icons: {
     icon: "/favicon.ico",
   },
@@ -17,7 +18,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={geist.variable}>
+      <body className={montserrat.variable}>
         {children}
       </body>
     </html>

@@ -56,12 +56,12 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
         .am-overlay {
           position: fixed; inset: 0; z-index: 1000;
-          background: rgba(0,0,0,0.5);
-          backdrop-filter: blur(8px);
+          background: rgba(0,0,0,0.7);
+          backdrop-filter: blur(12px);
           display: flex; align-items: center; justify-content: center;
           padding: 20px;
           animation: amIn 0.2s ease;
@@ -69,15 +69,16 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
         @keyframes amIn { from { opacity: 0; } to { opacity: 1; } }
 
         .am-box {
-          background: #fff;
+          background: #11111c;
+          border: 1px solid rgba(124,58,237,0.2);
           border-radius: 24px;
           width: 100%;
           max-width: 420px;
           max-height: 90vh;
           overflow-y: auto;
-          box-shadow: 0 32px 80px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.06);
+          box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,58,237,0.15), 0 0 60px rgba(124,58,237,0.1);
           animation: amUp 0.25s ease;
-          font-family: 'Geist', sans-serif;
+          font-family: 'Montserrat', sans-serif;
           scrollbar-width: none;
         }
         .am-box::-webkit-scrollbar { display: none; }
@@ -85,131 +86,164 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
 
         /* TOP */
         .am-top {
-          background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
+          background: linear-gradient(160deg, #0d0d14 0%, #16162a 100%);
           padding: 32px 32px 26px;
           position: relative; overflow: hidden;
+          border-bottom: 1px solid rgba(124,58,237,0.15);
         }
         .am-top-grid {
           position: absolute; inset: 0;
-          background-image: linear-gradient(rgba(124,58,237,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.1) 1px, transparent 1px);
+          background-image: linear-gradient(rgba(124,58,237,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.06) 1px, transparent 1px);
           background-size: 28px 28px;
+          pointer-events: none;
         }
         .am-top-glow {
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(124,58,237,0.45) 0%, transparent 70%);
+          background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(124,58,237,0.3) 0%, transparent 70%);
+          pointer-events: none;
         }
         .am-close {
           position: absolute; top: 14px; right: 14px; z-index: 2;
           width: 30px; height: 30px; border-radius: 8px;
-          background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-          color: rgba(255,255,255,0.7); font-size: 15px;
+          background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+          color: rgba(255,255,255,0.5); font-size: 15px;
           display: flex; align-items: center; justify-content: center;
           cursor: pointer; transition: all 0.15s; line-height: 1;
         }
-        .am-close:hover { background: rgba(255,255,255,0.2); color: white; }
+        .am-close:hover { background: rgba(255,255,255,0.12); color: white; }
 
         .am-brand {
           position: relative; z-index: 1;
-          display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+          display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
         }
-        .am-brand-icon {
-          width: 34px; height: 34px; border-radius: 9px;
-          background: linear-gradient(135deg, #7c3aed, #a855f7);
-          display: flex; align-items: center; justify-content: center;
-          font-size: 17px; color: white;
-          box-shadow: 0 4px 14px rgba(124,58,237,0.5);
+        .am-brand-name {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 13px;
+          font-weight: 700;
+          color: rgba(255,255,255,0.9);
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
         }
-        .am-brand-name { font-size: 14px; font-weight: 600; color: white; letter-spacing: -0.2px; }
 
         .am-headline {
           position: relative; z-index: 1;
-          font-family: 'Instrument Serif', serif;
-          font-size: 26px; font-weight: 400;
-          color: white; line-height: 1.2; letter-spacing: -0.5px;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 26px; font-weight: 700;
+          color: #e8e8f0; line-height: 1.2; letter-spacing: -0.3px;
         }
-        .am-headline em { font-style: italic; color: #a78bfa; }
+        .am-headline em { font-style: normal; font-weight: 700; color: #a78bfa; filter: drop-shadow(0 0 12px rgba(124,58,237,0.5)); }
         .am-subline {
           position: relative; z-index: 1;
-          font-size: 13px; color: rgba(255,255,255,0.5);
-          margin-top: 7px; line-height: 1.5;
+          font-size: 13px; color: rgba(255,255,255,0.4);
+          margin-top: 8px; line-height: 1.6;
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 400;
         }
-        .am-trial {
+
+        /* CREDITS BADGE */
+        .am-credits {
           position: relative; z-index: 1;
-          display: inline-flex; align-items: center; gap: 7px;
-          margin-top: 14px;
-          background: rgba(124,58,237,0.25);
-          border: 1px solid rgba(167,139,250,0.35);
-          border-radius: 50px; padding: 5px 13px;
-          font-size: 12px; font-weight: 500; color: #c4b5fd;
+          display: inline-flex; align-items: center; gap: 8px;
+          margin-top: 16px;
+          background: rgba(124,58,237,0.15);
+          border: 1px solid rgba(167,139,250,0.25);
+          border-radius: 50px; padding: 6px 14px;
+          font-size: 12px; font-weight: 600;
+          color: #c4b5fd;
+          font-family: 'Montserrat', sans-serif;
+          letter-spacing: 0.2px;
         }
-        .am-trial-dot {
-          width: 6px; height: 6px; border-radius: 50%; background: #a78bfa;
-          box-shadow: 0 0 0 3px rgba(167,139,250,0.25);
-          animation: tpulse 2s infinite;
+        .am-credits-dot {
+          width: 6px; height: 6px; border-radius: 50%;
+          background: #a78bfa;
+          box-shadow: 0 0 0 3px rgba(167,139,250,0.2);
+          animation: tpulse 2s infinite; flex-shrink: 0;
         }
-        @keyframes tpulse { 0%,100%{box-shadow:0 0 0 3px rgba(167,139,250,0.25)} 50%{box-shadow:0 0 0 6px rgba(167,139,250,0.1)} }
+        @keyframes tpulse { 0%,100%{box-shadow:0 0 0 3px rgba(167,139,250,0.2)} 50%{box-shadow:0 0 0 6px rgba(167,139,250,0.08)} }
 
         /* BODY */
         .am-body { padding: 26px 32px 30px; }
 
         /* TABS */
-        .am-tabs { display: flex; gap: 4px; background: #f4f4f5; border-radius: 10px; padding: 4px; margin-bottom: 22px; }
-        .am-tab { flex: 1; padding: 8px; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.2s; color: #71717a; background: transparent; }
-        .am-tab.on { background: white; color: #0a0a0a; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .am-tabs {
+          display: flex; gap: 4px;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(124,58,237,0.15);
+          border-radius: 10px; padding: 4px; margin-bottom: 22px;
+        }
+        .am-tab {
+          flex: 1; padding: 9px;
+          border-radius: 8px; font-size: 13px; font-weight: 600;
+          border: none; cursor: pointer;
+          font-family: 'Montserrat', sans-serif;
+          transition: all 0.2s; color: rgba(255,255,255,0.35);
+          background: transparent; letter-spacing: 0.2px;
+        }
+        .am-tab.on {
+          background: rgba(124,58,237,0.2);
+          color: #c4b5fd;
+          box-shadow: 0 0 0 1px rgba(124,58,237,0.3);
+        }
 
         /* GOOGLE */
         .am-google {
-          width: 100%; padding: 11px 16px;
-          border-radius: 10px; border: 1px solid #e4e4e7;
-          background: white; color: #0a0a0a;
+          width: 100%; padding: 12px 16px;
+          border-radius: 10px;
+          border: 1px solid rgba(124,58,237,0.2);
+          background: rgba(255,255,255,0.04);
+          color: rgba(255,255,255,0.8);
           font-size: 14px; font-weight: 500;
-          cursor: pointer; font-family: 'Geist', sans-serif;
+          cursor: pointer; font-family: 'Montserrat', sans-serif;
           display: flex; align-items: center; justify-content: center; gap: 10px;
           transition: all 0.2s; margin-bottom: 18px;
         }
-        .am-google:hover { background: #f4f4f5; }
-        .am-google:disabled { opacity: 0.6; cursor: not-allowed; }
+        .am-google:hover { background: rgba(255,255,255,0.08); border-color: rgba(124,58,237,0.35); color: white; }
+        .am-google:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* DIVIDER */
         .am-div { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-        .am-div-line { flex: 1; height: 1px; background: #e4e4e7; }
-        .am-div-txt { font-size: 12px; color: #a1a1aa; font-weight: 500; }
+        .am-div-line { flex: 1; height: 1px; background: rgba(124,58,237,0.15); }
+        .am-div-txt { font-size: 11px; color: rgba(255,255,255,0.25); font-weight: 500; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
 
         /* ALERTS */
-        .am-err { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 13px; font-size: 13px; color: #dc2626; margin-bottom: 14px; }
-        .am-ok { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 13px; font-size: 13px; color: #16a34a; margin-bottom: 14px; }
+        .am-err { background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.25); border-radius: 8px; padding: 10px 13px; font-size: 12px; color: #f87171; margin-bottom: 14px; font-family: 'Montserrat', sans-serif; }
+        .am-ok { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); border-radius: 8px; padding: 10px 13px; font-size: 12px; color: #4ade80; margin-bottom: 14px; font-family: 'Montserrat', sans-serif; }
 
         /* FIELDS */
         .am-field { margin-bottom: 13px; }
-        .am-label { display: block; font-size: 13px; font-weight: 500; color: #3f3f46; margin-bottom: 5px; }
+        .am-label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
         .am-input {
-          width: 100%; padding: 10px 13px;
-          border-radius: 10px; border: 1px solid #e4e4e7;
-          font-size: 14px; color: #0a0a0a;
-          font-family: 'Geist', sans-serif;
-          transition: all 0.15s; background: white; outline: none;
-          box-sizing: border-box;
+          width: 100%; padding: 11px 14px;
+          border-radius: 10px;
+          border: 1px solid rgba(124,58,237,0.2);
+          font-size: 14px; color: #e8e8f0;
+          font-family: 'Montserrat', sans-serif;
+          transition: all 0.15s;
+          background: rgba(255,255,255,0.04);
+          outline: none; box-sizing: border-box;
         }
-        .am-input:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
-        .am-input::placeholder { color: #a1a1aa; }
+        .am-input:focus { border-color: rgba(124,58,237,0.5); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); background: rgba(255,255,255,0.06); }
+        .am-input::placeholder { color: rgba(255,255,255,0.2); }
 
         /* SUBMIT */
         .am-submit {
-          width: 100%; padding: 12px;
+          width: 100%; padding: 13px;
           border-radius: 10px; border: none;
-          background: #0a0a0a; color: white;
-          font-size: 14px; font-weight: 600;
-          cursor: pointer; font-family: 'Geist', sans-serif;
+          background: #7c3aed; color: white;
+          font-size: 14px; font-weight: 700;
+          cursor: pointer; font-family: 'Montserrat', sans-serif;
           transition: all 0.2s; margin-top: 4px;
+          letter-spacing: 0.3px;
+          box-shadow: 0 0 24px rgba(124,58,237,0.3), 0 4px 12px rgba(124,58,237,0.2);
         }
-        .am-submit:hover:not(:disabled) { background: #1a1a1a; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
-        .am-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .am-submit:hover:not(:disabled) { background: #8b5cf6; transform: translateY(-2px); box-shadow: 0 0 40px rgba(124,58,237,0.4), 0 8px 20px rgba(124,58,237,0.3); }
+        .am-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .am-switch { text-align: center; margin-top: 14px; font-size: 13px; color: #71717a; }
-        .am-switch-btn { color: #7c3aed; font-weight: 500; cursor: pointer; background: none; border: none; font-family: 'Geist', sans-serif; font-size: 13px; }
-        .am-switch-btn:hover { text-decoration: underline; }
+        .am-switch { text-align: center; margin-top: 14px; font-size: 12px; color: rgba(255,255,255,0.3); font-family: 'Montserrat', sans-serif; }
+        .am-switch-btn { color: #a78bfa; font-weight: 600; cursor: pointer; background: none; border: none; font-family: 'Montserrat', sans-serif; font-size: 12px; }
+        .am-switch-btn:hover { color: #c4b5fd; text-decoration: underline; }
 
-        .am-terms { text-align: center; font-size: 11px; color: #a1a1aa; margin-top: 12px; line-height: 1.5; }
+        .am-terms { text-align: center; font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 12px; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
 
         /* RESPONSIVE */
         @media (max-width: 480px) {
@@ -217,9 +251,8 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
           .am-box { border-radius: 24px 24px 0 0; max-width: 100%; max-height: 92vh; }
           .am-top { padding: 26px 22px 22px; }
           .am-body { padding: 22px 22px 28px; }
-          .am-headline { font-size: 23px; }
+          .am-headline { font-size: 26px; }
         }
-
         @media (max-width: 360px) {
           .am-top { padding: 22px 18px 20px; }
           .am-body { padding: 18px 18px 24px; }
@@ -236,17 +269,17 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
             <button className="am-close" onClick={onClose}>✕</button>
 
             <div className="am-brand">
-              <img src="/logo.png" style={{ height: "30px", width: "30px", borderRadius: "8px", background: "transparent", mixBlendMode: "multiply" }} />
-              <span className="am-brand-name">Soni AI Agents</span>
+              <img src="/logo.png" style={{ height: "40px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
+              <span className="am-brand-name">AEZIO AI AGENTS</span>
             </div>
 
             {tab === "signup" ? (
               <>
-                <div className="am-headline">Start your<br /><em>free trial today</em></div>
+                <div className="am-headline">Start your<br /><em>journey today</em></div>
                 <div className="am-subline">Set up your AI agent in minutes. No credit card needed.</div>
-                <div className="am-trial">
-                  <div className="am-trial-dot" />
-                  1-day free trial included
+                <div className="am-credits">
+                  <div className="am-credits-dot" />
+                  20 free credits on signup
                 </div>
               </>
             ) : (
@@ -297,7 +330,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
             </div>
 
             <button className="am-submit" onClick={handleEmailAuth} disabled={loading}>
-              {loading ? "Please wait..." : tab === "signup" ? "Create Account — Start Free Trial" : "Login to Dashboard →"}
+              {loading ? "Please wait..." : tab === "signup" ? "Create Account — Get 20 Free Credits" : "Login to Dashboard →"}
             </button>
 
             <div className="am-switch">
@@ -308,7 +341,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }) {
             </div>
 
             {tab === "signup" && (
-              <div className="am-terms">By signing up you agree to our Terms of Service.<br />1-day free trial · No credit card required.</div>
+              <div className="am-terms">By signing up you agree to our Terms of Service.<br />20 free credits included · No credit card required.</div>
             )}
           </div>
         </div>
