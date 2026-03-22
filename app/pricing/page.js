@@ -84,7 +84,7 @@ export default function PricingPage() {
     },
     {
       name: "Email Agent",
-      icon: "📧",
+      icon: <img src="/mail.png" style={{height: "40px"}}/>,
       desc: "AI agent that replies to every customer email professionally and instantly.",
       monthlyPrice: 999,
       yearlyPrice: 8990,
@@ -407,7 +407,7 @@ export default function PricingPage() {
                     className={`pc-btn ${plan.featured ? "featured" : ""}`}
                     onClick={() => user ? window.location.href = `/dashboard/${plan.slug}` : openAuth("signup")}
                   >
-                    {plan.cta} →
+                    {plan.cta} 
                   </button>
                 </div>
               );

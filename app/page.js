@@ -319,10 +319,10 @@ export default function Home() {
           <p className="sec-sub">Set up once, run forever. Your customers get instant replies day and night.</p>
           <div className="agents">
             {[
-              { icon: <img src="/whatsappsvg.png" style={{ height: "32px", width: "32px" }} />, name: "WhatsApp Agent", tag: "Most Popular", tagColor: "#25D366", desc: "Customers message your WhatsApp — AI replies instantly. Handles FAQs, bookings, timings, and more. Works 24/7.", feats: ["Auto-replies 24/7", "Answers any FAQ", "Books appointments", "Multilingual"], slug: "whatsapp-setup" },
-              { icon: "📧", name: "Email Agent", tag: "Smart", tagColor: "#7c3aed", desc: "Every customer email gets a smart, professional reply in seconds. No backlogs, no missed inquiries.", feats: ["Instant replies", "Professional tone", "Works with Gmail", "Full history"], slug: "email-setup" },
-              { icon: "📞", name: "Voice Agent", tag: "Beta", tagColor: "#6d28d9", desc: "Customers call your number — AI answers, speaks naturally, gives info and books appointments. Scam calls auto-detected.", feats: ["Dedicated phone number", "Natural voice", "Books appointments", "Scam detection"], slug: "voice-setup" },
-              { icon: "📅", name: "Appointment Agent", tag: "New", tagColor: "#0ea5e9", desc: "AI automatically schedules, confirms and manages appointments across WhatsApp, Email and Voice — all in one place.", feats: ["Auto scheduling", "Confirmation alerts", "Reschedule & cancel", "All channels"], slug: "appointments" },
+              { icon: <img src="/whatsappsvg.png" style={{ height: "40px"}} />, name: "WhatsApp Agent", tag: "Most Popular", tagColor: "#25D366", desc: "Customers message your WhatsApp — AI replies instantly. Handles FAQs, bookings, timings, and more. Works 24/7.", feats: ["Auto-replies 24/7", "Answers any FAQ", "Books appointments", "Multilingual"], slug: "whatsapp-setup" },
+              { icon: <img src="/mail.png" style={{ height: "40px"}} />, name: "Email Agent", tag: "Smart", tagColor: "#7c3aed", desc: "Every customer email gets a smart, professional reply in seconds. No backlogs, no missed inquiries.", feats: ["Instant replies", "Professional tone", "Works with Gmail", "Full history"], slug: "email-setup" },
+              { icon: <img src="/voice.png" style={{ height: "40px"}} />, name: "Voice Agent", tag: "Beta", tagColor: "#6d28d9", desc: "Customers call your number — AI answers, speaks naturally, gives info and books appointments. Scam calls auto-detected.", feats: ["Dedicated phone number", "Natural voice", "Books appointments", "Scam detection"], slug: "voice-setup" },
+              { icon: <img src="/calendar.png" style={{ height: "40px"}} />, name: "Appointment Agent", tag: "New", tagColor: "#0ea5e9", desc: "AI automatically schedules, confirms and manages appointments across WhatsApp, Email and Voice — all in one place.", feats: ["Auto scheduling", "Confirmation alerts", "Reschedule & cancel", "All channels"], slug: "appointments" },
             ].map((a) => (
               <div key={a.slug} className="ac" onClick={() => user ? window.location.href=`/dashboard/${a.slug}` : openAuth("signup")}>
                 <span className="ac-tag" style={{ background: a.tagColor }}>{a.tag}</span>
@@ -345,10 +345,10 @@ export default function Home() {
           <p className="sec-sub">No technical knowledge needed. We handle setup, you handle your business.</p>
           <div className="steps">
             {[
-              { n: "01", i: "📝", t: "Fill the form", d: "Tell us about your business — timings, services, pricing, location. Takes 3 minutes." },
-              { n: "02", i: "⚙️", t: "We activate", d: "Our team sets up your AI agent within 24 hours. Zero technical work from your end." },
-              { n: "03", i: <img src="/ailogo.jpg" style={{ height: "50px", width: "50px" }} />, t: "AI goes live", d: "Your agent starts replying to customers automatically — any time, any day." },
-              { n: "04", i: "📈", t: "You grow", d: "Focus on your actual work. Every customer query is handled, every lead is captured." },
+              { n: "01", i: <img src="/form.png" style={{height: "40px"}}/>, t: "Fill the form", d: "Tell us about your business — timings, services, pricing, location. Takes 3 minutes." },
+              { n: "02", i: <img src="/activate.png" style={{height: "45px"}}/>, t: "We activate", d: "Our team sets up your AI agent within 24 hours. Zero technical work from your end." },
+              { n: "03", i: <img src="/ailogo.png" style={{height: "50px"}}/>, t: "AI goes live", d: "Your agent starts replying to customers automatically — any time, any day." },
+              { n: "04", i: <img src="/growth.png" style={{height: "40px"}}/>, t: "You grow", d: "Focus on your actual work. Every customer query is handled, every lead is captured." },
             ].map(s => (
               <div key={s.n} className="sc">
                 <div className="sc-n">{s.n}</div>
@@ -367,7 +367,7 @@ export default function Home() {
           <span className="sec-tag">Who It's For</span>
           <h2 className="sec-title">Built for real<br /><em>businesses</em></h2>
           <div className="biz">
-            {[["🏥","Clinics & Doctors"],["🍽️","Restaurants"],["💇","Salons & Spas"],["🏠","Real Estate"],["📚","Coaching Centers"],["🛍️","Online Stores"],["🏋️","Gyms & Fitness"],["🔧","Service Shops"]].map(([i,n]) => (
+            {[[<img src="/hospital.png" style={{height: "40px"}}/>,"Clinics & Doctors"],[<img src="/restaurant.png" style={{height: "40px"}}/>,"Restaurants"],[<img src="/salon.png" style={{height: "40px"}}/>,"Salons & Spas"],[<img src="/real-estate.png" style={{height: "45px"}}/>,"Real Estate"],[<img src="/school.png" style={{height: "40px"}}/>,"Coaching Centers"],[<img src="/online-store.png" style={{height: "40px"}}/>,"Online Stores"],[<img src="/gym.png" style={{height: "40px"}}/>,"Gyms & Fitness"],[<img src="/repair.png" style={{height: "40px"}}/>,"Service Shops"]].map(([i,n]) => (
               <div key={n} className="bc">
                 <div className="bc-i">{i}</div>
                 <div className="bc-n">{n}</div>

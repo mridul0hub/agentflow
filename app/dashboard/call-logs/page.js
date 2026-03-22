@@ -193,7 +193,7 @@ export default function CallLogsPage() {
           <img src="/logo.png" style={{ height: "50px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
           <span style={{ fontSize: "13px", fontWeight: "700", color: "var(--text)", letterSpacing: "1px", textTransform: "uppercase" }}>AEZIO AI</span>
         </Link>
-        <Link href="/dashboard" className="back-btn">← Back</Link>
+        <Link href="/dashboard" className="back-btn">Back</Link>
       </div>
 
       <div className="wrap">
@@ -201,29 +201,29 @@ export default function CallLogsPage() {
         <aside className="sidebar">
           <Link href="/" className="sb-logo">
             <img src="/logo.png" style={{ height: "50px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
-            <span className="sb-logo-text">AEZIO AI</span>
+            <span className="sb-logo-text">AEZIO AI AGENTS</span>
           </Link>
           <div className="sb-divider" />
           <div className="sb-label">Overview</div>
-          <Link href="/dashboard" className="sb-link"><span className="sb-link-icon">⊞</span> Dashboard</Link>
+          <Link href="/dashboard" className="sb-link"> Dashboard</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Agents</div>
           <Link href="/dashboard/whatsapp-setup" className="sb-link">
-            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "16px", width: "16px" }} /></span> WhatsApp Agent
+            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "20px"}} /></span> WhatsApp Agent
           </Link>
-          <Link href="/dashboard/email-setup" className="sb-link"><span className="sb-link-icon">📧</span> Email Agent</Link>
-          <Link href="/dashboard/voice-setup" className="sb-link"><span className="sb-link-icon">📞</span> Voice Agent</Link>
+          <Link href="/dashboard/email-setup" className="sb-link"><span className="sb-link-icon"><img src="/mail.png" style={{height: "20px"}}/></span> Email Agent</Link>
+          <Link href="/dashboard/voice-setup" className="sb-link"><span className="sb-link-icon"><img src="/voice.png" style={{height: "20px"}}/></span> Voice Agent</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Data</div>
           <Link href="/dashboard/appointments" className="sb-link"><span className="sb-link-icon">📅</span> Appointments</Link>
           <Link href="/dashboard/call-logs" className="sb-link active"><span className="sb-link-icon">📋</span> Call Logs</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Account</div>
-          <Link href="/pricing" className="sb-link"><span className="sb-link-icon">⬆</span> Upgrade Plan</Link>
-          <Link href="/" className="sb-link"><span className="sb-link-icon">←</span> Back to Website</Link>
+          <Link href="/pricing" className="sb-link"><span className="sb-link-icon"><img src="/upgrade.png" style={{height: "20px"}}/></span> Upgrade Plan</Link>
+          <Link href="/" className="sb-link">Back to Website</Link>
           <div className="sb-bottom">
             <button className="sb-logout" onClick={async () => { await supabase.auth.signOut(); router.push("/"); }}>
-              <span>⊗</span> Logout
+               Logout
             </button>
           </div>
         </aside>

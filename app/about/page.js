@@ -281,7 +281,7 @@ export default function AboutPage() {
                 <p className="mv-text">To democratize intelligent automation — making enterprise-grade AI agents accessible to every business, regardless of size, budget, or technical expertise. We believe every business deserves a smart assistant that never sleeps.</p>
               </div>
               <div className="mv-card">
-                <div className="mv-icon">🔭</div>
+                <div className="mv-icon"><img src="/vision.png" style={{height: "40px"}}/></div>
                 <div className="mv-title">Our Vision</div>
                 <p className="mv-text">A world where no customer inquiry goes unanswered, no lead is lost due to unavailability, and every business — from a local clinic to a global enterprise — operates with the efficiency of a fully staffed AI team.</p>
               </div>
@@ -297,12 +297,12 @@ export default function AboutPage() {
             <p className="sec-sub">Purpose-built for real-world business operations — not a generic product.</p>
             <div className="why-grid">
               {[
-                { icon: "🌍", title: "Built for Everyone", text: "Multilingual support, global reach, and agents designed to fit how businesses actually operate worldwide." },
-                { icon: "⚡", title: "Live in Minutes", text: "No developer required. Complete your setup form and your AI agent goes live within 24 hours." },
-                { icon: "🔒", title: "You Stay in Control", text: "Your data is encrypted and secure. Nothing is activated without your explicit approval." },
-                { icon: "🌙", title: "Always On", text: "Replies at 2am, on weekends, on public holidays — precisely when your team cannot." },
-                { icon: "💎", title: "Transparent Pricing", text: "Credit-based pricing that scales with your usage. Only pay for what you actually use." },
-                { icon: "🤝", title: "Human Support", text: "When you reach out, you speak with a real person committed to your success — not a chatbot." },
+                {title: "Built for Everyone", text: "Multilingual support, global reach, and agents designed to fit how businesses actually operate worldwide." },
+                {title: "Live in Minutes", text: "No developer required. Complete your setup form and your AI agent goes live within 24 hours." },
+                {title: "You Stay in Control", text: "Your data is encrypted and secure. Nothing is activated without your explicit approval." },
+                {title: "Always On", text: "Replies at 2am, on weekends, on public holidays — precisely when your team cannot." },
+                {title: "Transparent Pricing", text: "Credit-based pricing that scales with your usage. Only pay for what you actually use." },
+                {title: "Human Support", text: "When you reach out, you speak with a real person committed to your success — not a chatbot." },
               ].map((w) => (
                 <div key={w.title} className="why-card">
                   <div className="why-icon">{w.icon}</div>
@@ -338,14 +338,14 @@ export default function AboutPage() {
             <p className="sec-sub">Have a question or want to explore how AEZIO can work for your business? We respond promptly.</p>
             <div className="contact-grid">
               <a href="mailto:vasusoni1068@gmail.com" className="contact-item">
-                <div className="contact-icon">📧</div>
+                <div className="contact-icon"><img src="/mail.png" style={{height: "40px"}}/></div>
                 <div>
                   <div className="contact-label">Email</div>
                   <div className="contact-value">vasusoni1068@gmail.com</div>
                 </div>
               </a>
               <a href="https://linkedin.com" target="_blank" className="contact-item">
-                <div className="contact-icon">💼</div>
+                <div className="contact-icon"><img src="/linkedin.png" style={{height: "40px"}}/></div>
                 <div>
                   <div className="contact-label">LinkedIn</div>
                   <div className="contact-value">Coming soon</div>

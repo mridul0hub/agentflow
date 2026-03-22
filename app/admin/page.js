@@ -255,27 +255,27 @@ export default function AdminPanel() {
             <img src="/logo.png" style={{ height: "40px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
             <span className="sb-logo-text">AEZIO AI</span>
           </Link>
-          <div className="sb-admin-badge">⚡ ADMIN PANEL</div>
+          <div className="sb-admin-badge">ADMIN PANEL</div>
           <div className="sb-divider" />
           <div className="sb-label">Admin</div>
           <button className={`sb-link ${tab === "users" ? "active" : ""}`} onClick={() => setTab("users")}>
-            <span className="sb-link-icon">👥</span> All Users
+            <span className="sb-link-icon"><img src="/customer.png" style={{height: "40px"}}/></span> All Users
           </button>
           <button className={`sb-link ${tab === "stats" ? "active" : ""}`} onClick={() => setTab("stats")}>
-            <span className="sb-link-icon">📊</span> Overview Stats
+            <span className="sb-link-icon"><img src="/growth.png" style={{height: "40px"}}/></span> Overview Stats
           </button>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Navigation</div>
           <Link href="/dashboard" className="sb-link">
-            <span className="sb-link-icon">⊞</span> Dashboard
+            <span className="sb-link-icon"></span> Dashboard
           </Link>
           <Link href="/" className="sb-link">
-            <span className="sb-link-icon">←</span> Back to Website
+            <span className="sb-link-icon"></span> Back to Website
           </Link>
           <div className="sb-bottom">
             <div style={{ padding: "8px 12px 12px", fontSize: "11px", color: "var(--text-4)" }}>{user?.email}</div>
             <button className="sb-logout" onClick={async () => { await supabase.auth.signOut(); router.push("/"); }}>
-              <span>⊗</span> Logout
+              <span></span> Logout
             </button>
           </div>
         </aside>
@@ -285,7 +285,7 @@ export default function AdminPanel() {
           <div className="topbar">
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <span className="topbar-title">Admin Panel</span>
-              <span className="admin-pill">⚡ Admin Access</span>
+              <span className="admin-pill">Admin Access</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <span style={{ fontSize: "12px", color: "var(--text-4)" }}>{user?.email}</span>
@@ -416,7 +416,7 @@ export default function AdminPanel() {
                               onChange={e => setCreditNote(e.target.value)}
                             />
                             <button className="apply-btn" onClick={adjustCredits}>
-                              Apply Credit Adjustment →
+                              Apply Credit Adjustment 
                             </button>
                           </div>
                         </>
@@ -425,7 +425,7 @@ export default function AdminPanel() {
                   </>
                 ) : (
                   <div className="empty-detail">
-                    <div style={{ fontSize: "40px", marginBottom: "12px", opacity: 0.3 }}>👆</div>
+                    <div style={{ fontSize: "40px", marginBottom: "12px", opacity: 0.3 }}>⬆</div>
                     <div style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-3)" }}>Select a user</div>
                     <div style={{ fontSize: "12px", color: "var(--text-4)", marginTop: "4px" }}>Click any user to manage</div>
                   </div>

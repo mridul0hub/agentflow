@@ -10,6 +10,7 @@ export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState([]);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function AppointmentsPage() {
   const updateStatus = async (id, status) => {
     await supabase.from("appointments").update({ status }).eq("id", id);
     setAppointments(prev => prev.map(a => a.id === id ? { ...a, status } : a));
+    if (selected?.id === id) setSelected(prev => ({ ...prev, status }));
   };
 
   const formatDate = (d) => {
@@ -52,11 +54,16 @@ export default function AppointmentsPage() {
 
   const filtered = appointments.filter(a => {
     const matchFilter = filter === "all" || a.status === filter;
-    const matchSearch = !search || [a.customer_name, a.customer_number, a.subject, a.student_name].some(v => v?.toLowerCase().includes(search.toLowerCase()));
+    const matchSearch = !search || [a.customer_name, a.customer_number, a.purpose, a.customer_email, a.notes].some(v => v?.toLowerCase().includes(search.toLowerCase()));
     return matchFilter && matchSearch;
   });
 
-  const counts = { all: appointments.length, pending: appointments.filter(a => a.status === "pending").length, confirmed: appointments.filter(a => a.status === "confirmed").length, cancelled: appointments.filter(a => a.status === "cancelled").length };
+  const counts = {
+    all: appointments.length,
+    pending: appointments.filter(a => a.status === "pending").length,
+    confirmed: appointments.filter(a => a.status === "confirmed").length,
+    cancelled: appointments.filter(a => a.status === "cancelled").length
+  };
 
   if (loading) return (
     <div style={{ minHeight: "100vh", background: "#0d0d14", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Montserrat, sans-serif" }}>
@@ -113,7 +120,7 @@ export default function AppointmentsPage() {
         .topbar-title { font-size: 15px; font-weight: 700; color: var(--text); }
 
         /* CONTENT */
-        .content { padding: 32px; max-width: 1000px; }
+        .content { padding: 32px; max-width: 1100px; }
 
         /* STATS */
         .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
@@ -123,18 +130,22 @@ export default function AppointmentsPage() {
         .stat-val { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -1px; margin-bottom: 4px; }
         .stat-label { font-size: 12px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* SEARCH + FILTER */
+        /* TOOLBAR */
         .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
         .search-input { flex: 1; min-width: 200px; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-2); color: var(--text); font-size: 14px; font-family: 'Montserrat', sans-serif; outline: none; transition: all 0.15s; font-weight: 400; }
         .search-input:focus { border-color: var(--border-2); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
         .search-input::placeholder { color: var(--text-4); }
 
+        /* PAGE GRID */
+        .page-grid { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+
         /* TABLE */
         .table-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; box-shadow: var(--sh-card); }
         .table-header { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; color: var(--text-4); text-transform: uppercase; letter-spacing: 1px; }
-        .table-row { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.15s; }
+        .table-row { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.15s; cursor: pointer; }
         .table-row:last-child { border-bottom: none; }
         .table-row:hover { background: var(--bg-3); }
+        .table-row.selected { background: var(--p-soft); border-left: 3px solid var(--p3); }
         .customer-name { font-size: 13px; font-weight: 600; color: var(--text); }
         .customer-number { font-size: 11px; color: var(--text-4); margin-top: 2px; font-weight: 400; }
         .td { font-size: 13px; color: var(--text-3); font-weight: 400; }
@@ -146,6 +157,23 @@ export default function AppointmentsPage() {
         .action-btn.confirm:hover { background: rgba(34,197,94,0.2); }
         .action-btn.cancel { background: rgba(248,113,113,0.1); color: #f87171; border-color: rgba(248,113,113,0.2); }
         .action-btn.cancel:hover { background: rgba(248,113,113,0.2); }
+
+        /* DETAIL PANEL */
+        .detail-panel { background: var(--bg-2); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--sh-card); height: fit-content; position: sticky; top: 80px; overflow: hidden; }
+        .detail-header { padding: 18px 20px; border-bottom: 1px solid var(--border); background: var(--bg-3); }
+        .detail-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .detail-body { padding: 16px 20px; }
+        .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+        .detail-row:last-of-type { border-bottom: none; }
+        .detail-key { font-size: 11px; font-weight: 700; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+        .detail-val { font-size: 12px; color: var(--text-2); font-weight: 500; text-align: right; word-break: break-word; max-width: 180px; }
+        .extra-box { background: var(--bg-3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; }
+        .extra-item { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 7px; font-size: 11px; }
+        .extra-item:last-child { margin-bottom: 0; }
+        .extra-key { color: var(--text-4); font-weight: 600; text-transform: capitalize; }
+        .extra-val { color: var(--text-2); font-weight: 500; text-align: right; }
+        .detail-action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+        .detail-action-btn { padding: 9px; border-radius: 9px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; transition: all 0.15s; }
 
         /* EMPTY */
         .empty { text-align: center; padding: 64px 24px; }
@@ -161,6 +189,7 @@ export default function AppointmentsPage() {
         .f2 { animation: fadeUp 0.5s ease 0.07s both; }
         .f3 { animation: fadeUp 0.5s ease 0.14s both; }
 
+        @media (max-width: 1100px) { .page-grid { grid-template-columns: 1fr; } .detail-panel { position: static; } }
         @media (max-width: 900px) {
           .stats-row { grid-template-columns: repeat(2, 1fr); }
           .table-header { display: none; }
@@ -181,7 +210,7 @@ export default function AppointmentsPage() {
           <img src="/logo.png" style={{ height: "50px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
           <span style={{ fontSize: "13px", fontWeight: "700", color: "var(--text)", letterSpacing: "1px", textTransform: "uppercase" }}>AEZIO AI</span>
         </Link>
-        <Link href="/dashboard" className="back-btn">← Back</Link>
+        <Link href="/dashboard" className="back-btn">Back</Link>
       </div>
 
       <div className="wrap">
@@ -189,29 +218,29 @@ export default function AppointmentsPage() {
         <aside className="sidebar">
           <Link href="/" className="sb-logo">
             <img src="/logo.png" style={{ height: "50px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
-            <span className="sb-logo-text">AEZIO AI</span>
+            <span className="sb-logo-text">AEZIO AI AGENTS</span>
           </Link>
           <div className="sb-divider" />
           <div className="sb-label">Overview</div>
-          <Link href="/dashboard" className="sb-link"><span className="sb-link-icon">⊞</span> Dashboard</Link>
+          <Link href="/dashboard" className="sb-link">Dashboard</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Agents</div>
           <Link href="/dashboard/whatsapp-setup" className="sb-link">
-            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "16px", width: "16px" }} /></span> WhatsApp Agent
+            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "20px"}} /></span> WhatsApp Agent
           </Link>
-          <Link href="/dashboard/email-setup" className="sb-link"><span className="sb-link-icon">📧</span> Email Agent</Link>
-          <Link href="/dashboard/voice-setup" className="sb-link"><span className="sb-link-icon">📞</span> Voice Agent</Link>
+          <Link href="/dashboard/email-setup" className="sb-link"><span className="sb-link-icon"><img src="/mail.png" style={{height: "20px"}}/></span> Email Agent</Link>
+          <Link href="/dashboard/voice-setup" className="sb-link"><span className="sb-link-icon"><img src="/voice.png" style={{height: "20px"}}/></span> Voice Agent</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Data</div>
           <Link href="/dashboard/appointments" className="sb-link active"><span className="sb-link-icon">📅</span> Appointments</Link>
           <Link href="/dashboard/call-logs" className="sb-link"><span className="sb-link-icon">📋</span> Call Logs</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Account</div>
-          <Link href="/pricing" className="sb-link"><span className="sb-link-icon">⬆</span> Upgrade Plan</Link>
-          <Link href="/" className="sb-link"><span className="sb-link-icon">←</span> Back to Website</Link>
+          <Link href="/pricing" className="sb-link"><img src="/upgrade.png" style={{height: "20px"}}/>Upgrade Plan</Link>
+          <Link href="/" className="sb-link">Back to Website</Link>
           <div className="sb-bottom">
             <button className="sb-logout" onClick={async () => { await supabase.auth.signOut(); router.push("/"); }}>
-              <span>⊗</span> Logout
+               Logout
             </button>
           </div>
         </aside>
@@ -220,7 +249,7 @@ export default function AppointmentsPage() {
         <main className="main">
           <div className="topbar">
             <div className="topbar-left">
-              <Link href="/dashboard" className="back-btn">← Dashboard</Link>
+              <Link href="/dashboard" className="back-btn">Dashboard</Link>
               <span style={{ color: "var(--text-4)", fontSize: "14px" }}>/</span>
               <span className="topbar-title">Appointments</span>
             </div>
@@ -251,59 +280,133 @@ export default function AppointmentsPage() {
 
             {/* TOOLBAR */}
             <div className="toolbar f2">
-              <input className="search-input" placeholder="Search by name, number, subject..." value={search} onChange={e => setSearch(e.target.value)} />
+              <input className="search-input" placeholder="Search by name, number, purpose..." value={search} onChange={e => setSearch(e.target.value)} />
               <button onClick={() => loadAppointments(user.id)} style={{ padding: "10px 18px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--p-soft)", color: "var(--p3)", font: "600 13px Montserrat", cursor: "pointer", transition: "all 0.15s", whiteSpace: "nowrap" }}>
                 ↻ Refresh
               </button>
             </div>
 
-            {/* TABLE */}
-            <div className="table-card f3">
-              {filtered.length > 0 ? (
-                <>
-                  <div className="table-header">
-                    <span>Customer</span>
-                    <span>Appointment</span>
-                    <span>Subject</span>
-                    <span>Status</span>
-                    <span>Actions</span>
+            {/* PAGE GRID — Table + Detail Panel */}
+            <div className="page-grid f3">
+
+              {/* TABLE */}
+              <div className="table-card">
+                {filtered.length > 0 ? (
+                  <>
+                    <div className="table-header">
+                      <span>Customer</span>
+                      <span>Appointment</span>
+                      <span>Purpose</span>
+                      <span>Status</span>
+                      <span>Actions</span>
+                    </div>
+                    {filtered.map(a => {
+                      const sc = statusColor(a.status);
+                      return (
+                        <div key={a.id} className={`table-row ${selected?.id === a.id ? "selected" : ""}`} onClick={() => setSelected(a)}>
+                          <div>
+                            <div className="customer-name">{a.customer_name || "Unknown"}</div>
+                            <div className="customer-number">{a.customer_number || a.customer_email || "—"}</div>
+                          </div>
+                          <div>
+                            <div className="td" style={{ fontWeight: "500", color: "var(--text-2)" }}>{a.appointment_date || "—"}</div>
+                            <div className="td" style={{ fontSize: "11px", marginTop: "2px" }}>{a.appointment_time || "—"}</div>
+                          </div>
+                          <div className="td">{a.purpose || a.notes || "General"}</div>
+                          <div>
+                            <span className="status-badge" style={{ background: sc.bg, color: sc.color, borderColor: sc.border }}>
+                              <span className="status-dot" />
+                              {a.status || "pending"}
+                            </span>
+                          </div>
+                          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                            {a.status !== "confirmed" && (
+                              <button className="action-btn confirm" onClick={(e) => { e.stopPropagation(); updateStatus(a.id, "confirmed"); }}>✓</button>
+                            )}
+                            {a.status !== "cancelled" && (
+                              <button className="action-btn cancel" onClick={(e) => { e.stopPropagation(); updateStatus(a.id, "cancelled"); }}>✕</button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <div className="empty">
+                    <div className="empty-icon">📅</div>
+                    <div className="empty-title">No appointments yet</div>
+                    <div className="empty-sub">Appointments booked by your AI agents will appear here.</div>
                   </div>
-                  {filtered.map(a => {
-                    const sc = statusColor(a.status);
-                    return (
-                      <div key={a.id} className="table-row">
-                        <div>
-                          <div className="customer-name">{a.customer_name || "Unknown"}</div>
-                          <div className="customer-number">{a.customer_number || a.student_name || "—"}</div>
-                        </div>
-                        <div>
-                          <div className="td" style={{ fontWeight: "500", color: "var(--text-2)" }}>{a.appointment_date || "—"}</div>
-                          <div className="td" style={{ fontSize: "11px", marginTop: "2px" }}>{a.appointment_time || "—"}</div>
-                        </div>
-                        <div className="td">{a.subject || a.student_class || "General"}</div>
-                        <div>
-                          <span className="status-badge" style={{ background: sc.bg, color: sc.color, borderColor: sc.border }}>
-                            <span className="status-dot" />
-                            {a.status || "pending"}
-                          </span>
-                        </div>
-                        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                          {a.status !== "confirmed" && (
-                            <button className="action-btn confirm" onClick={() => updateStatus(a.id, "confirmed")}>✓ Confirm</button>
-                          )}
-                          {a.status !== "cancelled" && (
-                            <button className="action-btn cancel" onClick={() => updateStatus(a.id, "cancelled")}>✕ Cancel</button>
-                          )}
-                        </div>
+                )}
+              </div>
+
+              {/* DETAIL PANEL */}
+              {selected ? (
+                <div className="detail-panel">
+                  <div className="detail-header">
+                    <div className="detail-name">{selected.customer_name || "Unknown"}</div>
+                    <span className="status-badge" style={{ background: statusColor(selected.status).bg, color: statusColor(selected.status).color, borderColor: statusColor(selected.status).border }}>
+                      <span className="status-dot" /> {selected.status || "pending"}
+                    </span>
+                  </div>
+                  <div className="detail-body">
+                    {[
+                      { key: "Phone", val: selected.customer_number },
+                      { key: "Email", val: selected.customer_email },
+                      { key: "Date", val: selected.appointment_date },
+                      { key: "Time", val: selected.appointment_time },
+                      { key: "Purpose", val: selected.purpose },
+                      { key: "Notes", val: selected.notes },
+                      { key: "Agent", val: selected.agent_type },
+                      { key: "Booked", val: formatDate(selected.created_at) },
+                    ].filter(r => r.val).map(r => (
+                      <div key={r.key} className="detail-row">
+                        <span className="detail-key">{r.key}</span>
+                        <span className="detail-val">{r.val}</span>
                       </div>
-                    );
-                  })}
-                </>
+                    ))}
+
+                    {/* Extra info — any niche specific data */}
+                    {selected.extra_info && Object.keys(selected.extra_info).length > 0 && (
+                      <>
+                        <div style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-4)", textTransform: "uppercase", letterSpacing: "0.5px", marginTop: "12px", marginBottom: "8px" }}>
+                          Additional Info
+                        </div>
+                        <div className="extra-box">
+                          {Object.entries(selected.extra_info).map(([key, val]) => (
+                            <div key={key} className="extra-item">
+                              <span className="extra-key">{key.replace(/_/g, " ")}</span>
+                              <span className="extra-val">{String(val)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Action buttons */}
+                    <div className="detail-action-btns">
+                      {selected.status !== "confirmed" && (
+                        <button className="detail-action-btn" style={{ background: "rgba(34,197,94,0.1)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.2)" }} onClick={() => updateStatus(selected.id, "confirmed")}>
+                          ✓ Confirm
+                        </button>
+                      )}
+                      {selected.status !== "cancelled" && (
+                        <button className="detail-action-btn" style={{ background: "rgba(248,113,113,0.1)", color: "#f87171", border: "1px solid rgba(248,113,113,0.2)" }} onClick={() => updateStatus(selected.id, "cancelled")}>
+                          ✕ Cancel
+                        </button>
+                      )}
+                      {selected.status === "confirmed" && (
+                        <button className="detail-action-btn" style={{ background: "rgba(245,158,11,0.1)", color: "#fbbf24", border: "1px solid rgba(245,158,11,0.2)" }} onClick={() => updateStatus(selected.id, "pending")}>
+                          ↺ Reset
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               ) : (
-                <div className="empty">
-                  <div className="empty-icon">📅</div>
-                  <div className="empty-title">No appointments yet</div>
-                  <div className="empty-sub">Appointments booked by your AI agents will appear here.</div>
+                <div className="detail-panel" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "220px" }}>
+                  <div style={{ fontSize: "36px", marginBottom: "10px", opacity: 0.3 }}>📅</div>
+                  <div style={{ fontSize: "13px", color: "var(--text-4)", fontWeight: "500", textAlign: "center" }}>Click any row<br />to see details</div>
                 </div>
               )}
             </div>

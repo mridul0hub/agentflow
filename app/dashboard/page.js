@@ -255,7 +255,7 @@ export default function Dashboard() {
           <div className="sb-divider" />
           <div className="sb-label">Overview</div>
           <Link href="/dashboard" className="sb-link active" onClick={() => setMobOpen(false)}>
-            <span className="sb-link-icon">⊞</span> Dashboard
+            Dashboard
           </Link>
 
           <div style={{ marginTop: "14px" }} />
@@ -264,10 +264,10 @@ export default function Dashboard() {
             <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "20px"}} /></span> WhatsApp Agent
           </Link>
           <Link href="/dashboard/email-setup" className="sb-link" onClick={() => setMobOpen(false)}>
-            <span className="sb-link-icon">📧</span> Email Agent
+            <span className="sb-link-icon"><img src="/mail.png" style={{height: "20px"}}/></span> Email Agent
           </Link>
           <Link href="/dashboard/voice-setup" className="sb-link" onClick={() => setMobOpen(false)}>
-            <span className="sb-link-icon">📞</span> Voice Agent
+            <span className="sb-link-icon"><img src="/phone.png" style={{height: "25px"}}/></span> Voice Agent
           </Link>
 
           <div style={{ marginTop: "14px" }} />
@@ -282,13 +282,13 @@ export default function Dashboard() {
           <div style={{ marginTop: "14px" }} />
           <div className="sb-label">Account</div>
           <Link href="/dashboard/credits" className="sb-link" onClick={() => setMobOpen(false)}>
-            <span className="sb-link-icon">💎</span> Credits
+            <span className="sb-link-icon"><img src="/coin.png" style={{height: "20px"}}/></span> Credits
           </Link>
           <Link href="/pricing" className="sb-link" onClick={() => setMobOpen(false)}>
-            <span className="sb-link-icon">⬆</span> Upgrade Plan
+            <span className="sb-link-icon"><img src="/upgrade.png" style={{height: "20px"}}/></span> Upgrade Plan
           </Link>
           <Link href="/" className="sb-link" onClick={() => setMobOpen(false)}>
-            <span className="sb-link-icon">←</span> Back to Website
+            Back to Website
           </Link>
 
           <div className="sb-bottom">
@@ -328,10 +328,10 @@ export default function Dashboard() {
             {/* STATS */}
             <div className="stats-grid f1">
               {[
-                { icon: <img src="/whatsappsvg.png" style={{ height: "40px", width: "40px"}} />, bg: "rgba(37,211,102,0.1)", val: stats.whatsappMessages, label: "WhatsApp Replies", sub: "AI replies sent" },
-                { icon: "📧", bg: "rgba(74,158,255,0.1)", val: stats.emailMessages, label: "Email Replies", sub: "AI replies sent" },
-                { icon: "⚡", bg: "rgba(124,58,237,0.1)", val: stats.activeAgents, label: "Active Agents", sub: "Running now" },
-                { icon: "👥", bg: "rgba(245,158,11,0.1)", val: stats.totalCustomers, label: "Customers Served", sub: "Unique contacts" },
+                { icon: <img src="/whatsappsvg.png" style={{ height: "50px"}} />, bg: "rgba(37,211,102,0.1)", val: stats.whatsappMessages, label: "WhatsApp Replies", sub: "AI replies sent" },
+                { icon: <img src="/mail.png" style={{height: "50px"}}/>, bg: "rgba(74,158,255,0.1)", val: stats.emailMessages, label: "Email Replies", sub: "AI replies sent" },
+                { icon: <img src="/voice.png" style={{height: "50px"}}/>, bg: "rgba(124,58,237,0.1)", val: stats.activeAgents, label: "Active Agents", sub: "Running now" },
+                { icon: <img src="/customer.png" style={{height: "50px"}}/>, bg: "rgba(245,158,11,0.1)", val: stats.totalCustomers, label: "Customers Served", sub: "Unique contacts" },
               ].map((s) => (
                 <div key={s.label} className="sc">
                   <div className="sc-icon" style={{ background: s.bg }}>{s.icon}</div>
@@ -354,8 +354,8 @@ export default function Dashboard() {
                 </div>
                 {[
                   { icon: <img src="/whatsappsvg.png" style={{ height: "40px", width: "40px"}} />, bg: "rgba(37,211,102,0.1)", name: "WhatsApp Agent", sub: whatsappAgent?.business_name || "Not configured", agent: whatsappAgent, href: "/dashboard/whatsapp-setup" },
-                  { icon: "📧", bg: "rgba(74,158,255,0.1)", name: "Email Agent", sub: emailAgent?.business_name || "Not configured", agent: emailAgent, href: "/dashboard/email-setup" },
-                  { icon: "📞", bg: "rgba(124,58,237,0.1)", name: "Voice Agent", sub: "AI call answering", agent: null, href: "/dashboard/voice-setup" },
+                  { icon: <img src="/mail.png" style={{height: "40px"}}/>, bg: "rgba(74,158,255,0.1)", name: "Email Agent", sub: emailAgent?.business_name || "Not configured", agent: emailAgent, href: "/dashboard/email-setup" },
+                  { icon: <img src="/phone.png" style={{height: "40px"}}/>, bg: "rgba(124,58,237,0.1)", name: "Voice Agent", sub: "AI call answering", agent: null, href: "/dashboard/voice-setup" },
                 ].map((a) => (
                   <Link key={a.name} href={a.href} className="ag-row">
                     <div className="ag-icon" style={{ background: a.bg }}>{a.icon}</div>
@@ -384,7 +384,7 @@ export default function Dashboard() {
                   recentActivity.map((item, i) => (
                     <div key={i} className="act-row">
                       <div className="act-icon" style={{ background: item.role === "user" ? "rgba(74,158,255,0.1)" : "var(--p-soft)" }}>
-                        {item.role === "user" ? "👤" : "⚡"}
+                        {item.role === "user" ? <img src="/customer.png" style={{height: "40px"}}/> : <img src="/voice.png" style={{height: "40px"}}/>}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="act-msg">{item.role === "user" ? "Customer message" : "AI replied"}</div>
@@ -395,7 +395,7 @@ export default function Dashboard() {
                   ))
                 ) : (
                   <div style={{ textAlign: "center", padding: "36px 0" }}>
-                    <div style={{ fontSize: "32px", marginBottom: "12px", opacity: 0.4 }}>⚡</div>
+                    <div style={{ fontSize: "32px", marginBottom: "12px", opacity: 0.4 }}><img src="/voice.png" style={{height: "50px"}}/></div>
                     <p style={{ color: "var(--text-4)", fontSize: "13px", lineHeight: 1.7, fontWeight: "500" }}>No activity yet.<br />Set up your first agent!</p>
                   </div>
                 )}
@@ -408,9 +408,9 @@ export default function Dashboard() {
               <div className="qa-grid">
                 {[
                   { icon: <img src="/whatsappsvg.png" style={{ height: "40px", width: "40px"}} />, label: "WhatsApp Setup", href: "/dashboard/whatsapp-setup", bg: "rgba(37,211,102,0.1)" },
-                  { icon: "📧", label: "Email Setup", href: "/dashboard/email-setup", bg: "rgba(74,158,255,0.1)" },
-                  { icon: "📞", label: "Voice Setup", href: "/dashboard/voice-setup", bg: "rgba(124,58,237,0.1)" },
-                  { icon: "💎", label: "Upgrade Plan", href: "/pricing", bg: "rgba(245,158,11,0.1)" },
+                  { icon: <img src="/mail.png" style={{height: "40px"}}/>, label: "Email Setup", href: "/dashboard/email-setup", bg: "rgba(74,158,255,0.1)" },
+                  { icon: <img src="/phone.png" style={{height: "40px"}}/>, label: "Voice Setup", href: "/dashboard/voice-setup", bg: "rgba(124,58,237,0.1)" },
+                  { icon: <img src="/upgrade.png" style={{height: "40px"}}/>, label: "Upgrade Plan", href: "/pricing", bg: "rgba(245,158,11,0.1)" },
                 ].map((a) => (
                   <Link key={a.label} href={a.href} className="qa-item">
                     <div className="qa-icon" style={{ background: a.bg }}>{a.icon}</div>
@@ -426,7 +426,7 @@ export default function Dashboard() {
                 <div className="upgrade-title">Upgrade your plan</div>
                 <div className="upgrade-sub">Unlock unlimited agents, priority support & full analytics.</div>
               </div>
-              <Link href="/pricing" className="upgrade-btn">View Plans →</Link>
+              <Link href="/pricing" className="upgrade-btn">View Plans</Link>
             </div>
 
           </div>

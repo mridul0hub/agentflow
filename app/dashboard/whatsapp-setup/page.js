@@ -168,7 +168,7 @@ export default function WhatsAppSetup() {
           <img src="/logo.png" style={{ height: "50px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
           <span style={{ fontSize: "13px", fontWeight: "700", color: "var(--text)", letterSpacing: "1px", textTransform: "uppercase" }}>AEZIO AI</span>
         </Link>
-        <Link href="/dashboard" className="back-btn">← Dashboard</Link>
+        <Link href="/dashboard" className="back-btn">Dashboard</Link>
       </div>
 
       <div className="wrap">
@@ -176,25 +176,25 @@ export default function WhatsAppSetup() {
         <aside className="sidebar">
           <Link href="/" className="sb-logo">
             <img src="/logo.png" style={{ height: "50px", borderRadius: "30px", background: "#ffffff", padding: "2px" }} />
-            <span className="sb-logo-text">AEZIO AI</span>
+            <span className="sb-logo-text">AEZIO AI AGENTS</span>
           </Link>
           <div className="sb-divider" />
           <div className="sb-label">Overview</div>
-          <Link href="/dashboard" className="sb-link"><span className="sb-link-icon">⊞</span> Dashboard</Link>
+          <Link href="/dashboard" className="sb-link">Dashboard</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Agents</div>
           <Link href="/dashboard/whatsapp-setup" className="sb-link active">
-            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "16px", width: "16px" }} /></span> WhatsApp Agent
+            <span className="sb-link-icon"><img src="/whatsappsvg.png" style={{ height: "20px"}} /></span> WhatsApp Agent
           </Link>
-          <Link href="/dashboard/email-setup" className="sb-link"><span className="sb-link-icon">📧</span> Email Agent</Link>
-          <Link href="/dashboard/voice-setup" className="sb-link"><span className="sb-link-icon">📞</span> Voice Agent</Link>
+          <Link href="/dashboard/email-setup" className="sb-link"><span className="sb-link-icon"><img src="/mail.png" style={{height: "20px"}}/></span> Email Agent</Link>
+          <Link href="/dashboard/voice-setup" className="sb-link"><span className="sb-link-icon"><img src="/phone.png" style={{height: "20px"}}/></span> Voice Agent</Link>
           <div style={{ marginTop: "12px" }} />
           <div className="sb-label">Account</div>
-          <Link href="/pricing" className="sb-link"><span className="sb-link-icon">⬆</span> Upgrade Plan</Link>
-          <Link href="/" className="sb-link"><span className="sb-link-icon">←</span> Back to Website</Link>
+          <Link href="/pricing" className="sb-link"><span className="sb-link-icon"><img src="/upgrade.png" style={{height: "20px"}}/></span> Upgrade Plan</Link>
+          <Link href="/" className="sb-link">Back to Website</Link>
           <div className="sb-bottom">
             <button className="sb-logout" onClick={async () => { await supabase.auth.signOut(); router.push("/"); }}>
-              <span>⊗</span> Logout
+              Logout
             </button>
           </div>
         </aside>
@@ -203,7 +203,7 @@ export default function WhatsAppSetup() {
         <main className="main">
           <div className="topbar">
             <div className="topbar-left">
-              <Link href="/dashboard" className="back-btn">← Dashboard</Link>
+              <Link href="/dashboard" className="back-btn">Dashboard</Link>
               <span style={{ color: "var(--text-4)", fontSize: "14px" }}>/</span>
               <span className="topbar-title">WhatsApp Agent Setup</span>
             </div>
@@ -234,7 +234,7 @@ export default function WhatsAppSetup() {
               {error && <div className="alert-err">⚠ {error}</div>}
               {saved && <div className="alert-ok">✓ Agent details saved successfully!</div>}
 
-              <div className="form-section-title"><span>🏢</span> Business Information</div>
+              <div className="form-section-title"><span><img src="/real-estate.png" style={{height: "30px"}}/></span> Business Information</div>
 
               <div className="form-group">
                 <label className="form-label">Business Name <span>*</span></label>
@@ -261,7 +261,7 @@ export default function WhatsAppSetup() {
               </div>
 
               <div style={{ height: "1px", background: "var(--border)", margin: "24px 0" }} />
-              <div className="form-section-title"><span>💼</span> Services & Pricing</div>
+              <div className="form-section-title">Services & Pricing</div>
 
               <div className="form-group">
                 <label className="form-label">Services Offered</label>
@@ -276,7 +276,7 @@ export default function WhatsAppSetup() {
               </div>
 
               <div style={{ height: "1px", background: "var(--border)", margin: "24px 0" }} />
-              <div className="form-section-title"><span>📝</span> Extra Information</div>
+              <div className="form-section-title">Extra Information</div>
 
               <div className="form-group">
                 <label className="form-label">Other Important Information</label>
@@ -295,7 +295,7 @@ export default function WhatsAppSetup() {
 
             <div className="info-grid f3">
               {[
-                { icon: <img src="/ailogo.jpg" style={{ height: "50px", width: "50px" }} />, title: "Gemini AI Powered", text: "Replies intelligently using your business context" },
+                { icon: <img src="/ailogo.png" style={{height: "40x", width: "40px"}}/>, title: "AEZIO AI Powered", text: "Replies intelligently using your business context" },
                 { icon: <img src="/whatsappsvg.png" style={{ height: "40px", width: "40px" }} />, title: "WhatsApp Native", text: "Customers chat on regular WhatsApp — no extra app" },
                 { icon: "🌙", title: "Works 24/7", text: "Replies at 2am, on Sundays, on holidays" },
                 { icon: "🔒", title: "Secure", text: "All data encrypted and stored securely" },
